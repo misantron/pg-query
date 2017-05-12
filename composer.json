@@ -1,0 +1,13 @@
+{
+  "name": "mediatech/criteria",
+  "autoload": {
+    "psr-4": {
+      "MediaTech\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MediaTech\\Tests\\": "tests/"
+    }
+  }
+}
