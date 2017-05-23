@@ -8,7 +8,7 @@ use MediaTech\Query\Type;
 
 class Criteria
 {
-    const DEFAULT_ALIAS = 't1';
+    const DEFAULT_ALIAS = 't';
 
     /**
      * @var \PDO
@@ -150,7 +150,7 @@ class Criteria
     public function setAlias($alias)
     {
         if (!is_string($alias) || empty($alias)) {
-            throw new \InvalidArgumentException('Invalid table name');
+            throw new \InvalidArgumentException('Invalid alias name');
         }
 
         $this->queryParts['table']['alias'] = $alias;
@@ -212,11 +212,123 @@ class Criteria
 
         $this->type = Type::INSERT;
 
-        $this->queryParts['table'] = [
-            'name' => $table,
-        ];
+        $this->queryParts['table']['name'] = $table;
 
         return $this;
+    }
+
+    /**
+     * @param array $data
+     * @return Criteria
+     */
+    public function set(array $data)
+    {
+        if ($this->type !== Type::UPDATE) {
+            throw new \BadMethodCallException('Invalid method call');
+        }
+        foreach ($data as $field => $value) {
+            $this->queryParts['set'][$field] = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * @param array $items
+     * @return Criteria
+     */
+    public function values(array $items)
+    {
+        if ($this->type !== Type::INSERT) {
+            throw new \BadMethodCallException('Invalid method call');
+        }
+
+        if ($items === array_values($items)) {
+            // extract field names from data rows
+            if (sizeof($this->queryParts['fields']) === 0) {
+                $this->queryParts['fields'] = array_keys($items[0]);
+            }
+            $this->queryParts['values'] = array_map('array_values', $items);
+        } else {
+            $this->queryParts['fields'] = array_keys($items);
+            $this->queryParts['values'][] = array_values($items);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $table
+     * @param string $alias
+     * @param string $condition
+     * @return Criteria
+     */
+    public function join($table, $alias, $condition)
+    {
+        return $this->innerJoin($table, $alias, $condition);
+    }
+
+    /**
+     * @param string $table
+     * @param string $alias
+     * @param string $condition
+     * @return Criteria
+     */
+    public function innerJoin($table, $alias, $condition)
+    {
+        $this->validateJoin($alias);
+        $hash = $this->tableHash($table, $alias);
+        $this->queryParts['join'][$hash] = [
+            'type' => 'inner',
+            'table' => $table,
+            'alias' => $alias,
+            'condition' => $condition,
+        ];
+        return $this;
+    }
+
+    /**
+     * @param string $table
+     * @param string $alias
+     * @param string $condition
+     * @return Criteria
+     */
+    public function leftJoin($table, $alias, $condition)
+    {
+        $this->validateJoin($alias);
+        $hash = $this->tableHash($table, $alias);
+        $this->queryParts['join'][$hash] = [
+            'type' => 'left',
+            'table' => $table,
+            'alias' => $alias,
+            'condition' => $condition,
+        ];
+        return $this;
+    }
+
+    /**
+     * @param string $alias
+     */
+    private function validateJoin($alias)
+    {
+        $mainTableAlias = isset($this->queryParts['from']['alias']) ? $this->queryParts['from']['alias'] : self::DEFAULT_ALIAS;
+        if ($mainTableAlias === $alias) {
+            throw new \InvalidArgumentException('Invalid alias name');
+        }
+        foreach ($this->queryParts['join'] as $join) {
+            if ($alias === $join['alias']) {
+                throw new \InvalidArgumentException('Invalid alias name');
+            }
+        }
+    }
+
+    /**
+     * @param string $table
+     * @param string $alias
+     * @return string
+     */
+    private function tableHash(&$table, &$alias)
+    {
+        return hash('crc32', $table . '_' . $alias);
     }
 
     /**
