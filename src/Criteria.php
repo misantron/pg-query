@@ -306,6 +306,50 @@ class Criteria
     }
 
     /**
+     * @return Criteria
+     */
+    public function beginGroup()
+    {
+        $this->queryParts['where'][] = '(';
+
+        return $this;
+    }
+
+    /**
+     * @return Criteria
+     */
+    public function andBeginGroup()
+    {
+        if (empty($this->queryParts['where'])) {
+            $this->beginGroup();
+        } else {
+            $this->queryParts['where'][] = 'AND (';
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Criteria
+     */
+    public function orBeginGroup()
+    {
+        $this->queryParts['where'][] = 'OR (';
+
+        return $this;
+    }
+
+    /**
+     * @return Criteria
+     */
+    public function endGroup()
+    {
+        $this->queryParts['where'][] = ')';
+
+        return $this;
+    }
+
+    /**
      * @param string $alias
      */
     private function validateJoin($alias)
