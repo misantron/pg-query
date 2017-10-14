@@ -8,12 +8,22 @@ use MediaTech\Query\Type;
 
 class Criteria
 {
-    const DEFAULT_ALIAS = 't';
+    const DEFAULT_TABLE_ALIAS = 't1';
 
     /**
      * @var \PDO
      */
     private $connection;
+
+    /**
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * @var int
+     */
+    protected $fetchMode;
 
     protected $queryParts = [
         'fields' => [],
@@ -23,38 +33,19 @@ class Criteria
         'having' => [],
         'orderBy' => [],
         'groupBy' => [],
-        'params' => [],
         'with' => [],
         'set' => [],
         'values' => [],
+        'limit' => null,
+        'offset' => null,
     ];
 
     /**
-     * @var int
+     * @param \PDO $connection
      */
-    protected $offset;
-
-    /**
-     * @var
-     */
-    protected $limit;
-
-    /**
-     * @var int
-     */
-    protected $type;
-
-    /**
-     * @var int
-     */
-    protected $fetchMode;
-
     private function __construct(\PDO $connection)
     {
         $this->connection = $connection;
-
-        $this->type = Type::SELECT;
-        $this->fetchMode = FetchMode::ASSOC;
     }
 
     /**
@@ -100,12 +91,40 @@ class Criteria
     }
 
     /**
+     * @param Criteria|string $query
+     * @param string $alias
+     * @return Criteria
+     */
+    public function addWith($query, string $alias)
+    {
+        if (isset($this->queryParts['with'][$alias])) {
+            throw new \InvalidArgumentException('Alias name has already in use');
+        }
+
+        $this->queryParts['with'][$alias] = (string)$query;
+
+        return $this;
+    }
+
+    /**
+     * @param Criteria[]|string[] $queries
+     * @return Criteria
+     */
+    public function with(array $queries)
+    {
+        foreach ($queries as $alias => $query) {
+            $this->addWith($query, $alias);
+        }
+        return $this;
+    }
+
+    /**
      * @param string|array $fields
      * @return Criteria
      */
     public function fields($fields)
     {
-        $this->queryParts['fields'] = $this->prepareFields($fields);
+        $this->queryParts['fields'] = $this->parseFields($fields);
 
         return $this;
     }
@@ -116,8 +135,10 @@ class Criteria
      */
     public function addField($field)
     {
-        if ($this->type !== Type::SELECT) {
-            throw new \InvalidArgumentException('Unable to add field to non-select query');
+        if ($this->type !== Type::SELECT || $this->type !== Type::INSERT) {
+            throw new \InvalidArgumentException(
+                sprintf('Unable to add field to %s query', $this->type)
+            );
         }
 
         $this->queryParts['fields'][] = (string)$field;
@@ -130,15 +151,18 @@ class Criteria
      * @param string|null $alias
      * @return Criteria
      */
-    public function select($table, $alias = null)
+    public function select(string $table, $alias = null)
     {
-        if (!is_string($table) || empty($table)) {
-            throw new \InvalidArgumentException('Invalid table name');
+        if (empty($table)) {
+            throw new \InvalidArgumentException('Table name is empty');
         }
 
+        $this->type = Type::SELECT;
+        $this->fetchMode = FetchMode::ASSOC;
+
         $this->queryParts['table'] = [
-            'name' => $table,
-            'alias' => $alias ?: self::DEFAULT_ALIAS,
+            'name' => pg_escape_identifier($table),
+            'alias' => $alias ?: self::DEFAULT_TABLE_ALIAS,
         ];
         return $this;
     }
@@ -147,10 +171,10 @@ class Criteria
      * @param string $alias
      * @return Criteria
      */
-    public function setAlias($alias)
+    public function setAlias(string $alias)
     {
-        if (!is_string($alias) || empty($alias)) {
-            throw new \InvalidArgumentException('Invalid alias name');
+        if (empty($alias)) {
+            throw new \InvalidArgumentException('Alias name is empty');
         }
 
         $this->queryParts['table']['alias'] = $alias;
@@ -163,17 +187,17 @@ class Criteria
      * @param string|null $alias
      * @return Criteria
      */
-    public function update($table, $alias = null)
+    public function update(string $table, $alias = null)
     {
-        if (!is_string($table) || empty($table)) {
-            throw new \InvalidArgumentException('Invalid table name');
+        if (empty($table)) {
+            throw new \InvalidArgumentException('Table name is empty');
         }
 
         $this->type = Type::UPDATE;
 
         $this->queryParts['table'] = [
-            'name' => $table,
-            'alias' => $alias ?: self::DEFAULT_ALIAS,
+            'name' => pg_escape_identifier($table),
+            'alias' => $alias ?: self::DEFAULT_TABLE_ALIAS,
         ];
 
         return $this;
@@ -184,17 +208,17 @@ class Criteria
      * @param string|null $alias
      * @return Criteria
      */
-    public function delete($table, $alias = null)
+    public function delete(string $table, $alias = null)
     {
-        if (!is_string($table) || empty($table)) {
-            throw new \InvalidArgumentException('Invalid table name');
+        if (empty($table)) {
+            throw new \InvalidArgumentException('Table name is empty');
         }
 
         $this->type = Type::DELETE;
 
         $this->queryParts['table'] = [
-            'name' => $table,
-            'alias' => $alias ?: self::DEFAULT_ALIAS,
+            'name' => pg_escape_identifier($table),
+            'alias' => $alias ?: self::DEFAULT_TABLE_ALIAS,
         ];
 
         return $this;
@@ -204,15 +228,15 @@ class Criteria
      * @param string $table
      * @return Criteria
      */
-    public function insert($table)
+    public function insert(string $table)
     {
-        if (!is_string($table) || empty($table)) {
+        if (empty($table)) {
             throw new \InvalidArgumentException('Invalid table name');
         }
 
         $this->type = Type::INSERT;
 
-        $this->queryParts['table']['name'] = $table;
+        $this->queryParts['table']['name'] = pg_escape_identifier($table);
 
         return $this;
     }
@@ -224,10 +248,11 @@ class Criteria
     public function set(array $data)
     {
         if ($this->type !== Type::UPDATE) {
-            throw new \BadMethodCallException('Invalid method call');
+            throw new \BadMethodCallException('Invalid query type');
         }
+
         foreach ($data as $field => $value) {
-            $this->queryParts['set'][$field] = $value;
+            $this->queryParts['set'][pg_escape_identifier($field)] = $value;
         }
         return $this;
     }
@@ -239,7 +264,7 @@ class Criteria
     public function values(array $items)
     {
         if ($this->type !== Type::INSERT) {
-            throw new \BadMethodCallException('Invalid method call');
+            throw new \BadMethodCallException('Invalid query type');
         }
 
         if ($items === array_values($items)) {
@@ -273,13 +298,13 @@ class Criteria
      * @param string $condition
      * @return Criteria
      */
-    public function innerJoin($table, $alias, $condition)
+    public function innerJoin(string $table, string $alias, string $condition)
     {
         $this->validateJoin($alias);
         $hash = $this->tableHash($table, $alias);
         $this->queryParts['join'][$hash] = [
             'type' => 'inner',
-            'table' => $table,
+            'table' => pg_escape_identifier($table),
             'alias' => $alias,
             'condition' => $condition,
         ];
@@ -292,13 +317,13 @@ class Criteria
      * @param string $condition
      * @return Criteria
      */
-    public function leftJoin($table, $alias, $condition)
+    public function leftJoin(string $table, string $alias, string $condition)
     {
         $this->validateJoin($alias);
         $hash = $this->tableHash($table, $alias);
         $this->queryParts['join'][$hash] = [
             'type' => 'left',
-            'table' => $table,
+            'table' => pg_escape_identifier($table),
             'alias' => $alias,
             'condition' => $condition,
         ];
@@ -349,12 +374,37 @@ class Criteria
         return $this;
     }
 
+    public function limit(int $value)
+    {
+        $this->queryParts['limit'] = $value;
+
+        return $this;
+    }
+
+    public function offset(int $value)
+    {
+        $this->queryParts['offset'] = $value;
+
+        return $this;
+    }
+
+    private function build()
+    {
+        return '';
+    }
+
+    public function __toString()
+    {
+        return $this->build();
+    }
+
     /**
      * @param string $alias
      */
     private function validateJoin($alias)
     {
-        $mainTableAlias = isset($this->queryParts['from']['alias']) ? $this->queryParts['from']['alias'] : self::DEFAULT_ALIAS;
+        $mainTableAlias = isset($this->queryParts['from']['alias']) ?
+            $this->queryParts['from']['alias'] : self::DEFAULT_TABLE_ALIAS;
         if ($mainTableAlias === $alias) {
             throw new \InvalidArgumentException('Invalid alias name');
         }
@@ -370,7 +420,7 @@ class Criteria
      * @param string $alias
      * @return string
      */
-    private function tableHash(&$table, &$alias)
+    private function tableHash(string &$table, string &$alias)
     {
         return hash('crc32', $table . '_' . $alias);
     }
@@ -379,13 +429,14 @@ class Criteria
      * @param array|string $fields
      * @return array
      */
-    private function prepareFields($fields)
+    private function parseFields($fields)
     {
         if (is_string($fields)) {
             $fields = explode(',', $fields);
         }
-        $res = array_map('trim', $fields);
 
-        return $res;
+        return array_filter(array_map(function (string $field) {
+            return pg_escape_identifier(trim($field));
+        }, $fields));
     }
 }

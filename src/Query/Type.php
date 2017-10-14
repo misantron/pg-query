@@ -5,8 +5,8 @@ namespace MediaTech\Query;
 
 class Type extends AbstractEnum
 {
-    const SELECT = 1;
-    const INSERT = 2;
-    const UPDATE = 3;
-    const DELETE = 4;
+    const SELECT = 'select';
+    const INSERT = 'update';
+    const UPDATE = 'update';
+    const DELETE = 'delete';
 }
