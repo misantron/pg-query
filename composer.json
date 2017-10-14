@@ -1,7 +1,8 @@
 {
   "name": "mediatech/criteria",
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.0",
+    "ext-pdo-pgsql": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "~6.0"
