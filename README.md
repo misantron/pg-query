@@ -1,1 +1,1 @@
-# Criteria - PHP postgresql query builder
+# PG-Query - powerful pgsql query builder
