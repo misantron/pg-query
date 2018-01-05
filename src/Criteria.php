@@ -148,10 +148,10 @@ class Criteria
 
     /**
      * @param string $table
-     * @param string|null $alias
+     * @param string $alias
      * @return Criteria
      */
-    public function select(string $table, $alias = null)
+    public function select(string $table, $alias = self::DEFAULT_TABLE_ALIAS)
     {
         if (empty($table)) {
             throw new \InvalidArgumentException('Table name is empty');
@@ -162,7 +162,7 @@ class Criteria
 
         $this->queryParts['table'] = [
             'name' => pg_escape_identifier($table),
-            'alias' => $alias ?: self::DEFAULT_TABLE_ALIAS,
+            'alias' => $alias,
         ];
         return $this;
     }
@@ -184,10 +184,10 @@ class Criteria
 
     /**
      * @param string $table
-     * @param string|null $alias
+     * @param string $alias
      * @return Criteria
      */
-    public function update(string $table, $alias = null)
+    public function update(string $table, $alias = self::DEFAULT_TABLE_ALIAS)
     {
         if (empty($table)) {
             throw new \InvalidArgumentException('Table name is empty');
@@ -197,7 +197,7 @@ class Criteria
 
         $this->queryParts['table'] = [
             'name' => pg_escape_identifier($table),
-            'alias' => $alias ?: self::DEFAULT_TABLE_ALIAS,
+            'alias' => $alias,
         ];
 
         return $this;
@@ -205,10 +205,10 @@ class Criteria
 
     /**
      * @param string $table
-     * @param string|null $alias
+     * @param string $alias
      * @return Criteria
      */
-    public function delete(string $table, $alias = null)
+    public function delete(string $table, $alias = self::DEFAULT_TABLE_ALIAS)
     {
         if (empty($table)) {
             throw new \InvalidArgumentException('Table name is empty');
@@ -218,7 +218,7 @@ class Criteria
 
         $this->queryParts['table'] = [
             'name' => pg_escape_identifier($table),
-            'alias' => $alias ?: self::DEFAULT_TABLE_ALIAS,
+            'alias' => $alias,
         ];
 
         return $this;
@@ -252,7 +252,7 @@ class Criteria
         }
 
         foreach ($data as $field => $value) {
-            $this->queryParts['set'][pg_escape_identifier($field)] = $value;
+            $this->queryParts['set'][pg_escape_identifier($field)] = pg_escape_string($value);
         }
         return $this;
     }
@@ -301,7 +301,7 @@ class Criteria
     public function innerJoin(string $table, string $alias, string $condition)
     {
         $this->validateJoin($alias);
-        $hash = $this->tableHash($table, $alias);
+        $hash = hash('crc32', $table . '_' . $alias);
         $this->queryParts['join'][$hash] = [
             'type' => 'inner',
             'table' => pg_escape_identifier($table),
@@ -320,7 +320,7 @@ class Criteria
     public function leftJoin(string $table, string $alias, string $condition)
     {
         $this->validateJoin($alias);
-        $hash = $this->tableHash($table, $alias);
+        $hash = hash('crc32', $table . '_' . $alias);
         $this->queryParts['join'][$hash] = [
             'type' => 'left',
             'table' => pg_escape_identifier($table),
@@ -413,16 +413,6 @@ class Criteria
                 throw new \InvalidArgumentException('Invalid alias name');
             }
         }
-    }
-
-    /**
-     * @param string $table
-     * @param string $alias
-     * @return string
-     */
-    private function tableHash(string &$table, string &$alias)
-    {
-        return hash('crc32', $table . '_' . $alias);
     }
 
     /**
