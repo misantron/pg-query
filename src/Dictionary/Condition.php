@@ -1,9 +1,9 @@
 <?php
 
-namespace MediaTech\Query;
+namespace MediaTech\Query\Dictionary;
 
 
-class Condition extends AbstractEnum
+class Condition extends Dictionary
 {
     const EQUAL = '=';
     const NOT_EQUAL = '!=';

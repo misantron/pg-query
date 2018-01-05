@@ -1,20 +1,19 @@
 {
-  "name": "mediatech/criteria",
+  "name": "mediatech/pg-query",
   "require": {
-    "php": ">=7.0",
-    "ext-pdo-pgsql": "*"
+    "php": ">=7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~6.0"
   },
   "autoload": {
     "psr-4": {
-      "MediaTech\\": "src/"
+      "MediaTech\\Query\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "MediaTech\\Tests\\": "tests/"
+      "MediaTech\\Query\\Tests\\": "tests/"
     }
   }
 }

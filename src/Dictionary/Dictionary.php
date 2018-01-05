@@ -1,15 +1,18 @@
 <?php
 
-namespace MediaTech\Query;
+namespace MediaTech\Query\Dictionary;
 
 
-abstract class AbstractEnum
+abstract class Dictionary
 {
     /**
      * @var array
      */
     protected static $cache = [];
 
+    /**
+     * @throws \BadMethodCallException
+     */
     final private function __construct()
     {
         throw new \BadMethodCallException('Non static call is disabled.');
@@ -18,7 +21,7 @@ abstract class AbstractEnum
     /**
      * @return array
      */
-    final public static function getKeys()
+    final public static function getKeys(): array
     {
         $hash = crc32(static::class);
         if (!isset(static::$cache[$hash])) {
