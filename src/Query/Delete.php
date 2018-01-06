@@ -3,22 +3,20 @@
 namespace MediaTech\Query\Query;
 
 
+use MediaTech\Query\Query\Mixin\Conditions;
+
 class Delete extends Query
 {
-    /**
-     * @var string
-     */
-    private $alias;
-
-    public function alias(string $value)
-    {
-        $this->alias = $this->escapeIdentifier($value, false);
-
-        return $this;
-    }
+    use Conditions;
 
     public function build(): string
     {
-        return '';
+        $query = 'DELETE FROM ' . $this->table;
+
+        if (!empty($this->conditions)) {
+            $query .= ' WHERE ' . $this->buildConditions();
+        }
+
+        return $query;
     }
 }

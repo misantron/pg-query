@@ -3,7 +3,7 @@
 namespace MediaTech\Query\Dictionary;
 
 
-class Condition extends Dictionary
+class Operator extends Dictionary
 {
     const EQUAL = '=';
     const NOT_EQUAL = '!=';

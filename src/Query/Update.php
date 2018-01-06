@@ -3,24 +3,16 @@
 namespace MediaTech\Query\Query;
 
 
+use MediaTech\Query\Query\Mixin\Conditions;
+
 class Update extends Query
 {
-    /**
-     * @var string
-     */
-    private $alias;
+    use Conditions;
 
     /**
      * @var array
      */
     private $set;
-
-    public function alias(string $value)
-    {
-        $this->alias = $this->escapeIdentifier($value, false);
-
-        return $this;
-    }
 
     public function set(array $data)
     {

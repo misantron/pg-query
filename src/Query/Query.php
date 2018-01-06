@@ -62,7 +62,7 @@ abstract class Query
         return $quote ? '"' . $str . '"' : $str;
     }
 
-    protected function escapeValue($value)
+    protected function escapeValue($value): string
     {
         if (is_numeric($value)) {
             $escaped = $value;

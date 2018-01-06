@@ -4,9 +4,12 @@ namespace MediaTech\Query\Query;
 
 
 use MediaTech\Query\Dictionary\FetchMode;
+use MediaTech\Query\Query\Mixin\Conditions;
 
 class Select extends Query
 {
+    use Conditions;
+
     const DEFAULT_TABLE_ALIAS = 't1';
 
     /**
@@ -23,6 +26,16 @@ class Select extends Query
      * @var array
      */
     private $join;
+
+    private $groupBy;
+
+    private $orderBy;
+
+    private $having;
+
+    private $limit;
+
+    private $offset;
 
     /**
      * @var int
@@ -76,13 +89,6 @@ class Select extends Query
             throw new \InvalidArgumentException('Invalid fetch mode');
         }
 
-        if ($mode === FetchMode::COLUMN && sizeof($this->columns) !== 1) {
-            throw new \InvalidArgumentException('Invalid fields number for this fetch mode');
-        }
-        if ($mode === FetchMode::KEY_VALUE && sizeof($this->columns) !== 2) {
-            throw new \InvalidArgumentException('Invalid fields number for this fetch mode');
-        }
-
         $this->fetchMode = $mode;
 
         return $this;
@@ -107,12 +113,14 @@ class Select extends Query
      */
     public function innerJoin(string $table, string $alias, string $condition)
     {
-        // validation
+        $table = $this->escapeIdentifier($table, false);
+        $alias = $this->escapeIdentifier($alias, false);
 
-        $hash = hash('crc32', $table . '_' . $alias);
+        $hash = $this->validateJoin($table, $alias);
+
         $this->join[$hash] = [
             'type' => 'inner',
-            'table' => pg_escape_identifier($table),
+            'table' => $table,
             'alias' => $alias,
             'condition' => $condition,
         ];
@@ -127,20 +135,63 @@ class Select extends Query
      */
     public function leftJoin(string $table, string $alias, string $condition)
     {
-        // validation
+        $table = $this->escapeIdentifier($table, false);
+        $alias = $this->escapeIdentifier($alias, false);
 
-        $hash = hash('crc32', $table . '_' . $alias);
+        $hash = $this->validateJoin($table, $alias);
+
         $this->join[$hash] = [
             'type' => 'left',
-            'table' => pg_escape_identifier($table),
+            'table' => $table,
             'alias' => $alias,
             'condition' => $condition,
         ];
         return $this;
     }
 
+    /**
+     * @param string $table
+     * @param string $alias
+     * @return string
+     */
+    private function validateJoin(string $table, string $alias): string
+    {
+        $hash = hash('crc32', $table . '_' . $alias);
+
+        if (isset($this->join[$hash])) {
+            throw new \InvalidArgumentException('Table has already joined');
+        }
+        foreach ($this->join as $join) {
+            if ($alias === $join['alias']) {
+                throw new \InvalidArgumentException('Invalid alias name');
+            }
+        }
+        return $hash;
+    }
+
+    public function limit(int $value)
+    {
+        $this->limit = $value;
+
+        return $this;
+    }
+
+    public function offset(int $value)
+    {
+        $this->offset = $value;
+
+        return $this;
+    }
+
     public function build(): string
     {
+        if ($this->fetchMode === FetchMode::COLUMN && sizeof($this->columns) !== 1) {
+            throw new \InvalidArgumentException('Invalid fields number for this fetch mode');
+        }
+        if ($this->fetchMode === FetchMode::KEY_VALUE && sizeof($this->columns) !== 2) {
+            throw new \InvalidArgumentException('Invalid fields number for this fetch mode');
+        }
+
         return '';
     }
 }
