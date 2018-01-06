@@ -16,10 +16,6 @@ class FactoryTest extends TestCase
             ->getMock();
 
         $factory = new Factory($pdo);
-        $this->assertInstanceOf(\PDO::class, 'pdo', $factory);
-
-        $pdo = $factory->getPDO();
-        $this->assertEquals(false, \PDO::ATTR_EMULATE_PREPARES, $pdo->getAttribute(\PDO::ATTR_EMULATE_PREPARES));
-        $this->assertEquals(\PDO::ERRMODE_EXCEPTION, \PDO::ATTR_ERRMODE, $pdo->getAttribute(\PDO::ATTR_ERRMODE));
+        $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $factory);
     }
 }
