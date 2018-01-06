@@ -21,18 +21,25 @@ abstract class Query
      */
     public function __construct(\PDO $pdo, string $table)
     {
+        if (empty($table)) {
+            throw new \InvalidArgumentException('Table name is empty');
+        }
+
         $this->pdo = $pdo;
         $this->table = $this->escapeIdentifier($table, false);
     }
 
+    /**
+     * @return string
+     */
     abstract public function build(): string;
 
-    protected function arrayConvert(array $items, string $type = 'integer'): string
+    /**
+     * @return string
+     */
+    public function __toString()
     {
-        if (empty($items) || !is_array($items)) {
-            return 'ARRAY[]::INTEGER[]';
-        }
-        return sprintf('ARRAY[%s]::INTEGER[]', implode(',', $items));
+        return $this->build();
     }
 
     protected function isJson($value): bool
@@ -43,7 +50,7 @@ abstract class Query
 
     protected function escapeIdentifier(string $value, bool $quote = true): string
     {
-        $str = preg_replace('/[^0-9a-z_]/i', '', $value);
+        $str = preg_replace('/[^\.0-9a-z_]/i', '', $value);
         if ($str !== trim($value)) {
             throw new \InvalidArgumentException('Invalid identifier: Invalid characters supplied.');
         }
@@ -64,11 +71,44 @@ abstract class Query
         } elseif (is_bool($value)) {
             $escaped = $value ? 'true' : 'false';
         } elseif (is_array($value)) {
-            $escaped = $this->arrayConvert($value);
+            $type = $this->isIntegerArray($value) ? 'integer': 'string';
+            $escaped = $this->escapeArray($value, $type);
         } else {
             $escaped = $this->pdo->quote($value, \PDO::PARAM_STR);
         }
         return $escaped;
+    }
+
+    /**
+     * @param array $items
+     * @param string $type
+     * @return string
+     */
+    private function escapeArray(array $items, string $type = 'integer'): string
+    {
+        $cast = $type === 'integer' ? 'INTEGER[]' : 'VARCHAR[]';
+
+        if (empty($items)) {
+            return 'ARRAY[]::' . $cast;
+        }
+        if ($type === 'string') {
+            $items = array_map(function (string $value) {
+                return "'" . $value . "'";
+            }, $items);
+        }
+        return 'ARRAY[' . implode(',', $items) . ']::' . $cast;
+    }
+
+    /**
+     * @param array $array
+     * @return bool
+     */
+    private function isIntegerArray(array $array): bool
+    {
+        $filtered = array_filter($array, function ($value) {
+            return !is_int($value);
+        });
+        return empty($filtered);
     }
 
     /**
@@ -82,7 +122,7 @@ abstract class Query
         }
 
         return array_filter(array_map(function (string $field) {
-            return $this->escapeIdentifier(trim($field));
+            return $this->escapeIdentifier(trim($field), false);
         }, $fields));
     }
 }

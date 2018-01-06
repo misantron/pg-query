@@ -60,10 +60,6 @@ class Factory
      */
     public function select(string $table)
     {
-        if (empty($table)) {
-            throw new \InvalidArgumentException('Table name is empty');
-        }
-
         return new Select($this->pdo, $table);
     }
 
@@ -73,10 +69,6 @@ class Factory
      */
     public function update(string $table)
     {
-        if (empty($table)) {
-            throw new \InvalidArgumentException('Table name is empty');
-        }
-
         return new Update($this->pdo, $table);
     }
 
@@ -86,10 +78,6 @@ class Factory
      */
     public function delete(string $table)
     {
-        if (empty($table)) {
-            throw new \InvalidArgumentException('Table name is empty');
-        }
-
         return new Delete($this->pdo, $table);
     }
 
@@ -99,10 +87,6 @@ class Factory
      */
     public function insert(string $table)
     {
-        if (empty($table)) {
-            throw new \InvalidArgumentException('Invalid table name');
-        }
-
         return new Insert($this->pdo, $table);
     }
 }

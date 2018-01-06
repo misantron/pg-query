@@ -21,13 +21,13 @@ class Insert extends Query
     private $rowSet;
 
     /**
-     * @param array $items
+     * @param array|string $items
      * @return Insert
      */
-    public function columns(array $items): Insert
+    public function columns($items): Insert
     {
         if (empty($items)) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Column list is empty');
         }
 
         $this->columns = $this->parseColumns($items);
@@ -42,7 +42,7 @@ class Insert extends Query
     public function values(array $items): Insert
     {
         if (empty($items)) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Value list is empty');
         }
 
         if ($items === array_values($items)) {
@@ -83,12 +83,12 @@ class Insert extends Query
             return '(' . implode(',', $row) . ')';
         }, $values);
 
-        $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(', ', $this->columns));
+        $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
         if ($this->rowSet instanceof Select) {
             $query .= ' ' . $this->rowSet->build();
         } else {
-            $query .= ' VALUES ' . implode(', ', $values) . ' RETURNING *';
+            $query .= ' VALUES ' . implode(',', $values) . ' RETURNING *';
         }
 
         return $query;

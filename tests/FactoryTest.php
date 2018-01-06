@@ -4,18 +4,55 @@ namespace MediaTech\Query\Tests;
 
 
 use MediaTech\Query\Factory;
-use PHPUnit\Framework\TestCase;
+use MediaTech\Query\Query\Delete;
+use MediaTech\Query\Query\Insert;
+use MediaTech\Query\Query\Select;
+use MediaTech\Query\Query\Update;
 
-class FactoryTest extends TestCase
+class FactoryTest extends BaseTestCase
 {
     public function testConstructor()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\PDO $pdo */
-        $pdo = $this->getMockBuilder(\PDO::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $factory = new Factory($pdo);
+        $factory = $this->createFactory();
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $factory);
+    }
+
+    public function testInsert()
+    {
+        $factory = $this->createFactory();
+
+        $query = $factory->insert('foo.bar');
+        $this->assertInstanceOf(Insert::class, $query);
+    }
+
+    public function testSelect()
+    {
+        $factory = $this->createFactory();
+
+        $query = $factory->select('foo.bar');
+        $this->assertInstanceOf(Select::class, $query);
+    }
+
+    public function testUpdate()
+    {
+        $factory = $this->createFactory();
+
+        $query = $factory->update('foo.bar');
+        $this->assertInstanceOf(Update::class, $query);
+    }
+
+    public function testDelete()
+    {
+        $factory = $this->createFactory();
+
+        $query = $factory->delete('foo.bar');
+        $this->assertInstanceOf(Delete::class, $query);
+    }
+
+    private function createFactory()
+    {
+        $pdo = $pdo = $this->createPDOMock();
+
+        return new Factory($pdo);
     }
 }
