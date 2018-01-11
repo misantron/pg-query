@@ -48,6 +48,11 @@ abstract class Query
         return json_last_error() === JSON_ERROR_NONE;
     }
 
+    /**
+     * @param string $value
+     * @param bool $quote
+     * @return string
+     */
     protected function escapeIdentifier(string $value, bool $quote = true): string
     {
         $str = preg_replace('/[^\.0-9a-z_]/i', '', $value);
@@ -62,6 +67,10 @@ abstract class Query
         return $quote ? '"' . $str . '"' : $str;
     }
 
+    /**
+     * @param mixed $value
+     * @return string
+     */
     protected function escapeValue($value): string
     {
         if (is_numeric($value)) {
@@ -71,8 +80,7 @@ abstract class Query
         } elseif (is_bool($value)) {
             $escaped = $value ? 'true' : 'false';
         } elseif (is_array($value)) {
-            $type = $this->isIntegerArray($value) ? 'integer': 'string';
-            $escaped = $this->escapeArray($value, $type);
+            $escaped = $this->escapeArray($value);
         } else {
             $escaped = $this->pdo->quote($value, \PDO::PARAM_STR);
         }
@@ -80,30 +88,30 @@ abstract class Query
     }
 
     /**
-     * @param array $items
-     * @param string $type
+     * @param array $values
      * @return string
      */
-    private function escapeArray(array $items, string $type = 'integer'): string
+    protected function escapeArray(array $values): string
     {
+        $type = $this->isIntegerArray($values) ? 'integer': 'string';
         $cast = $type === 'integer' ? 'INTEGER[]' : 'VARCHAR[]';
 
-        if (empty($items)) {
+        if (empty($values)) {
             return 'ARRAY[]::' . $cast;
         }
         if ($type === 'string') {
-            $items = array_map(function (string $value) {
+            $values = array_map(function (string $value) {
                 return "'" . $value . "'";
-            }, $items);
+            }, $values);
         }
-        return 'ARRAY[' . implode(',', $items) . ']::' . $cast;
+        return 'ARRAY[' . implode(',', $values) . ']::' . $cast;
     }
 
     /**
      * @param array $array
      * @return bool
      */
-    private function isIntegerArray(array $array): bool
+    protected function isIntegerArray(array $array): bool
     {
         $filtered = array_filter($array, function ($value) {
             return !is_int($value);
@@ -112,17 +120,17 @@ abstract class Query
     }
 
     /**
-     * @param array|string $fields
+     * @param array|string $items
      * @return array
      */
-    protected function parseColumns($fields): array
+    protected function parseList($items): array
     {
-        if (is_string($fields)) {
-            $fields = explode(',', $fields);
+        if (is_string($items)) {
+            $items = explode(',', $items);
         }
 
-        return array_filter(array_map(function (string $field) {
-            return $this->escapeIdentifier(trim($field), false);
-        }, $fields));
+        return array_filter(array_map(function (string $item) {
+            return $this->escapeIdentifier(trim($item), false);
+        }, $items));
     }
 }

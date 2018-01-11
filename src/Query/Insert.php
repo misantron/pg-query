@@ -30,7 +30,7 @@ class Insert extends Query
             throw new \InvalidArgumentException('Column list is empty');
         }
 
-        $this->columns = $this->parseColumns($items);
+        $this->columns = $this->parseList($items);
 
         return $this;
     }

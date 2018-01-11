@@ -27,14 +27,29 @@ class Select extends Query
      */
     private $join;
 
+    /**
+     * @var array
+     */
     private $groupBy;
 
+    /**
+     * @var array
+     */
     private $orderBy;
 
+    /**
+     * @var string
+     */
     private $having;
 
+    /**
+     * @var int
+     */
     private $limit;
 
+    /**
+     * @var int
+     */
     private $offset;
 
     /**
@@ -65,25 +80,37 @@ class Select extends Query
         $this->fetchMode = $fetchMode;
     }
 
-    public function alias(string $value)
+    /**
+     * @param string $value
+     * @return Select
+     */
+    public function alias(string $value): Select
     {
         $this->alias = $this->escapeIdentifier($value, false);
 
         return $this;
     }
 
-    public function columns(array $items)
+    /**
+     * @param array $items
+     * @return Select
+     */
+    public function columns(array $items): Select
     {
         if (empty($items)) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('Column list is empty');
         }
 
-        $this->columns = $this->parseColumns($items);
+        $this->columns = $this->parseList($items);
 
         return $this;
     }
 
-    public function setFetchMode(int $mode)
+    /**
+     * @param int $mode
+     * @return Select
+     */
+    public function setFetchMode(int $mode): Select
     {
         if (!in_array($mode, FetchMode::getKeys())) {
             throw new \InvalidArgumentException('Invalid fetch mode');
@@ -100,7 +127,7 @@ class Select extends Query
      * @param string $condition
      * @return Select
      */
-    public function join(string $table, string $alias, string $condition)
+    public function join(string $table, string $alias, string $condition): Select
     {
         return $this->innerJoin($table, $alias, $condition);
     }
@@ -111,7 +138,7 @@ class Select extends Query
      * @param string $condition
      * @return Select
      */
-    public function innerJoin(string $table, string $alias, string $condition)
+    public function innerJoin(string $table, string $alias, string $condition): Select
     {
         $table = $this->escapeIdentifier($table, false);
         $alias = $this->escapeIdentifier($alias, false);
@@ -133,7 +160,7 @@ class Select extends Query
      * @param string $condition
      * @return Select
      */
-    public function leftJoin(string $table, string $alias, string $condition)
+    public function leftJoin(string $table, string $alias, string $condition): Select
     {
         $table = $this->escapeIdentifier($table, false);
         $alias = $this->escapeIdentifier($alias, false);
@@ -169,14 +196,74 @@ class Select extends Query
         return $hash;
     }
 
-    public function limit(int $value)
+    /**
+     * @param array $values
+     * @return Select
+     */
+    public function with(array $values): Select
+    {
+        foreach ($values as $alias => $value) {
+            $alias = $this->escapeIdentifier($alias, false);
+            if (!$value instanceof Select) {
+                throw new \InvalidArgumentException('');
+            }
+            if (isset($this->with[$alias])) {
+                throw new \InvalidArgumentException('');
+            }
+            $this->with[$alias] = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * @param array $values
+     * @return Select
+     */
+    public function groupBy(array $values): Select
+    {
+        $this->groupBy = $values;
+
+        return $this;
+    }
+
+    /**
+     * @param array $values
+     * @return Select
+     */
+    public function orderBy(array $values): Select
+    {
+        $this->orderBy = $values;
+
+        return $this;
+    }
+
+    /**
+     * @param string $condition
+     * @return Select
+     */
+    public function having(string $condition): Select
+    {
+        $this->having = $condition;
+
+        return $this;
+    }
+
+    /**
+     * @param int $value
+     * @return Select
+     */
+    public function limit(int $value): Select
     {
         $this->limit = $value;
 
         return $this;
     }
 
-    public function offset(int $value)
+    /**
+     * @param int $value
+     * @return Select
+     */
+    public function offset(int $value): Select
     {
         $this->offset = $value;
 
@@ -185,13 +272,22 @@ class Select extends Query
 
     public function build(): string
     {
-        if ($this->fetchMode === FetchMode::COLUMN && sizeof($this->columns) !== 1) {
-            throw new \InvalidArgumentException('Invalid fields number for this fetch mode');
-        }
-        if ($this->fetchMode === FetchMode::KEY_VALUE && sizeof($this->columns) !== 2) {
-            throw new \InvalidArgumentException('Invalid fields number for this fetch mode');
-        }
+        $this->validateQuery();
 
         return '';
+    }
+
+    private function validateQuery()
+    {
+        if (!empty($this->having) && empty($this->groupBy)) {
+            throw new \RuntimeException('Using having without group by is unacceptable');
+        }
+
+        if ($this->fetchMode === FetchMode::COLUMN && sizeof($this->columns) !== 1) {
+            throw new \RuntimeException('Invalid fields number for this fetch mode');
+        }
+        if ($this->fetchMode === FetchMode::KEY_VALUE && sizeof($this->columns) !== 2) {
+            throw new \RuntimeException('Invalid fields number for this fetch mode');
+        }
     }
 }
