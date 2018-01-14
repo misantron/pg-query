@@ -101,7 +101,7 @@ abstract class Query
         }
         if ($type === 'string') {
             $values = array_map(function (string $value) {
-                return "'" . $value . "'";
+                return "'" . str_replace("'", "''", $value) . "'";
             }, $values);
         }
         return 'ARRAY[' . implode(',', $values) . ']::' . $cast;

@@ -25,7 +25,7 @@ class Update extends Query
         }
 
         foreach ($data as $field => $value) {
-            $this->set[$this->escapeIdentifier($field)] = $this->escapeValue($value);
+            $this->set[$this->escapeIdentifier($field, false)] = $this->escapeValue($value);
         }
         return $this;
     }
