@@ -42,6 +42,11 @@ abstract class Query
         return $this->build();
     }
 
+    public function execute()
+    {
+
+    }
+
     protected function isJson($value): bool
     {
         json_decode($value);

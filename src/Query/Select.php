@@ -3,8 +3,8 @@
 namespace MediaTech\Query\Query;
 
 
-use MediaTech\Query\Dictionary\FetchMode;
 use MediaTech\Query\Query\Mixin\Conditions;
+use MediaTech\Query\Query\Select\FetchMode;
 
 class Select extends Query
 {
@@ -20,22 +20,27 @@ class Select extends Query
     /**
      * @var array
      */
-    private $columns;
+    private $columns = [];
+
+    /**
+     * @var bool
+     */
+    private $distinct;
 
     /**
      * @var array
      */
-    private $join;
+    private $joins = [];
 
     /**
      * @var array
      */
-    private $groupBy;
+    private $groupBy = [];
 
     /**
      * @var array
      */
-    private $orderBy;
+    private $orderBy = [];
 
     /**
      * @var string
@@ -60,7 +65,7 @@ class Select extends Query
     /**
      * @var Select[]
      */
-    private $with;
+    private $with = [];
 
     /**
      * @param \PDO $pdo
@@ -107,16 +112,26 @@ class Select extends Query
     }
 
     /**
-     * @param int $mode
      * @return Select
      */
-    public function setFetchMode(int $mode): Select
+    public function distinct(): Select
     {
-        if (!in_array($mode, FetchMode::getKeys())) {
+        $this->distinct = true;
+
+        return $this;
+    }
+
+    /**
+     * @param int $value
+     * @return Select
+     */
+    public function fetchMode(int $value): Select
+    {
+        if (!in_array($value, FetchMode::getKeys())) {
             throw new \InvalidArgumentException('Invalid fetch mode');
         }
 
-        $this->fetchMode = $mode;
+        $this->fetchMode = $value;
 
         return $this;
     }
@@ -145,7 +160,7 @@ class Select extends Query
 
         $hash = $this->validateJoin($table, $alias);
 
-        $this->join[$hash] = [
+        $this->joins[$hash] = [
             'type' => 'inner',
             'table' => $table,
             'alias' => $alias,
@@ -167,7 +182,7 @@ class Select extends Query
 
         $hash = $this->validateJoin($table, $alias);
 
-        $this->join[$hash] = [
+        $this->joins[$hash] = [
             'type' => 'left',
             'table' => $table,
             'alias' => $alias,
@@ -185,10 +200,10 @@ class Select extends Query
     {
         $hash = hash('crc32', $table . '_' . $alias);
 
-        if (isset($this->join[$hash])) {
+        if (isset($this->joins[$hash])) {
             throw new \InvalidArgumentException('Table has already joined');
         }
-        foreach ($this->join as $join) {
+        foreach ($this->joins as $join) {
             if ($alias === $join['alias']) {
                 throw new \InvalidArgumentException('Invalid alias name');
             }
@@ -205,10 +220,10 @@ class Select extends Query
         foreach ($values as $alias => $value) {
             $alias = $this->escapeIdentifier($alias, false);
             if (!$value instanceof Select) {
-                throw new \InvalidArgumentException('');
+                throw new \InvalidArgumentException('Invalid query type');
             }
             if (isset($this->with[$alias])) {
-                throw new \InvalidArgumentException('');
+                throw new \InvalidArgumentException('Alias is already in use');
             }
             $this->with[$alias] = $value;
         }
@@ -287,7 +302,17 @@ class Select extends Query
     {
         $this->validateQuery();
 
-        return '';
+        $query = '';
+        $query .= $this->buildWith();
+        $query .= $this->buildSelect();
+        $query .= $this->buildJoins();
+        $query .= $this->buildWhere();
+        $query .= $this->buildGroupBy();
+        $query .= $this->buildHaving();
+        $query .= $this->buildOrderBy();
+        $query .= $this->buildLimitOffset();
+
+        return $query;
     }
 
     private function validateQuery()
@@ -302,5 +327,72 @@ class Select extends Query
         if ($this->fetchMode === FetchMode::KEY_VALUE && sizeof($this->columns) !== 2) {
             throw new \RuntimeException('Invalid fields number for this fetch mode');
         }
+    }
+
+    private function buildWith(): string
+    {
+        $queries = [];
+        foreach ($this->with as $alias => $query) {
+            $queries[] = $alias . ' AS (' . $query->build() . ')';
+        }
+
+        return !empty($queries) ? 'WITH ' . implode(', ', $queries) : '';
+    }
+
+    private function buildSelect(): string
+    {
+        $str = 'SELECT ' . ($this->distinct ? 'DISTINCT ' : '');
+        $str .= (empty($this->columns) ? '*' : implode(',', $this->columns)) . ' FROM ' . $this->table . ' ' . $this->alias;
+
+        return $str;
+    }
+
+    private function buildJoins(): string
+    {
+        $joins = [];
+        foreach ($this->joins as $join) {
+            $joins[] = sprintf(
+                "%s JOIN %s %s ON %s",
+                strtoupper($join['type']),
+                $join['table'],
+                $join['alias'],
+                $join['condition']
+            );
+        }
+        return !empty($joins) ? ' ' . implode(' ', $joins) : '';
+    }
+
+    private function buildWhere(): string
+    {
+        return $this->hasConditions() ? ' WHERE ' . $this->buildConditions() : '';
+    }
+
+    private function buildGroupBy(): string
+    {
+        return !empty($this->groupBy) ? ' GROUP BY ' . implode(',', $this->groupBy) : '';
+    }
+
+    private function buildHaving(): string
+    {
+        return !empty($this->having) ? ' HAVING ' . $this->having : '';
+    }
+
+    private function buildOrderBy(): string
+    {
+        return !empty($this->orderBy) ? ' ORDER BY ' . implode(',', $this->orderBy) : '';
+    }
+
+    private function buildLimitOffset(): string
+    {
+        $str = '';
+
+        if (is_int($this->limit)) {
+            $str .= ' LIMIT ' . $this->limit;
+        }
+        if (is_int($this->offset)) {
+            $str .= ' OFFSET ' . $this->offset;
+        }
+
+        return $str;
     }
 }

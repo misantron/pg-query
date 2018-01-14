@@ -132,7 +132,7 @@ class InsertTest extends BaseTestCase
             ->columns($columns)
             ->fromRows($rowSetQuery);
 
-        $this->assertEquals("INSERT INTO bar.foo (foo,bar) ", $query->build());
+        $this->assertEquals('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->build());
     }
 
     private function createQuery()
