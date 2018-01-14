@@ -70,24 +70,27 @@ class Insert extends Query
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function build(): string
     {
-        $values = [];
-        foreach ($this->values as $k => $row) {
-            foreach ($row as $i => $value) {
-                $values[$k][$i] = $this->escapeValue($value);
-            }
-        }
-
-        $values = array_map(function (array $row) {
-            return '(' . implode(',', $row) . ')';
-        }, $values);
-
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
         if ($this->rowSet instanceof Select) {
             $query .= ' ' . $this->rowSet->build();
         } else {
+            $values = [];
+            foreach ($this->values as $k => $row) {
+                foreach ($row as $i => $value) {
+                    $values[$k][$i] = $this->escapeValue($value);
+                }
+            }
+
+            $values = array_map(function (array $row) {
+                return '(' . implode(',', $row) . ')';
+            }, $values);
+
             $query .= ' VALUES ' . implode(',', $values) . ' RETURNING *';
         }
 

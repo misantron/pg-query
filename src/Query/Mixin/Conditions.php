@@ -318,7 +318,7 @@ trait Conditions
         }
         if ($type === 'string') {
             $filtered = array_map(function (string $item) {
-                return "'" . $item . "'";
+                return "'" . str_replace("'", "''", $item) . "'";
             }, $filtered);
         }
         return implode(',', $filtered);

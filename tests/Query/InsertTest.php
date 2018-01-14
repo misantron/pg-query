@@ -3,6 +3,7 @@
 namespace MediaTech\Query\Tests\Query;
 
 
+use MediaTech\Query\Factory;
 use MediaTech\Query\Query\Insert;
 use MediaTech\Query\Query\Select;
 use MediaTech\Query\Tests\BaseTestCase;
@@ -116,7 +117,22 @@ class InsertTest extends BaseTestCase
 
     public function testBuildWithRowSet()
     {
-        $this->markTestIncomplete('Not ready');
+        $pdo = $this->createPDOMock();
+        $columns = ['foo', 'bar'];
+
+        $rowSetQuery = Factory::create($pdo)->select('foo.bar');
+
+        $rowSetQuery
+            ->columns($columns)
+            ->andEquals('test', 1)
+            ->range(0, 50);
+
+        $query = new Insert($pdo, 'bar.foo');
+        $query
+            ->columns($columns)
+            ->fromRows($rowSetQuery);
+
+        $this->assertEquals("INSERT INTO bar.foo (foo,bar) ", $query->build());
     }
 
     private function createQuery()

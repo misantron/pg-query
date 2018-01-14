@@ -270,6 +270,19 @@ class Select extends Query
         return $this;
     }
 
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @return Select
+     */
+    public function range(int $offset, int $limit): Select
+    {
+        $this->offset = $offset;
+        $this->limit = $limit;
+
+        return $this;
+    }
+
     public function build(): string
     {
         $this->validateQuery();
