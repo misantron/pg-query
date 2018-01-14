@@ -119,6 +119,121 @@ trait Conditions
         return $this;
     }
 
+    public function more(string $column, $value)
+    {
+        return $this->andMore($column, $value);
+    }
+
+    public function andMore(string $column, $value)
+    {
+        $this->conditions[] = [
+            'sign' => 'AND',
+            'condition' => $this->buildEquals($column, $value, '>'),
+        ];
+        return $this;
+    }
+
+    public function orMore(string $column, $value)
+    {
+        $this->conditions[] = [
+            'sign' => 'OR',
+            'condition' => $this->buildEquals($column, $value, '>'),
+        ];
+        return $this;
+    }
+
+    public function moreOrEquals(string $column, $value)
+    {
+        return $this->andMoreOrEquals($column, $value);
+    }
+
+    public function andMoreOrEquals(string $column, $value)
+    {
+        $this->conditions[] = [
+            'sign' => 'AND',
+            'condition' => $this->buildEquals($column, $value, '>='),
+        ];
+        return $this;
+    }
+
+    public function orMoreOrEquals(string $column, $value)
+    {
+        $this->conditions[] = [
+            'sign' => 'OR',
+            'condition' => $this->buildEquals($column, $value, '>='),
+        ];
+        return $this;
+    }
+
+    public function less(string $column, $value)
+    {
+        return $this->andLess($column, $value);
+    }
+
+    public function andLess(string $column, $value)
+    {
+        $this->conditions[] = [
+            'sign' => 'AND',
+            'condition' => $this->buildEquals($column, $value, '<'),
+        ];
+        return $this;
+    }
+
+    public function orLess(string $column, $value)
+    {
+        $this->conditions[] = [
+            'sign' => 'OR',
+            'condition' => $this->buildEquals($column, $value, '<'),
+        ];
+        return $this;
+    }
+
+    public function lessOrEquals(string $column, $value)
+    {
+        return $this->andLessOrEquals($column, $value);
+    }
+
+    public function andLessOrEquals(string $column, $value)
+    {
+        $this->conditions[] = [
+            'sign' => 'AND',
+            'condition' => $this->buildEquals($column, $value, '<='),
+        ];
+        return $this;
+    }
+
+    public function orLessOrEquals(string $column, $value)
+    {
+        $this->conditions[] = [
+            'sign' => 'OR',
+            'condition' => $this->buildEquals($column, $value, '<='),
+        ];
+        return $this;
+    }
+
+    public function between(string $column, array $values)
+    {
+        return $this->andBetween($column, $values);
+    }
+
+    public function andBetween(string $column, array $values)
+    {
+        $this->conditions[] = [
+            'sign' => 'AND',
+            'condition' => $this->buildBetween($column, $values),
+        ];
+        return $this;
+    }
+
+    public function orBetween(string $column, array $values)
+    {
+        $this->conditions[] = [
+            'sign' => 'OR',
+            'condition' => $this->buildBetween($column, $values),
+        ];
+        return $this;
+    }
+
     public function isNull(string $column)
     {
         return $this->andIsNull($column);
@@ -283,6 +398,15 @@ trait Conditions
     private function buildEquals(string $column, $value, string $operator): string
     {
         return sprintf('%s %s %s', $this->escapeIdentifier($column, false), $operator, $this->escapeValue($value));
+    }
+
+    private function buildBetween(string $column, array $values): string
+    {
+        list($rangeBegin, $rangeEnd) = array_map(function ($value) {
+            return $this->escapeValue($value);
+        }, $values);
+
+        return sprintf('%s BETWEEN %s AND %s', $this->escapeIdentifier($column, false), $rangeBegin, $rangeEnd);
     }
 
     private function buildNull(string $column, string $operator): string
