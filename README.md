@@ -1,7 +1,8 @@
 # PG.Query
 
+[![Build Status](http://img.shields.io/travis/newmediatech/pg-query.svg?style=flat-square&maxAge=2592000)](https://travis-ci.org/newmediatech/pg-query)
 [![PHP 7 Support](https://img.shields.io/badge/PHP%207-supported-blue.svg?style=flat-square)](https://github.com/newmediatech/pg-query)
-[![license](https://img.shields.io/github/license/newmediatech/pg-query.svg?style=flat-square)](https://github.com/newmediatech/pg-query)
+[![License](https://img.shields.io/github/license/newmediatech/pg-query.svg?style=flat-square)](https://github.com/newmediatech/pg-query)
 
 Powerful SQL query builder without dependencies, oriented on Postgres database.  
 Using [PDO](http://php.net/PDO) inside. 
