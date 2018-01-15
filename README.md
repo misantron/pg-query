@@ -1,6 +1,8 @@
 # PG.Query
 
 [![Build Status](http://img.shields.io/travis/newmediatech/pg-query.svg?style=flat-square&maxAge=2592000)](https://travis-ci.org/newmediatech/pg-query)
+[![Code Coverage](http://img.shields.io/coveralls/github/newmediatech/pg-query.svg?style=flat-square)](https://coveralls.io/github/newmediatech/pg-query)
+[![Code Climate](http://img.shields.io/codeclimate/github/newmediatech/pg-query.svg?style=flat-square)](https://codeclimate.com/github/newmediatech/pg-query)
 [![PHP 7 Support](https://img.shields.io/badge/PHP%207-supported-blue.svg?style=flat-square)](https://github.com/newmediatech/pg-query)
 [![License](https://img.shields.io/github/license/newmediatech/pg-query.svg?style=flat-square)](https://github.com/newmediatech/pg-query)
 

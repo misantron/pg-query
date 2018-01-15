@@ -155,9 +155,6 @@ class Select extends Query
      */
     public function innerJoin(string $table, string $alias, string $condition): Select
     {
-        $table = $this->escapeIdentifier($table, false);
-        $alias = $this->escapeIdentifier($alias, false);
-
         $hash = $this->validateJoin($table, $alias);
 
         $this->joins[$hash] = [
@@ -177,9 +174,6 @@ class Select extends Query
      */
     public function leftJoin(string $table, string $alias, string $condition): Select
     {
-        $table = $this->escapeIdentifier($table, false);
-        $alias = $this->escapeIdentifier($alias, false);
-
         $hash = $this->validateJoin($table, $alias);
 
         $this->joins[$hash] = [
@@ -198,6 +192,9 @@ class Select extends Query
      */
     private function validateJoin(string $table, string $alias): string
     {
+        $table = $this->escapeIdentifier($table, false);
+        $alias = $this->escapeIdentifier($alias, false);
+
         $hash = hash('crc32', $table . '_' . $alias);
 
         if (isset($this->joins[$hash])) {

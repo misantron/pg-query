@@ -1,5 +1,10 @@
 {
   "name": "mediatech/pg-query",
+  "description": "Powerful PostgreSQL query builder",
+  "keywords": ["php", "pdo", "postgres", "query-builder"],
+  "homepage": "https://github.com/newmediatech/pg-query",
+  "type": "library",
+  "license": "MIT",
   "require": {
     "php": ">=7.0"
   },
