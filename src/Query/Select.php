@@ -97,10 +97,10 @@ class Select extends Query
     }
 
     /**
-     * @param array $items
+     * @param array|string $items
      * @return Select
      */
-    public function columns(array $items): Select
+    public function columns($items): Select
     {
         if (empty($items)) {
             throw new \InvalidArgumentException('Column list is empty');
@@ -112,11 +112,12 @@ class Select extends Query
     }
 
     /**
+     * @param bool $value
      * @return Select
      */
-    public function distinct(): Select
+    public function distinct(bool $value = true): Select
     {
-        $this->distinct = true;
+        $this->distinct = $value;
 
         return $this;
     }
