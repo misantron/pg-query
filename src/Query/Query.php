@@ -11,6 +11,11 @@ abstract class Query
     private $pdo;
 
     /**
+     * @var \PDOStatement
+     */
+    protected $statement;
+
+    /**
      * @var string
      */
     protected $table;
@@ -42,15 +47,17 @@ abstract class Query
         return $this->build();
     }
 
+    /**
+     * @return Query
+     */
     public function execute()
     {
+        $query = $this->build();
 
-    }
+        $this->statement = $this->pdo->prepare($query);
+        $this->statement->execute();
 
-    protected function isJson($value): bool
-    {
-        json_decode($value);
-        return json_last_error() === JSON_ERROR_NONE;
+        return $this;
     }
 
     /**
