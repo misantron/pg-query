@@ -5,6 +5,10 @@ namespace MediaTech\Query\Query;
 
 use MediaTech\Query\Query\Mixin\Conditions;
 
+/**
+ * Class Delete
+ * @package MediaTech\Query\Query
+ */
 class Delete extends Query
 {
     use Conditions;
@@ -15,10 +19,7 @@ class Delete extends Query
     public function build(): string
     {
         $query = 'DELETE FROM ' . $this->table;
-
-        if ($this->hasConditions()) {
-            $query .= ' WHERE ' . $this->buildConditions();
-        }
+        $query .= $this->buildConditions();
 
         return $query;
     }

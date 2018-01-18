@@ -5,6 +5,10 @@ namespace MediaTech\Query\Query;
 
 use MediaTech\Query\Query\Mixin\Conditions;
 
+/**
+ * Class Update
+ * @package MediaTech\Query\Query
+ */
 class Update extends Query
 {
     use Conditions;
@@ -12,7 +16,7 @@ class Update extends Query
     /**
      * @var array
      */
-    private $set;
+    private $set = [];
 
     /**
      * @param array $data
@@ -36,10 +40,7 @@ class Update extends Query
     public function build(): string
     {
         $query = 'UPDATE ' . $this->table . ' SET ' . $this->buildSet();
-
-        if ($this->hasConditions()) {
-            $query .= ' WHERE ' . $this->buildConditions();
-        }
+        $query .= $this->buildConditions();
 
         return $query;
     }
@@ -50,6 +51,10 @@ class Update extends Query
     private function buildSet(): string
     {
         $set = $this->set;
+
+        if (empty($set)) {
+            throw new \RuntimeException('Query set is empty');
+        }
 
         $values = array_map(function (string $field, string $value) {
             return $field . ' = ' . $value;

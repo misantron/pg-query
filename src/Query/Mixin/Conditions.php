@@ -17,7 +17,7 @@ trait Conditions
     /**
      * @var array
      */
-    private $conditions;
+    private $conditions = [];
 
     /**
      * @return Conditions
@@ -449,14 +449,6 @@ trait Conditions
     }
 
     /**
-     * @return bool
-     */
-    private function hasConditions(): bool
-    {
-        return !empty($this->conditions);
-    }
-
-    /**
      * @return string
      */
     private function buildConditions(): string
@@ -464,7 +456,7 @@ trait Conditions
         $trimSign = true;
         $conditions = $this->conditions;
 
-        return (string)array_reduce(
+        $query = (string)array_reduce(
             $conditions,
             function (string $query, array $part) use (&$trimSign) {
                 $condition = (string)$part['condition'];
@@ -479,5 +471,7 @@ trait Conditions
             },
             ''
         );
+
+        return $query === '' ? $query : ' WHERE ' . $query;
     }
 }

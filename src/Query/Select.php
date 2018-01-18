@@ -4,13 +4,24 @@ namespace MediaTech\Query\Query;
 
 
 use MediaTech\Query\Query\Mixin\Conditions;
-use MediaTech\Query\Query\Select\FetchMode;
 
+/**
+ * Class Select
+ * @package MediaTech\Query\Query
+ */
 class Select extends Query
 {
     use Conditions;
 
     const DEFAULT_TABLE_ALIAS = 't1';
+
+    const AVAILABLE_FETCH_MODES = [
+        \PDO::FETCH_ASSOC,
+        \PDO::FETCH_CLASS,
+        \PDO::FETCH_KEY_PAIR,
+        \PDO::FETCH_COLUMN,
+        \PDO::FETCH_FUNC,
+    ];
 
     /**
      * @var string
@@ -77,7 +88,7 @@ class Select extends Query
         \PDO $pdo,
         string $table,
         string $alias = self::DEFAULT_TABLE_ALIAS,
-        int $fetchMode = FetchMode::ASSOC
+        int $fetchMode = \PDO::FETCH_ASSOC
     ) {
         parent::__construct($pdo, $table);
 
@@ -128,7 +139,7 @@ class Select extends Query
      */
     public function fetchMode(int $value): Select
     {
-        if (!in_array($value, FetchMode::getKeys())) {
+        if (!in_array($value, self::AVAILABLE_FETCH_MODES)) {
             throw new \InvalidArgumentException('Invalid fetch mode');
         }
 
@@ -304,7 +315,7 @@ class Select extends Query
         $query .= $this->buildWith();
         $query .= $this->buildSelect();
         $query .= $this->buildJoins();
-        $query .= $this->buildWhere();
+        $query .= $this->buildConditions();
         $query .= $this->buildGroupBy();
         $query .= $this->buildHaving();
         $query .= $this->buildOrderBy();
@@ -313,16 +324,60 @@ class Select extends Query
         return $query;
     }
 
+    /**
+     * @param string|callable $argument
+     * @return array
+     */
+    public function fetchAll($argument = null): array
+    {
+        switch ($this->fetchMode) {
+            case \PDO::FETCH_CLASS:
+            case \PDO::FETCH_FUNC:
+                $data = $this->statement->fetchAll($this->fetchMode, $argument);
+                break;
+            case \PDO::FETCH_ASSOC:
+            case \PDO::FETCH_KEY_PAIR:
+            case \PDO::FETCH_COLUMN:
+                $data = $this->statement->fetchAll($this->fetchMode);
+                break;
+            default:
+                throw new \RuntimeException('Invalid fetch mode');
+        }
+        return $data;
+    }
+
+    /**
+     * @param string $argument
+     * @return mixed
+     */
+    public function fetchOne($argument = null)
+    {
+        switch ($this->fetchMode) {
+            case \PDO::FETCH_CLASS:
+                $data = $this->statement->fetchObject($argument);
+                break;
+            case \PDO::FETCH_ASSOC:
+                $data = $this->statement->fetch();
+                break;
+            case \PDO::FETCH_COLUMN:
+                $data = $this->statement->fetchColumn();
+                break;
+            default:
+                throw new \RuntimeException('Invalid fetch mode');
+        }
+        return $data;
+    }
+
     private function validateQuery()
     {
         if (!empty($this->having) && empty($this->groupBy)) {
             throw new \RuntimeException('Using having without group by is unacceptable');
         }
 
-        if ($this->fetchMode === FetchMode::COLUMN && sizeof($this->columns) !== 1) {
+        if ($this->fetchMode === \PDO::FETCH_COLUMN && sizeof($this->columns) !== 1) {
             throw new \RuntimeException('Invalid fields number for this fetch mode');
         }
-        if ($this->fetchMode === FetchMode::KEY_VALUE && sizeof($this->columns) !== 2) {
+        if ($this->fetchMode === \PDO::FETCH_KEY_PAIR && sizeof($this->columns) !== 2) {
             throw new \RuntimeException('Invalid fields number for this fetch mode');
         }
     }
@@ -358,11 +413,6 @@ class Select extends Query
             );
         }
         return !empty($joins) ? ' ' . implode(' ', $joins) : '';
-    }
-
-    private function buildWhere(): string
-    {
-        return $this->hasConditions() ? ' WHERE ' . $this->buildConditions() : '';
     }
 
     private function buildGroupBy(): string

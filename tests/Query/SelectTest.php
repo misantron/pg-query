@@ -18,7 +18,7 @@ class SelectTest extends BaseTestCase
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
         $this->assertAttributeEquals('foo.bar', 'table', $query);
         $this->assertAttributeEquals(Select::DEFAULT_TABLE_ALIAS, 'alias', $query);
-        $this->assertAttributeEquals(Select\FetchMode::ASSOC, 'fetchMode', $query);
+        $this->assertAttributeEquals(\PDO::FETCH_ASSOC, 'fetchMode', $query);
         $this->assertAttributeEquals([], 'columns', $query);
         $this->assertAttributeEquals([], 'joins', $query);
         $this->assertAttributeEquals([], 'groupBy', $query);
@@ -33,9 +33,9 @@ class SelectTest extends BaseTestCase
 
         $this->assertAttributeEquals('test', 'alias', $query);
 
-        $query = new Select($pdo, $table, 'test', Select\FetchMode::OBJECT);
+        $query = new Select($pdo, $table, 'test', \PDO::FETCH_CLASS);
 
-        $this->assertAttributeEquals(Select\FetchMode::OBJECT, 'fetchMode', $query);
+        $this->assertAttributeEquals(\PDO::FETCH_CLASS, 'fetchMode', $query);
     }
 
     public function testAlias()
@@ -90,15 +90,15 @@ class SelectTest extends BaseTestCase
     public function testFetchModeWithInvalidValue()
     {
         $query = $this->createQuery();
-        $query->fetchMode(100500);
+        $query->fetchMode(\PDO::FETCH_BOUND);
     }
 
     public function testFetchMode()
     {
         $query = $this->createQuery();
-        $query->fetchMode(Select\FetchMode::COLUMN);
+        $query->fetchMode(\PDO::FETCH_COLUMN);
 
-        $this->assertAttributeEquals(Select\FetchMode::COLUMN, 'fetchMode', $query);
+        $this->assertAttributeEquals(\PDO::FETCH_COLUMN, 'fetchMode', $query);
     }
 
     private function createQuery()

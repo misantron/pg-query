@@ -3,6 +3,10 @@
 namespace MediaTech\Query\Query;
 
 
+/**
+ * Class Query
+ * @package MediaTech\Query\Query
+ */
 abstract class Query
 {
     /**

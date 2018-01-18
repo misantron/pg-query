@@ -3,6 +3,10 @@
 namespace MediaTech\Query\Query;
 
 
+/**
+ * Class Insert
+ * @package MediaTech\Query\Query
+ */
 class Insert extends Query
 {
     /**

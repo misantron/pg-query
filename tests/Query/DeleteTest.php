@@ -14,6 +14,7 @@ class DeleteTest extends BaseTestCase
 
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
         $this->assertAttributeEquals('foo.bar', 'table', $query);
+        $this->assertAttributeEquals([], 'conditions', $query);
     }
 
     public function testBuildWithoutConditions()

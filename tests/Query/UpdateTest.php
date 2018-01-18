@@ -14,7 +14,8 @@ class UpdateTest extends BaseTestCase
 
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
         $this->assertAttributeEquals('foo.bar', 'table', $query);
-        $this->assertAttributeEquals(null, 'set', $query);
+        $this->assertAttributeEquals([], 'set', $query);
+        $this->assertAttributeEquals([], 'conditions', $query);
     }
 
     /**
@@ -51,6 +52,18 @@ class UpdateTest extends BaseTestCase
         $query->set(['col1' => 1]);
 
         $this->assertEquals('UPDATE foo.bar SET col1 = 1', $query->build());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Query set is empty
+     */
+    public function testBuildWithoutSet()
+    {
+        $query = $this->createQuery();
+        $query->andEquals('col1', 1);
+
+        $query->build();
     }
 
     public function testBuild()
