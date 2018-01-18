@@ -80,20 +80,28 @@ class Insert extends Query
         if ($this->rowSet instanceof Select) {
             $query .= ' ' . $this->rowSet->build();
         } else {
-            $values = [];
-            foreach ($this->values as $k => $row) {
-                foreach ($row as $i => $value) {
-                    $values[$k][$i] = $this->escapeValue($value);
-                }
-            }
-
-            $values = array_map(function (array $row) {
-                return '(' . implode(',', $row) . ')';
-            }, $values);
-
-            $query .= ' VALUES ' . implode(',', $values) . ' RETURNING *';
+            $query .= ' VALUES ' . $this->buildValues() . ' RETURNING *';
         }
 
         return $query;
+    }
+
+    /**
+     * @return string
+     */
+    private function buildValues(): string
+    {
+        $values = [];
+        foreach ($this->values as $k => $row) {
+            foreach ($row as $i => $value) {
+                $values[$k][$i] = $this->escapeValue($value);
+            }
+        }
+
+        $values = array_map(function (array $row) {
+            return '(' . implode(',', $row) . ')';
+        }, $values);
+
+        return implode(',', $values);
     }
 }

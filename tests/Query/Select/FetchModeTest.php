@@ -13,7 +13,6 @@ class FetchModeTest extends BaseTestCase
         $keys = [
             FetchMode::OBJECT,
             FetchMode::ASSOC,
-            FetchMode::BY_ID,
             FetchMode::KEY_VALUE,
             FetchMode::COLUMN,
             FetchMode::CALLBACK,
