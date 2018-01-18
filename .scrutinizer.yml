@@ -1,7 +1,5 @@
 filter:
-  exclude_paths:
-    - "tests/*"
-    - "build/*"
+  exclude_paths: [tests/*]
 checks:
   php:
     code_rating: true
