@@ -10,6 +10,17 @@ use MediaTech\Query\Tests\BaseTestCase;
 
 class InsertTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Table name is empty
+     */
+    public function testConstructorWithEmptyTable()
+    {
+        $pdo = $this->createPDOMock();
+
+        new Insert($pdo, '');
+    }
+
     public function testConstructor()
     {
         $query = $this->createQuery();
@@ -133,6 +144,14 @@ class InsertTest extends BaseTestCase
             ->fromRows($rowSetQuery);
 
         $this->assertEquals('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->build());
+    }
+
+    public function testToString()
+    {
+        $query = $this->createQuery();
+        $query->values(['foo' => 1]);
+
+        $this->assertEquals((string)$query, $query->build());
     }
 
     private function createQuery()

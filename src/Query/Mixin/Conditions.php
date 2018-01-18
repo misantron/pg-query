@@ -27,9 +27,6 @@ trait Conditions
         return $this->andGroup();
     }
 
-    /**
-     * @return Conditions
-     */
     public function andGroup()
     {
         $this->conditions[] = [
@@ -41,9 +38,6 @@ trait Conditions
         return $this;
     }
 
-    /**
-     * @return Conditions
-     */
     public function orGroup()
     {
         $this->conditions[] = [
@@ -55,9 +49,6 @@ trait Conditions
         return $this;
     }
 
-    /**
-     * @return Conditions
-     */
     public function endGroup()
     {
         $this->conditions[] = [
@@ -68,11 +59,6 @@ trait Conditions
         return $this;
     }
 
-    /**
-     * @param string $column
-     * @param mixed $value
-     * @return Conditions
-     */
     public function equals(string $column, $value)
     {
         return $this->andEquals($column, $value);

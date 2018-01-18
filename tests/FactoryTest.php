@@ -17,6 +17,13 @@ class FactoryTest extends BaseTestCase
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $factory);
     }
 
+    public function testGetPDO()
+    {
+        $factory = $this->createFactory();
+
+        $this->assertInstanceOf(\PDO::class, $factory->getPDO());
+    }
+
     public function testInsert()
     {
         $factory = $this->createFactory();
