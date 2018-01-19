@@ -20,13 +20,16 @@ trait Conditions
     private $conditions = [];
 
     /**
-     * @return Conditions
+     * @return Filterable
      */
     public function beginGroup()
     {
         return $this->andGroup();
     }
 
+    /**
+     * @return Filterable
+     */
     public function andGroup()
     {
         $this->conditions[] = [
@@ -38,6 +41,9 @@ trait Conditions
         return $this;
     }
 
+    /**
+     * @return Filterable
+     */
     public function orGroup()
     {
         $this->conditions[] = [
@@ -49,6 +55,9 @@ trait Conditions
         return $this;
     }
 
+    /**
+     * @return Filterable
+     */
     public function endGroup()
     {
         $this->conditions[] = [

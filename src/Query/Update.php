@@ -4,12 +4,13 @@ namespace MediaTech\Query\Query;
 
 
 use MediaTech\Query\Query\Mixin\Conditions;
+use MediaTech\Query\Query\Mixin\Filterable;
 
 /**
  * Class Update
  * @package MediaTech\Query\Query
  */
-class Update extends Query
+class Update extends Query implements Filterable
 {
     use Conditions;
 
