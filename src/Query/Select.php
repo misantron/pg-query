@@ -9,6 +9,8 @@ use MediaTech\Query\Query\Mixin\Filterable;
 /**
  * Class Select
  * @package MediaTech\Query\Query
+ *
+ * @method Select execute()
  */
 class Select extends Query implements Filterable
 {
@@ -215,14 +217,14 @@ class Select extends Query implements Filterable
         }
         foreach ($this->joins as $join) {
             if ($alias === $join['alias']) {
-                throw new \InvalidArgumentException('Invalid alias name');
+                throw new \InvalidArgumentException('Alias is already in use');
             }
         }
         return $hash;
     }
 
     /**
-     * @param array $values
+     * @param Select[] $values
      * @return Select
      */
     public function with(array $values): Select
@@ -230,23 +232,21 @@ class Select extends Query implements Filterable
         foreach ($values as $alias => $value) {
             $alias = $this->escapeIdentifier($alias, false);
             if (!$value instanceof Select) {
-                throw new \InvalidArgumentException('Invalid query type');
+                throw new \InvalidArgumentException('Only select query can be used');
             }
-            if (isset($this->with[$alias])) {
-                throw new \InvalidArgumentException('Alias is already in use');
-            }
+            // alias name cannot be duplicated
             $this->with[$alias] = $value;
         }
         return $this;
     }
 
     /**
-     * @param array $values
+     * @param array|string $values
      * @return Select
      */
-    public function groupBy(array $values): Select
+    public function groupBy($values): Select
     {
-        $this->groupBy = $values;
+        $this->groupBy = $this->parseList($values);
 
         return $this;
     }
@@ -331,6 +331,10 @@ class Select extends Query implements Filterable
      */
     public function fetchAll($argument = null): array
     {
+        if (!$this->statement instanceof \PDOStatement) {
+            throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
+        }
+
         switch ($this->fetchMode) {
             case \PDO::FETCH_CLASS:
             case \PDO::FETCH_FUNC:
@@ -342,7 +346,7 @@ class Select extends Query implements Filterable
                 $data = $this->statement->fetchAll($this->fetchMode);
                 break;
             default:
-                throw new \RuntimeException('Invalid fetch mode');
+                throw new \RuntimeException('Data fetch error: invalid fetch mode');
         }
         return $data;
     }
@@ -353,6 +357,10 @@ class Select extends Query implements Filterable
      */
     public function fetchOne($argument = null)
     {
+        if (!$this->statement instanceof \PDOStatement) {
+            throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
+        }
+
         switch ($this->fetchMode) {
             case \PDO::FETCH_CLASS:
                 $data = $this->statement->fetchObject($argument);
@@ -364,25 +372,31 @@ class Select extends Query implements Filterable
                 $data = $this->statement->fetchColumn();
                 break;
             default:
-                throw new \RuntimeException('Invalid fetch mode');
+                throw new \RuntimeException('Data fetch error: invalid fetch mode');
         }
         return $data;
     }
 
+    /**
+     * @throws \RuntimeException
+     */
     private function validateQuery()
     {
         if (!empty($this->having) && empty($this->groupBy)) {
-            throw new \RuntimeException('Using having without group by is unacceptable');
+            throw new \RuntimeException('Query build error: using having without group by');
         }
 
         if ($this->fetchMode === \PDO::FETCH_COLUMN && sizeof($this->columns) !== 1) {
-            throw new \RuntimeException('Invalid fields number for this fetch mode');
+            throw new \RuntimeException('Query build error: fields number is not equals to 1');
         }
         if ($this->fetchMode === \PDO::FETCH_KEY_PAIR && sizeof($this->columns) !== 2) {
-            throw new \RuntimeException('Invalid fields number for this fetch mode');
+            throw new \RuntimeException('Query build error: fields number is not equals to 2');
         }
     }
 
+    /**
+     * @return string
+     */
     private function buildWith(): string
     {
         $queries = [];
@@ -390,7 +404,7 @@ class Select extends Query implements Filterable
             $queries[] = $alias . ' AS (' . $query->build() . ')';
         }
 
-        return !empty($queries) ? 'WITH ' . implode(', ', $queries) : '';
+        return !empty($queries) ? 'WITH ' . implode(', ', $queries) . ' ' : '';
     }
 
     private function buildSelect(): string

@@ -79,12 +79,16 @@ class Insert extends Query
      */
     public function build(): string
     {
+        if (empty($this->columns)) {
+            throw new \RuntimeException('Column list is empty');
+        }
+
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
         if ($this->rowSet instanceof Select) {
             $query .= ' ' . $this->rowSet->build();
         } else {
-            $query .= ' VALUES ' . $this->buildValues() . ' RETURNING *';
+            $query .= $this->buildValues();
         }
 
         return $query;
@@ -95,6 +99,10 @@ class Insert extends Query
      */
     private function buildValues(): string
     {
+        if (empty($this->values)) {
+            throw new \RuntimeException('Value list is empty');
+        }
+
         $values = [];
         foreach ($this->values as $k => $row) {
             foreach ($row as $i => $value) {
@@ -106,6 +114,6 @@ class Insert extends Query
             return '(' . implode(',', $row) . ')';
         }, $values);
 
-        return implode(',', $values);
+        return ' VALUES ' . implode(',', $values) . ' RETURNING *';
     }
 }

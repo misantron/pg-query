@@ -68,11 +68,23 @@ trait Conditions
         return $this;
     }
 
+    /**
+     * @param string $column
+     * @param mixed $value
+     *
+     * @return Filterable
+     */
     public function equals(string $column, $value)
     {
         return $this->andEquals($column, $value);
     }
 
+    /**
+     * @param string $column
+     * @param mixed $value
+     *
+     * @return Filterable
+     */
     public function andEquals(string $column, $value)
     {
         $this->conditions[] = [
@@ -82,6 +94,12 @@ trait Conditions
         return $this;
     }
 
+    /**
+     * @param string $column
+     * @param mixed $value
+     *
+     * @return Filterable
+     */
     public function orEquals(string $column, $value)
     {
         $this->conditions[] = [

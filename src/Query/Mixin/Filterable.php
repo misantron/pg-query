@@ -24,4 +24,28 @@ interface Filterable
      * @return Filterable
      */
     public function endGroup();
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     *
+     * @return Filterable
+     */
+    public function equals(string $column, $value);
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     *
+     * @return Filterable
+     */
+    public function andEquals(string $column, $value);
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     *
+     * @return Filterable
+     */
+    public function orEquals(string $column, $value);
 }

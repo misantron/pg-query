@@ -106,24 +106,47 @@ class InsertTest extends BaseTestCase
         $this->assertAttributeInstanceOf(Select::class, 'rowSet', $query);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Column list is empty
+     */
+    public function testBuildWithoutColumns()
+    {
+        $query = $this->createQuery();
+        $query->build();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Value list is empty
+     */
+    public function testBuildWithoutValues()
+    {
+        $query = $this->createQuery();
+        $query->columns(['foo', 'bar']);
+        $query->build();
+    }
+
     public function testBuildWithValues()
     {
         $values = [
             ['foo' => 1, 'bar' => 'test1'],
-            ['foo' => 3, 'bar' => 'test2'],
+            ['foo' => 3, 'bar' => false],
+            ['foo' => 4, 'bar' => null],
+            ['foo' => 5, 'bar' => [5,8]],
         ];
 
         $pdo = $this->createPDOMock();
 
         $pdo
             ->method('quote')
-            ->withConsecutive(['test1', \PDO::PARAM_STR], ['test2', \PDO::PARAM_STR])
-            ->willReturnOnConsecutiveCalls("'test1'", "'test2'");
+            ->withConsecutive(['test1', \PDO::PARAM_STR])
+            ->willReturnOnConsecutiveCalls("'test1'");
 
         $query = new Insert($pdo, 'foo.bar');
         $query->values($values);
 
-        $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,'test2') RETURNING *", $query->build());
+        $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[]) RETURNING *", $query->build());
     }
 
     public function testBuildWithRowSet()
@@ -135,8 +158,8 @@ class InsertTest extends BaseTestCase
 
         $rowSetQuery
             ->columns($columns)
-            ->andEquals('test', 1)
-            ->range(0, 50);
+            ->range(0, 50)
+            ->andEquals('test', 1);
 
         $query = new Insert($pdo, 'bar.foo');
         $query

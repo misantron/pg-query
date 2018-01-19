@@ -3,12 +3,18 @@
 namespace MediaTech\Query\Query;
 
 
+use MediaTech\Query\Escape;
+use MediaTech\Query\Expression\Field;
+use MediaTech\Query\Renderable;
+
 /**
  * Class Query
  * @package MediaTech\Query\Query
  */
-abstract class Query
+abstract class Query implements Renderable
 {
+    use Escape;
+
     /**
      * @var \PDO
      */
@@ -41,11 +47,6 @@ abstract class Query
     /**
      * @return string
      */
-    abstract public function build(): string;
-
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return $this->build();
@@ -62,25 +63,6 @@ abstract class Query
         $this->statement->execute();
 
         return $this;
-    }
-
-    /**
-     * @param string $value
-     * @param bool $quote
-     * @return string
-     */
-    protected function escapeIdentifier(string $value, bool $quote = true): string
-    {
-        $str = preg_replace('/[^\.0-9a-z_]/i', '', $value);
-        if ($str !== trim($value)) {
-            throw new \InvalidArgumentException('Invalid identifier: Invalid characters supplied.');
-        }
-
-        if (preg_match('/^[0-9]/', $str)) {
-            throw new \InvalidArgumentException('Invalid identifier: Must begin with a letter or underscore.');
-        }
-
-        return $quote ? '"' . $str . '"' : $str;
     }
 
     /**
@@ -104,38 +86,6 @@ abstract class Query
     }
 
     /**
-     * @param array $values
-     * @return string
-     */
-    protected function escapeArray(array $values): string
-    {
-        $type = $this->isIntegerArray($values) ? 'integer': 'string';
-        $cast = $type === 'integer' ? 'INTEGER[]' : 'VARCHAR[]';
-
-        if (empty($values)) {
-            return 'ARRAY[]::' . $cast;
-        }
-        if ($type === 'string') {
-            $values = array_map(function (string $value) {
-                return "'" . str_replace("'", "''", $value) . "'";
-            }, $values);
-        }
-        return 'ARRAY[' . implode(',', $values) . ']::' . $cast;
-    }
-
-    /**
-     * @param array $array
-     * @return bool
-     */
-    protected function isIntegerArray(array $array): bool
-    {
-        $filtered = array_filter($array, function ($value) {
-            return !is_int($value);
-        });
-        return empty($filtered);
-    }
-
-    /**
      * @param array|string $items
      * @return array
      */
@@ -145,8 +95,10 @@ abstract class Query
             $items = explode(',', $items);
         }
 
-        return array_filter(array_map(function (string $item) {
-            return $this->escapeIdentifier(trim($item), false);
+        return array_filter(array_map(function ($item) {
+            return $item instanceof Field ?
+                $item->build() :
+                $this->escapeIdentifier(trim($item), false);
         }, $items));
     }
 }
