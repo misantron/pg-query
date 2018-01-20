@@ -3,7 +3,8 @@
 namespace MediaTech\Query\Query;
 
 
-use MediaTech\Query\Query\Mixin\Conditions;
+use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
+use MediaTech\Query\Query\Mixin\Filters;
 use MediaTech\Query\Query\Mixin\Filterable;
 
 /**
@@ -12,12 +13,19 @@ use MediaTech\Query\Query\Mixin\Filterable;
  */
 class Update extends Query implements Filterable
 {
-    use Conditions;
+    use Filters;
 
     /**
      * @var array
      */
     private $set = [];
+
+    public function __construct(\PDO $pdo, string $table)
+    {
+        parent::__construct($pdo, $table);
+
+        $this->filters = new FilterGroup();
+    }
 
     /**
      * @param array $data
@@ -41,7 +49,7 @@ class Update extends Query implements Filterable
     public function build(): string
     {
         $query = 'UPDATE ' . $this->table . ' SET ' . $this->buildSet();
-        $query .= $this->buildConditions();
+        $query .= $this->filters->notEmpty() ? ' WHERE ' . $this->filters->build() : '';
 
         return $query;
     }

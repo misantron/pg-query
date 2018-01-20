@@ -3,8 +3,11 @@
 namespace MediaTech\Query\Query;
 
 
-use MediaTech\Query\Query\Mixin\Conditions;
+use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
+use MediaTech\Query\Query\Mixin\Filters;
+use MediaTech\Query\Query\Mixin\DataFetching;
 use MediaTech\Query\Query\Mixin\Filterable;
+use MediaTech\Query\Query\Mixin\Retrievable;
 
 /**
  * Class Select
@@ -12,19 +15,11 @@ use MediaTech\Query\Query\Mixin\Filterable;
  *
  * @method Select execute()
  */
-class Select extends Query implements Filterable
+class Select extends Query implements Filterable, Retrievable
 {
-    use Conditions;
+    use Filters, DataFetching;
 
     const DEFAULT_TABLE_ALIAS = 't1';
-
-    const AVAILABLE_FETCH_MODES = [
-        \PDO::FETCH_ASSOC,
-        \PDO::FETCH_CLASS,
-        \PDO::FETCH_KEY_PAIR,
-        \PDO::FETCH_COLUMN,
-        \PDO::FETCH_FUNC,
-    ];
 
     /**
      * @var string
@@ -72,11 +67,6 @@ class Select extends Query implements Filterable
     private $offset;
 
     /**
-     * @var int
-     */
-    private $fetchMode;
-
-    /**
      * @var Select[]
      */
     private $with = [];
@@ -85,18 +75,13 @@ class Select extends Query implements Filterable
      * @param \PDO $pdo
      * @param string $table
      * @param string $alias
-     * @param int $fetchMode
      */
-    public function __construct(
-        \PDO $pdo,
-        string $table,
-        string $alias = self::DEFAULT_TABLE_ALIAS,
-        int $fetchMode = \PDO::FETCH_ASSOC
-    ) {
+    public function __construct(\PDO $pdo, string $table, string $alias = self::DEFAULT_TABLE_ALIAS)
+    {
         parent::__construct($pdo, $table);
 
         $this->alias = $this->escapeIdentifier($alias, false);
-        $this->fetchMode = $fetchMode;
+        $this->filters = new FilterGroup();
     }
 
     /**
@@ -132,21 +117,6 @@ class Select extends Query implements Filterable
     public function distinct(bool $value = true): Select
     {
         $this->distinct = $value;
-
-        return $this;
-    }
-
-    /**
-     * @param int $value
-     * @return Select
-     */
-    public function fetchMode(int $value): Select
-    {
-        if (!in_array($value, self::AVAILABLE_FETCH_MODES)) {
-            throw new \InvalidArgumentException('Invalid fetch mode');
-        }
-
-        $this->fetchMode = $value;
 
         return $this;
     }
@@ -316,7 +286,7 @@ class Select extends Query implements Filterable
         $query .= $this->buildWith();
         $query .= $this->buildSelect();
         $query .= $this->buildJoins();
-        $query .= $this->buildConditions();
+        $query .= $this->buildFilters();
         $query .= $this->buildGroupBy();
         $query .= $this->buildHaving();
         $query .= $this->buildOrderBy();
@@ -326,71 +296,12 @@ class Select extends Query implements Filterable
     }
 
     /**
-     * @param string|callable $argument
-     * @return array
-     */
-    public function fetchAll($argument = null): array
-    {
-        if (!$this->statement instanceof \PDOStatement) {
-            throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
-        }
-
-        switch ($this->fetchMode) {
-            case \PDO::FETCH_CLASS:
-            case \PDO::FETCH_FUNC:
-                $data = $this->statement->fetchAll($this->fetchMode, $argument);
-                break;
-            case \PDO::FETCH_ASSOC:
-            case \PDO::FETCH_KEY_PAIR:
-            case \PDO::FETCH_COLUMN:
-                $data = $this->statement->fetchAll($this->fetchMode);
-                break;
-            default:
-                throw new \RuntimeException('Data fetch error: invalid fetch mode');
-        }
-        return $data;
-    }
-
-    /**
-     * @param string $argument
-     * @return mixed
-     */
-    public function fetchOne($argument = null)
-    {
-        if (!$this->statement instanceof \PDOStatement) {
-            throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
-        }
-
-        switch ($this->fetchMode) {
-            case \PDO::FETCH_CLASS:
-                $data = $this->statement->fetchObject($argument);
-                break;
-            case \PDO::FETCH_ASSOC:
-                $data = $this->statement->fetch();
-                break;
-            case \PDO::FETCH_COLUMN:
-                $data = $this->statement->fetchColumn();
-                break;
-            default:
-                throw new \RuntimeException('Data fetch error: invalid fetch mode');
-        }
-        return $data;
-    }
-
-    /**
      * @throws \RuntimeException
      */
     private function validateQuery()
     {
         if (!empty($this->having) && empty($this->groupBy)) {
             throw new \RuntimeException('Query build error: using having without group by');
-        }
-
-        if ($this->fetchMode === \PDO::FETCH_COLUMN && sizeof($this->columns) !== 1) {
-            throw new \RuntimeException('Query build error: fields number is not equals to 1');
-        }
-        if ($this->fetchMode === \PDO::FETCH_KEY_PAIR && sizeof($this->columns) !== 2) {
-            throw new \RuntimeException('Query build error: fields number is not equals to 2');
         }
     }
 
@@ -428,6 +339,11 @@ class Select extends Query implements Filterable
             );
         }
         return !empty($joins) ? ' ' . implode(' ', $joins) : '';
+    }
+
+    private function buildFilters(): string
+    {
+        return $this->filters->notEmpty() ? ' WHERE ' . $this->filters->build() : '';
     }
 
     private function buildGroupBy(): string

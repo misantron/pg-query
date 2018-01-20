@@ -3,6 +3,7 @@
 namespace MediaTech\Query\Tests\Query;
 
 
+use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
 use MediaTech\Query\Query\Update;
 use MediaTech\Query\Tests\BaseTestCase;
 
@@ -13,9 +14,9 @@ class UpdateTest extends BaseTestCase
         $query = $this->createQuery();
 
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
+        $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
         $this->assertAttributeEquals('foo.bar', 'table', $query);
         $this->assertAttributeEquals([], 'set', $query);
-        $this->assertAttributeEquals([], 'conditions', $query);
     }
 
     /**

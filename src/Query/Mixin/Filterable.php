@@ -3,6 +3,10 @@
 namespace MediaTech\Query\Query\Mixin;
 
 
+/**
+ * Interface Filterable
+ * @package MediaTech\Query\Query\Mixin
+ */
 interface Filterable
 {
     /**

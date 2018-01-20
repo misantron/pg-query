@@ -3,7 +3,8 @@
 namespace MediaTech\Query\Query;
 
 
-use MediaTech\Query\Query\Mixin\Conditions;
+use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
+use MediaTech\Query\Query\Mixin\Filters;
 use MediaTech\Query\Query\Mixin\Filterable;
 
 /**
@@ -12,7 +13,14 @@ use MediaTech\Query\Query\Mixin\Filterable;
  */
 class Delete extends Query implements Filterable
 {
-    use Conditions;
+    use Filters;
+
+    public function __construct(\PDO $pdo, string $table)
+    {
+        parent::__construct($pdo, $table);
+
+        $this->filters = new FilterGroup();
+    }
 
     /**
      * @return string
@@ -20,7 +28,7 @@ class Delete extends Query implements Filterable
     public function build(): string
     {
         $query = 'DELETE FROM ' . $this->table;
-        $query .= $this->buildConditions();
+        $query .= $this->filters->notEmpty() ? ' WHERE ' . $this->filters->build() : '';
 
         return $query;
     }

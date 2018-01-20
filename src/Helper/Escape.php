@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query;
+namespace MediaTech\Query\Helper;
 
 
 /**
@@ -29,6 +29,26 @@ trait Escape
     }
 
     /**
+     * @param mixed $value
+     * @return string
+     */
+    protected function escapeValue($value): string
+    {
+        if (is_numeric($value)) {
+            $escaped = $value;
+        } elseif (is_null($value)) {
+            $escaped = 'null';
+        } elseif (is_bool($value)) {
+            $escaped = $value ? 'true' : 'false';
+        } elseif (is_array($value)) {
+            $escaped = $this->escapeArray($value);
+        } else {
+            $escaped = $this->quote($value);
+        }
+        return $escaped;
+    }
+
+    /**
      * @param array $values
      * @return string
      */
@@ -42,10 +62,29 @@ trait Escape
         }
         if ($type === 'string') {
             $values = array_map(function (string $value) {
-                return "'" . str_replace("'", "''", $value) . "'";
+                return $this->quote($value);
             }, $values);
         }
         return 'ARRAY[' . implode(',', $values) . ']::' . $cast;
+    }
+
+    /**
+     * @param array $items
+     * @return string
+     */
+    protected function escapeList(array $items): string
+    {
+        $type = $this->isIntegerArray($items) ? 'integer': 'string';
+        $filtered = array_filter($items);
+        if (empty($filtered)) {
+            throw new \InvalidArgumentException('Value list is empty');
+        }
+        if ($type === 'string') {
+            $filtered = array_map(function (string $item) {
+                return $this->quote($item);
+            }, $filtered);
+        }
+        return implode(',', $filtered);
     }
 
     /**
@@ -58,5 +97,14 @@ trait Escape
             return !is_int($value);
         });
         return empty($filtered);
+    }
+
+    /**
+     * @param mixed $value
+     * @return string
+     */
+    protected function quote($value): string
+    {
+        return "'" . str_replace("'", "''", (string)$value) . "'";
     }
 }

@@ -5,6 +5,7 @@ namespace MediaTech\Query\Tests\Query;
 
 use MediaTech\Query\Factory;
 use MediaTech\Query\Expression\Field;
+use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
 use MediaTech\Query\Query\Select;
 use MediaTech\Query\Tests\BaseTestCase;
 
@@ -18,9 +19,9 @@ class SelectTest extends BaseTestCase
         $query = new Select($pdo, $table);
 
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
+        $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
         $this->assertAttributeEquals('foo.bar', 'table', $query);
         $this->assertAttributeEquals(Select::DEFAULT_TABLE_ALIAS, 'alias', $query);
-        $this->assertAttributeEquals(\PDO::FETCH_ASSOC, 'fetchMode', $query);
         $this->assertAttributeEquals([], 'columns', $query);
         $this->assertAttributeEquals([], 'joins', $query);
         $this->assertAttributeEquals([], 'groupBy', $query);
@@ -34,10 +35,6 @@ class SelectTest extends BaseTestCase
         $query = new Select($pdo, $table, 'test');
 
         $this->assertAttributeEquals('test', 'alias', $query);
-
-        $query = new Select($pdo, $table, 'test', \PDO::FETCH_CLASS);
-
-        $this->assertAttributeEquals(\PDO::FETCH_CLASS, 'fetchMode', $query);
     }
 
     public function testAlias()
@@ -83,24 +80,6 @@ class SelectTest extends BaseTestCase
         $query->distinct(false);
 
         $this->assertAttributeEquals(false, 'distinct', $query);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid fetch mode
-     */
-    public function testFetchModeWithInvalidValue()
-    {
-        $query = $this->createQuery();
-        $query->fetchMode(\PDO::FETCH_BOUND);
-    }
-
-    public function testFetchMode()
-    {
-        $query = $this->createQuery();
-        $query->fetchMode(\PDO::FETCH_COLUMN);
-
-        $this->assertAttributeEquals(\PDO::FETCH_COLUMN, 'fetchMode', $query);
     }
 
     /**
@@ -261,32 +240,6 @@ class SelectTest extends BaseTestCase
             ->build();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Query build error: fields number is not equals to 1
-     */
-    public function testBuildWithFetchColumnAndInvalidColumnsNumber()
-    {
-        $query = $this->createQuery();
-        $query
-            ->columns(['foo', 'bar'])
-            ->fetchMode(\PDO::FETCH_COLUMN)
-            ->build();
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Query build error: fields number is not equals to 2
-     */
-    public function testBuildWithFetchKeyPairAndInvalidColumnsNumber()
-    {
-        $query = $this->createQuery();
-        $query
-            ->columns(['foo'])
-            ->fetchMode(\PDO::FETCH_KEY_PAIR)
-            ->build();
-    }
-
     public function testBuild()
     {
         $factory = Factory::create($this->createPDOMock());
@@ -373,10 +326,10 @@ class SelectTest extends BaseTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
      */
-    public function testFetchAllBeforeExecute()
+    public function testFetchAllObjectBeforeExecute()
     {
         $query = $this->createQuery();
-        $query->fetchAll();
+        $query->fetchAllObject(\stdClass::class);
     }
 
     public function testFetchAllObject()
@@ -405,7 +358,6 @@ class SelectTest extends BaseTestCase
             ->willReturn($statement);
 
         $query = new Select($pdo, 'foo.bar');
-        $query->fetchMode(\PDO::FETCH_CLASS);
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -413,10 +365,10 @@ class SelectTest extends BaseTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchAll(\stdClass::class));
+        $this->assertEquals($data, $query->fetchAllObject(\stdClass::class));
     }
 
-    public function testFetchAllCallback()
+    public function testFetchCallback()
     {
         $pdo = $this->createPDOMock();
 
@@ -443,7 +395,6 @@ class SelectTest extends BaseTestCase
             ->willReturn($statement);
 
         $query = new Select($pdo, 'foo.bar');
-        $query->fetchMode(\PDO::FETCH_FUNC);
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -451,7 +402,7 @@ class SelectTest extends BaseTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchAll($callback));
+        $this->assertEquals($data, $query->fetchCallback($callback));
     }
 
     public function testFetchAllAssoc()
@@ -487,10 +438,10 @@ class SelectTest extends BaseTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchAll());
+        $this->assertEquals($data, $query->fetchAllAssoc());
     }
 
-    public function testFetchAllKeyPair()
+    public function testFetchKeyPair()
     {
         $pdo = $this->createPDOMock();
 
@@ -516,7 +467,6 @@ class SelectTest extends BaseTestCase
             ->willReturn($statement);
 
         $query = new Select($pdo, 'foo.bar');
-        $query->fetchMode(\PDO::FETCH_KEY_PAIR);
 
         $query
             ->columns(['field1', 'field2'])
@@ -525,7 +475,7 @@ class SelectTest extends BaseTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchAll());
+        $this->assertEquals($data, $query->fetchKeyValue());
     }
 
     public function testFetchAllColumn()
@@ -551,7 +501,6 @@ class SelectTest extends BaseTestCase
             ->willReturn($statement);
 
         $query = new Select($pdo, 'foo.bar');
-        $query->fetchMode(\PDO::FETCH_COLUMN);
 
         $query
             ->columns('field1')
@@ -560,7 +509,17 @@ class SelectTest extends BaseTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchAll());
+        $this->assertEquals($data, $query->fetchAllColumn());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
+     */
+    public function testFetchOneObjectBeforeExecute()
+    {
+        $query = $this->createQuery();
+        $query->fetchOneObject(\stdClass::class);
     }
 
     public function testFetchOneObject()
@@ -586,7 +545,6 @@ class SelectTest extends BaseTestCase
             ->willReturn($statement);
 
         $query = new Select($pdo, 'foo.bar');
-        $query->fetchMode(\PDO::FETCH_CLASS);
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -594,7 +552,7 @@ class SelectTest extends BaseTestCase
             ->limit(1)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchOne(\stdClass::class));
+        $this->assertEquals($data, $query->fetchOneObject(\stdClass::class));
     }
 
     public function testFetchOneAssoc()
@@ -603,7 +561,7 @@ class SelectTest extends BaseTestCase
 
         $query = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 1';
 
-        $data =['foo' => 1, 'bar' => 2];
+        $data = ['foo' => 1, 'bar' => 2];
 
         $statement = $this->getMockBuilder(\PDOStatement::class)
             ->disableOriginalConstructor()
@@ -626,10 +584,10 @@ class SelectTest extends BaseTestCase
             ->limit(1)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchOne());
+        $this->assertEquals($data, $query->fetchOneAssoc());
     }
 
-    public function testFetchOneColumn()
+    public function testFetchColumn()
     {
         $pdo = $this->createPDOMock();
 
@@ -651,7 +609,6 @@ class SelectTest extends BaseTestCase
             ->willReturn($statement);
 
         $query = new Select($pdo, 'foo.bar');
-        $query->fetchMode(\PDO::FETCH_COLUMN);
 
         $query
             ->columns('field1')
@@ -660,17 +617,7 @@ class SelectTest extends BaseTestCase
             ->limit(1)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchOne());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
-     */
-    public function testFetchOneBeforeExecute()
-    {
-        $query = $this->createQuery();
-        $query->fetchOne();
+        $this->assertEquals($data, $query->fetchColumn());
     }
 
     private function createQuery()

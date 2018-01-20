@@ -3,8 +3,8 @@
 namespace MediaTech\Query\Query;
 
 
-use MediaTech\Query\Escape;
 use MediaTech\Query\Expression\Field;
+use MediaTech\Query\Helper\Escape;
 use MediaTech\Query\Renderable;
 
 /**
@@ -63,26 +63,6 @@ abstract class Query implements Renderable
         $this->statement->execute();
 
         return $this;
-    }
-
-    /**
-     * @param mixed $value
-     * @return string
-     */
-    protected function escapeValue($value): string
-    {
-        if (is_numeric($value)) {
-            $escaped = $value;
-        } elseif (is_null($value)) {
-            $escaped = 'null';
-        } elseif (is_bool($value)) {
-            $escaped = $value ? 'true' : 'false';
-        } elseif (is_array($value)) {
-            $escaped = $this->escapeArray($value);
-        } else {
-            $escaped = $this->pdo->quote($value, \PDO::PARAM_STR);
-        }
-        return $escaped;
     }
 
     /**

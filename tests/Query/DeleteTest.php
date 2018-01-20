@@ -4,6 +4,7 @@ namespace MediaTech\Query\Tests\Query;
 
 
 use MediaTech\Query\Query\Delete;
+use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
 use MediaTech\Query\Tests\BaseTestCase;
 
 class DeleteTest extends BaseTestCase
@@ -13,8 +14,8 @@ class DeleteTest extends BaseTestCase
         $query = $this->createQuery();
 
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
+        $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
         $this->assertAttributeEquals('foo.bar', 'table', $query);
-        $this->assertAttributeEquals([], 'conditions', $query);
     }
 
     public function testBuildWithoutConditions()

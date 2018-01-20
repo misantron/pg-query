@@ -3,7 +3,7 @@
 namespace MediaTech\Query\Expression;
 
 
-use MediaTech\Query\Escape;
+use MediaTech\Query\Helper\Escape;
 use MediaTech\Query\Renderable;
 
 /**
