@@ -16,18 +16,20 @@ class BetweenCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $value
+     * @param array $values
      */
     public function __construct(string $column, array $values)
     {
         parent::__construct($column, 'BETWEEN');
 
-        $this->values = $this->escapeList($values);
+        $this->values = array_map(function ($value) {
+            return $this->escapeValue($value);
+        }, $values);
     }
 
     /**
      * @param string $column
-     * @param array $value
+     * @param array $values
      * @return BetweenCondition
      */
     public static function create(string $column, array $values)
@@ -48,9 +50,8 @@ class BetweenCondition extends Condition
      */
     public function build(): string
     {
-        list($rangeBegin, $rangeEnd) = array_map(function ($value) {
-            return $this->escapeValue($value);
-        }, $this->values);
+        $values = $this->values;
+        list($rangeBegin, $rangeEnd) = $values;
 
         return sprintf('%s %s %s AND %s', $this->column, $this->operator, $rangeBegin, $rangeEnd);
     }

@@ -10,13 +10,13 @@ namespace MediaTech\Query\Query\Mixin\Condition;
 class ArrayContainsCondition extends Condition
 {
     /**
-     * @var array
+     * @var string
      */
     private $values;
 
     /**
      * @param string $column
-     * @param array $value
+     * @param array $values
      */
     public function __construct(string $column, array $values)
     {
@@ -27,7 +27,7 @@ class ArrayContainsCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $value
+     * @param array $values
      * @return ArrayContainsCondition
      */
     public static function create(string $column, array $values)

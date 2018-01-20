@@ -6,13 +6,13 @@ namespace MediaTech\Query\Query\Mixin\Condition;
 class InCondition extends Condition
 {
     /**
-     * @var array
+     * @var string
      */
     private $values;
 
     /**
      * @param string $column
-     * @param array $value
+     * @param array $values
      * @param string $operator
      */
     public function __construct(string $column, array $values, string $operator)
@@ -24,7 +24,7 @@ class InCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $value
+     * @param array $values
      * @param string $operator
      * @return ValueCondition
      */
