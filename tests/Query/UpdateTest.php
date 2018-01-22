@@ -52,7 +52,7 @@ class UpdateTest extends BaseTestCase
         $query = $this->createQuery();
         $query->set(['col1' => 1]);
 
-        $this->assertEquals('UPDATE foo.bar SET col1 = 1', $query->build());
+        $this->assertEquals('UPDATE foo.bar SET col1 = 1', $query->__toString());
     }
 
     /**
@@ -64,7 +64,7 @@ class UpdateTest extends BaseTestCase
         $query = $this->createQuery();
         $query->andEquals('col1', 1);
 
-        $query->build();
+        $query->__toString();
     }
 
     public function testBuild()
@@ -82,7 +82,7 @@ class UpdateTest extends BaseTestCase
             ->andEquals('col1', 1)
             ->andEquals('col2', 'test');
 
-        $this->assertEquals("UPDATE foo.bar SET foo = 'bar' WHERE col1 = 1 AND col2 = 'test'", $query->build());
+        $this->assertEquals("UPDATE foo.bar SET foo = 'bar' WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
     }
 
     private function createQuery($pdo = null)

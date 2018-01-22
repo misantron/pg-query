@@ -4,13 +4,13 @@ namespace MediaTech\Query\Expression;
 
 
 use MediaTech\Query\Helper\Escape;
-use MediaTech\Query\Renderable;
+use MediaTech\Query\Stringable;
 
 /**
  * Class Field
  * @package MediaTech\Query\Expression
  */
-class Field implements Renderable
+class Field implements Stringable
 {
     use Escape;
 
@@ -36,18 +36,18 @@ class Field implements Renderable
 
     /**
      * @param string $expression
-     * @param string|null $alias
+     * @param string $alias
      * @return Field
      */
-    public static function create(string $expression, $alias = null)
+    public static function create(string $expression, string $alias = '')
     {
-        return new static($expression, $alias ?? '');
+        return new static($expression, $alias);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         return $this->expression . ($this->alias ? ' AS ' . $this->alias : '');
     }

@@ -3,7 +3,7 @@
 namespace MediaTech\Query\Query\Mixin\Filter;
 
 
-use MediaTech\Query\Renderable;
+use MediaTech\Query\Stringable;
 
 /**
  * Class Filter
@@ -45,7 +45,7 @@ class Filter
     }
 
     /**
-     * @param Renderable|string $condition
+     * @param Stringable|string $condition
      * @param string $conjunction
      * @param bool $group
      * @return static

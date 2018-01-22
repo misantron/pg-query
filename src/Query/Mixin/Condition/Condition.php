@@ -4,9 +4,13 @@ namespace MediaTech\Query\Query\Mixin\Condition;
 
 
 use MediaTech\Query\Helper\Escape;
-use MediaTech\Query\Renderable;
+use MediaTech\Query\Stringable;
 
-abstract class Condition implements Renderable
+/**
+ * Class Condition
+ * @package MediaTech\Query\Query\Mixin\Condition
+ */
+abstract class Condition implements Stringable
 {
     use Escape;
 
@@ -24,9 +28,9 @@ abstract class Condition implements Renderable
      * @param string $column
      * @param string $operator
      */
-    public function __construct(string $column, string $operator)
+    public function __construct(string $column, string $operator = '')
     {
-        if (!in_array($operator, $this->getAcceptableOperators())) {
+        if (!empty($operator) && !in_array($operator, $this->getAcceptableOperators())) {
             throw new \InvalidArgumentException('Invalid condition operator');
         }
 
@@ -38,12 +42,4 @@ abstract class Condition implements Renderable
      * @return array
      */
     abstract protected function getAcceptableOperators(): array;
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->build();
-    }
 }

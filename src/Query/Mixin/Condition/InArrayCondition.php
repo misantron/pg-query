@@ -3,6 +3,10 @@
 namespace MediaTech\Query\Query\Mixin\Condition;
 
 
+/**
+ * Class InArrayCondition
+ * @package MediaTech\Query\Query\Mixin\Condition
+ */
 class InArrayCondition extends Condition
 {
     /**
@@ -34,7 +38,7 @@ class InArrayCondition extends Condition
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     protected function getAcceptableOperators(): array
     {
@@ -42,9 +46,9 @@ class InArrayCondition extends Condition
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         return sprintf('%s %s ANY (%s)', $this->value, $this->operator, $this->column);
     }

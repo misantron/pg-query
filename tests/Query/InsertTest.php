@@ -113,7 +113,7 @@ class InsertTest extends BaseTestCase
     public function testBuildWithoutColumns()
     {
         $query = $this->createQuery();
-        $query->build();
+        $query->__toString();
     }
 
     /**
@@ -124,7 +124,7 @@ class InsertTest extends BaseTestCase
     {
         $query = $this->createQuery();
         $query->columns(['foo', 'bar']);
-        $query->build();
+        $query->__toString();
     }
 
     public function testBuildWithValues()
@@ -146,7 +146,7 @@ class InsertTest extends BaseTestCase
         $query = new Insert($pdo, 'foo.bar');
         $query->values($values);
 
-        $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[]) RETURNING *", $query->build());
+        $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[]) RETURNING *", $query->__toString());
     }
 
     public function testBuildWithRowSet()
@@ -166,7 +166,7 @@ class InsertTest extends BaseTestCase
             ->columns($columns)
             ->fromRows($rowSetQuery);
 
-        $this->assertEquals('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->build());
+        $this->assertEquals('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->__toString());
     }
 
     public function testToString()
@@ -174,7 +174,7 @@ class InsertTest extends BaseTestCase
         $query = $this->createQuery();
         $query->values(['foo' => 1]);
 
-        $this->assertEquals((string)$query, $query->build());
+        $this->assertEquals((string)$query, $query->__toString());
     }
 
     private function createQuery()

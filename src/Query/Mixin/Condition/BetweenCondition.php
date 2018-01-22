@@ -20,7 +20,7 @@ class BetweenCondition extends Condition
      */
     public function __construct(string $column, array $values)
     {
-        parent::__construct($column, 'BETWEEN');
+        parent::__construct($column);
 
         $this->values = array_map(function ($value) {
             return $this->escapeValue($value);
@@ -38,21 +38,21 @@ class BetweenCondition extends Condition
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     protected function getAcceptableOperators(): array
     {
-        return ['BETWEEN'];
+        return [];
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         $values = $this->values;
         list($rangeBegin, $rangeEnd) = $values;
 
-        return sprintf('%s %s %s AND %s', $this->column, $this->operator, $rangeBegin, $rangeEnd);
+        return sprintf('%s BETWEEN %s AND %s', $this->column, $rangeBegin, $rangeEnd);
     }
 }

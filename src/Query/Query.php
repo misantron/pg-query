@@ -5,13 +5,13 @@ namespace MediaTech\Query\Query;
 
 use MediaTech\Query\Expression\Field;
 use MediaTech\Query\Helper\Escape;
-use MediaTech\Query\Renderable;
+use MediaTech\Query\Stringable;
 
 /**
  * Class Query
  * @package MediaTech\Query\Query
  */
-abstract class Query implements Renderable
+abstract class Query implements Stringable
 {
     use Escape;
 
@@ -45,19 +45,11 @@ abstract class Query implements Renderable
     }
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->build();
-    }
-
-    /**
      * @return Query
      */
     public function execute()
     {
-        $query = $this->build();
+        $query = $this->__toString();
 
         $this->statement = $this->pdo->prepare($query);
         $this->statement->execute();
@@ -77,7 +69,7 @@ abstract class Query implements Renderable
 
         return array_filter(array_map(function ($item) {
             return $item instanceof Field ?
-                $item->build() :
+                (string)$item :
                 $this->escapeIdentifier(trim($item), false);
         }, $items));
     }

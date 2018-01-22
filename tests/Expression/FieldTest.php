@@ -13,7 +13,7 @@ class FieldTest extends BaseTestCase
         $field = Field::create('SUM(field)');
 
         $this->assertAttributeEquals('SUM(field)', 'expression', $field);
-        $this->assertAttributeEquals(null, 'alias', $field);
+        $this->assertAttributeEquals('', 'alias', $field);
 
         $field = Field::create('SUM(field)', 'total');
 
@@ -24,9 +24,9 @@ class FieldTest extends BaseTestCase
     public function testBuild()
     {
         $field = Field::create('SUM(field)');
-        $this->assertEquals('SUM(field)', $field->build());
+        $this->assertEquals('SUM(field)', $field->__toString());
 
         $field = Field::create('SUM(field)', 'total');
-        $this->assertEquals('SUM(field) AS total', $field->build());
+        $this->assertEquals('SUM(field) AS total', $field->__toString());
     }
 }

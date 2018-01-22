@@ -3,16 +3,16 @@
 namespace MediaTech\Query\Query\Mixin\Filter;
 
 
-use MediaTech\Query\Renderable;
+use MediaTech\Query\Stringable;
 
 /**
  * Class FilterGroup
  * @package MediaTech\Query\Query\Mixin\Filter
  */
-class FilterGroup implements Renderable
+class FilterGroup implements Stringable
 {
     /**
-     * @var array
+     * @var Filter[]
      */
     private $list = [];
 
@@ -33,9 +33,9 @@ class FilterGroup implements Renderable
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         $trimSign = true;
         $filters = $this->list;

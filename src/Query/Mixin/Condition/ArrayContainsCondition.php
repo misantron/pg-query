@@ -20,7 +20,7 @@ class ArrayContainsCondition extends Condition
      */
     public function __construct(string $column, array $values)
     {
-        parent::__construct($column, '@>');
+        parent::__construct($column);
 
         $this->values = $this->escapeArray($values);
     }
@@ -40,14 +40,14 @@ class ArrayContainsCondition extends Condition
      */
     protected function getAcceptableOperators(): array
     {
-        return ['@>'];
+        return [];
     }
 
     /**
      * @return string
      */
-    public function build(): string
+    public function __toString(): string
     {
-        return sprintf('%s %s %s', $this->column, $this->operator, $this->values);
+        return sprintf('%s @> %s', $this->column, $this->values);
     }
 }

@@ -37,15 +37,18 @@ class ValueCondition extends Condition
         return new static($column, $value, $operator);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getAcceptableOperators(): array
     {
         return ['=', '!=', '>', '<', '>=', '<='];
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         return sprintf('%s %s %s', $this->column, $this->operator, $this->value);
     }

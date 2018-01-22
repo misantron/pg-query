@@ -75,9 +75,9 @@ class Insert extends Query
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         if (empty($this->columns)) {
             throw new \RuntimeException('Column list is empty');
@@ -86,7 +86,7 @@ class Insert extends Query
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
         if ($this->rowSet instanceof Select) {
-            $query .= ' ' . $this->rowSet->build();
+            $query .= ' ' . (string)$this->rowSet;
         } else {
             $query .= $this->buildValues();
         }

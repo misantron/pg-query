@@ -22,7 +22,7 @@ class DeleteTest extends BaseTestCase
     {
         $query = $this->createQuery();
 
-        $this->assertEquals('DELETE FROM foo.bar', $query->build());
+        $this->assertEquals('DELETE FROM foo.bar', $query->__toString());
     }
 
     public function testBuild()
@@ -39,7 +39,7 @@ class DeleteTest extends BaseTestCase
             ->andEquals('col1', 1)
             ->andEquals('col2', 'test');
 
-        $this->assertEquals("DELETE FROM foo.bar WHERE col1 = 1 AND col2 = 'test'", $query->build());
+        $this->assertEquals("DELETE FROM foo.bar WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
     }
 
     private function createQuery($pdo = null)

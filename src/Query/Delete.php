@@ -23,12 +23,12 @@ class Delete extends Query implements Filterable
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         $query = 'DELETE FROM ' . $this->table;
-        $query .= $this->filters->notEmpty() ? ' WHERE ' . $this->filters->build() : '';
+        $query .= $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
 
         return $query;
     }

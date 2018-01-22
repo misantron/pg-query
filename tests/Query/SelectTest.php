@@ -237,7 +237,7 @@ class SelectTest extends BaseTestCase
         $query = $this->createQuery();
         $query
             ->having('total_amount >= 1500')
-            ->build();
+            ->__toString();
     }
 
     public function testBuild()
@@ -268,7 +268,7 @@ class SelectTest extends BaseTestCase
             ->limit(1000)
             ->offset(150);
 
-        $this->assertEquals('WITH regional_sales AS (SELECT region,SUM(amount) AS total_sales FROM orders t1 GROUP BY region), top_regions AS (SELECT region FROM regional_sales t1 WHERE total_sales > 1000) SELECT field1,field2 FROM foo.bar t1 INNER JOIN test t2 ON t2.id = t1.user_id WHERE field1 IN (3,7,9) OR field2 IS NULL GROUP BY region HAVING total_amount >= 1500 ORDER BY region desc LIMIT 1000 OFFSET 150', $query->build());
+        $this->assertEquals('WITH regional_sales AS (SELECT region,SUM(amount) AS total_sales FROM orders t1 GROUP BY region), top_regions AS (SELECT region FROM regional_sales t1 WHERE total_sales > 1000) SELECT field1,field2 FROM foo.bar t1 INNER JOIN test t2 ON t2.id = t1.user_id WHERE field1 IN (3,7,9) OR field2 IS NULL GROUP BY region HAVING total_amount >= 1500 ORDER BY region desc LIMIT 1000 OFFSET 150', $query->__toString());
     }
 
     public function testBuildConditionsGroup()
@@ -281,7 +281,7 @@ class SelectTest extends BaseTestCase
             ->orIsNull('bar')
             ->endGroup();
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE ( foo = 1 OR bar IS NULL )', $query->build());
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE ( foo = 1 OR bar IS NULL )', $query->__toString());
     }
 
     public function testBuildConditionsWithDifferentEquals()
@@ -296,7 +296,7 @@ class SelectTest extends BaseTestCase
             ->orNotEquals('bar', true)
             ->andNotEquals('baz', 20);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo = 1 AND bar = false OR baz = 10 AND foo != 2 OR bar != true AND baz != 20', $query->build());
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo = 1 AND bar = false OR baz = 10 AND foo != 2 OR bar != true AND baz != 20', $query->__toString());
     }
 
     public function testExecute()

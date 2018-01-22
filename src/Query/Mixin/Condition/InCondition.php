@@ -3,6 +3,10 @@
 namespace MediaTech\Query\Query\Mixin\Condition;
 
 
+/**
+ * Class InCondition
+ * @package MediaTech\Query\Query\Mixin\Condition
+ */
 class InCondition extends Condition
 {
     /**
@@ -26,7 +30,7 @@ class InCondition extends Condition
      * @param string $column
      * @param array $values
      * @param string $operator
-     * @return ValueCondition
+     * @return InCondition
      */
     public static function create(string $column, array $values, string $operator)
     {
@@ -34,18 +38,18 @@ class InCondition extends Condition
     }
 
     /**
-     * @return string
-     */
-    public function build(): string
-    {
-        return sprintf('%s %s (%s)', $this->column, $this->operator, $this->values);
-    }
-
-    /**
-     * @return array
+     * {@inheritdoc}
      */
     protected function getAcceptableOperators(): array
     {
         return ['IN', 'NOT IN'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString(): string
+    {
+        return sprintf('%s %s (%s)', $this->column, $this->operator, $this->values);
     }
 }

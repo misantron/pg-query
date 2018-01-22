@@ -278,7 +278,10 @@ class Select extends Query implements Filterable, Retrievable
         return $this;
     }
 
-    public function build(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString(): string
     {
         $this->validateQuery();
 
@@ -312,7 +315,7 @@ class Select extends Query implements Filterable, Retrievable
     {
         $queries = [];
         foreach ($this->with as $alias => $query) {
-            $queries[] = $alias . ' AS (' . $query->build() . ')';
+            $queries[] = $alias . ' AS (' . (string)$query . ')';
         }
 
         return !empty($queries) ? 'WITH ' . implode(', ', $queries) . ' ' : '';
@@ -343,7 +346,7 @@ class Select extends Query implements Filterable, Retrievable
 
     private function buildFilters(): string
     {
-        return $this->filters->notEmpty() ? ' WHERE ' . $this->filters->build() : '';
+        return $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
     }
 
     private function buildGroupBy(): string

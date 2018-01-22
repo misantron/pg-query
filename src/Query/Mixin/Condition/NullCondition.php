@@ -19,15 +19,18 @@ class NullCondition extends Condition
         return new static($column, $operator);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getAcceptableOperators(): array
     {
         return ['IS', 'NOT IS'];
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         return sprintf('%s %s NULL', $this->column, $this->operator);
     }

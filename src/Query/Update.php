@@ -20,6 +20,10 @@ class Update extends Query implements Filterable
      */
     private $set = [];
 
+    /**
+     * @param \PDO $pdo
+     * @param string $table
+     */
     public function __construct(\PDO $pdo, string $table)
     {
         parent::__construct($pdo, $table);
@@ -44,12 +48,12 @@ class Update extends Query implements Filterable
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function build(): string
+    public function __toString(): string
     {
         $query = 'UPDATE ' . $this->table . ' SET ' . $this->buildSet();
-        $query .= $this->filters->notEmpty() ? ' WHERE ' . $this->filters->build() : '';
+        $query .= $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
 
         return $query;
     }
