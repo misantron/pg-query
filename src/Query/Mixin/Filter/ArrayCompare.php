@@ -3,9 +3,9 @@
 namespace MediaTech\Query\Query\Mixin\Filter;
 
 
-use MediaTech\Query\Query\Mixin\Condition\ArrayContainsCondition;
-use MediaTech\Query\Query\Mixin\Condition\InArrayCondition;
-use MediaTech\Query\Query\Mixin\Condition\InCondition;
+use MediaTech\Query\Query\Condition\ArrayContainsCondition;
+use MediaTech\Query\Query\Condition\InArrayCondition;
+use MediaTech\Query\Query\Condition\InCondition;
 
 /**
  * Trait ArrayCompare

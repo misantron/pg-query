@@ -1,11 +1,11 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin\Condition;
+namespace MediaTech\Query\Query\Condition;
 
 
 /**
  * Class BetweenCondition
- * @package MediaTech\Query\Query\Mixin\Condition
+ * @package MediaTech\Query\Query\Condition
  */
 class BetweenCondition extends Condition
 {

@@ -3,7 +3,7 @@
 namespace MediaTech\Query\Query\Mixin\Filter;
 
 
-use MediaTech\Query\Query\Mixin\Condition\BetweenCondition;
+use MediaTech\Query\Query\Condition\BetweenCondition;
 
 /**
  * Trait RangeCompare

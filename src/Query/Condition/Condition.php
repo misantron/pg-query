@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin\Condition;
+namespace MediaTech\Query\Query\Condition;
 
 
 use MediaTech\Query\Helper\Escape;
@@ -8,7 +8,7 @@ use MediaTech\Query\Stringable;
 
 /**
  * Class Condition
- * @package MediaTech\Query\Query\Mixin\Condition
+ * @package MediaTech\Query\Query\Condition
  */
 abstract class Condition implements Stringable
 {

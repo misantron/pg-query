@@ -1,13 +1,13 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin\Condition;
+namespace MediaTech\Query\Query\Condition;
 
 
 /**
- * Class ValueCondition
- * @package MediaTech\Query\Query\Mixin\Condition
+ * Class InArrayCondition
+ * @package MediaTech\Query\Query\Condition
  */
-class ValueCondition extends Condition
+class InArrayCondition extends Condition
 {
     /**
      * @var mixed
@@ -30,7 +30,7 @@ class ValueCondition extends Condition
      * @param string $column
      * @param mixed $value
      * @param string $operator
-     * @return ValueCondition
+     * @return InArrayCondition
      */
     public static function create(string $column, $value, string $operator)
     {
@@ -42,7 +42,7 @@ class ValueCondition extends Condition
      */
     protected function getAcceptableOperators(): array
     {
-        return ['=', '!=', '>', '<', '>=', '<='];
+        return ['=', '!='];
     }
 
     /**
@@ -50,6 +50,6 @@ class ValueCondition extends Condition
      */
     public function __toString(): string
     {
-        return sprintf('%s %s %s', $this->column, $this->operator, $this->value);
+        return sprintf('%s %s ANY (%s)', $this->value, $this->operator, $this->column);
     }
 }
