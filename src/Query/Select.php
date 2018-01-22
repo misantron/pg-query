@@ -123,14 +123,8 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     public function innerJoin(string $table, string $alias, string $condition): Select
     {
-        $hash = $this->validateJoin($table, $alias);
+        $this->appendJoin('inner', $table, $alias, $condition);
 
-        $this->joins[$hash] = [
-            'type' => 'inner',
-            'table' => $table,
-            'alias' => $alias,
-            'condition' => $condition,
-        ];
         return $this;
     }
 
@@ -142,23 +136,18 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     public function leftJoin(string $table, string $alias, string $condition): Select
     {
-        $hash = $this->validateJoin($table, $alias);
+        $this->appendJoin('left', $table, $alias, $condition);
 
-        $this->joins[$hash] = [
-            'type' => 'left',
-            'table' => $table,
-            'alias' => $alias,
-            'condition' => $condition,
-        ];
         return $this;
     }
 
     /**
+     * @param string $type
      * @param string $table
      * @param string $alias
-     * @return string
+     * @param string $condition
      */
-    private function validateJoin(string $table, string $alias): string
+    private function appendJoin(string $type, string $table, string $alias, string $condition)
     {
         $table = $this->escapeIdentifier($table, false);
         $alias = $this->escapeIdentifier($alias, false);
@@ -173,7 +162,13 @@ class Select extends Query implements Selectable, Filterable, Retrievable
                 throw new \InvalidArgumentException('Alias is already in use');
             }
         }
-        return $hash;
+
+        $this->joins[$hash] = [
+            'type' => $type,
+            'table' => $table,
+            'alias' => $alias,
+            'condition' => $condition,
+        ];
     }
 
     /**
