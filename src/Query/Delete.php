@@ -28,7 +28,7 @@ class Delete extends Query implements Filterable
     public function __toString(): string
     {
         $query = 'DELETE FROM ' . $this->table;
-        $query .= $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
+        $query .= $this->buildFilters();
 
         return $query;
     }

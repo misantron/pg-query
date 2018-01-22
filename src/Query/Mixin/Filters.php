@@ -60,4 +60,12 @@ trait Filters
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    private function buildFilters(): string
+    {
+        return $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
+    }
 }

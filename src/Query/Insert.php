@@ -3,16 +3,18 @@
 namespace MediaTech\Query\Query;
 
 
+use MediaTech\Query\Query\Mixin\Columns;
+use MediaTech\Query\Query\Mixin\Selectable;
+
 /**
  * Class Insert
  * @package MediaTech\Query\Query
+ *
+ * @method Insert columns($items)
  */
-class Insert extends Query
+class Insert extends Query implements Selectable
 {
-    /**
-     * @var array
-     */
-    private $columns;
+    use Columns;
 
     /**
      * @var array
@@ -23,21 +25,6 @@ class Insert extends Query
      * @var Select
      */
     private $rowSet;
-
-    /**
-     * @param array|string $items
-     * @return Insert
-     */
-    public function columns($items): Insert
-    {
-        if (empty($items)) {
-            throw new \InvalidArgumentException('Column list is empty');
-        }
-
-        $this->columns = $this->parseList($items);
-
-        return $this;
-    }
 
     /**
      * @param array $items

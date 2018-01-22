@@ -3,21 +3,24 @@
 namespace MediaTech\Query\Query;
 
 
-use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
-use MediaTech\Query\Query\Mixin\Filters;
+use MediaTech\Query\Query\Mixin\Columns;
 use MediaTech\Query\Query\Mixin\DataFetching;
+use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Filterable;
+use MediaTech\Query\Query\Mixin\Filters;
 use MediaTech\Query\Query\Mixin\Retrievable;
+use MediaTech\Query\Query\Mixin\Selectable;
 
 /**
  * Class Select
  * @package MediaTech\Query\Query
  *
  * @method Select execute()
+ * @method Select columns($items)
  */
-class Select extends Query implements Filterable, Retrievable
+class Select extends Query implements Selectable, Filterable, Retrievable
 {
-    use Filters, DataFetching;
+    use Columns, Filters, DataFetching;
 
     const DEFAULT_TABLE_ALIAS = 't1';
 
@@ -25,11 +28,6 @@ class Select extends Query implements Filterable, Retrievable
      * @var string
      */
     private $alias;
-
-    /**
-     * @var array
-     */
-    private $columns = [];
 
     /**
      * @var bool
@@ -91,21 +89,6 @@ class Select extends Query implements Filterable, Retrievable
     public function alias(string $value): Select
     {
         $this->alias = $this->escapeIdentifier($value, false);
-
-        return $this;
-    }
-
-    /**
-     * @param array|string $items
-     * @return Select
-     */
-    public function columns($items): Select
-    {
-        if (empty($items)) {
-            throw new \InvalidArgumentException('Column list is empty');
-        }
-
-        $this->columns = $this->parseList($items);
 
         return $this;
     }
@@ -342,11 +325,6 @@ class Select extends Query implements Filterable, Retrievable
             );
         }
         return !empty($joins) ? ' ' . implode(' ', $joins) : '';
-    }
-
-    private function buildFilters(): string
-    {
-        return $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
     }
 
     private function buildGroupBy(): string

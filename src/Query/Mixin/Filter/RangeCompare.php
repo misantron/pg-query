@@ -4,6 +4,7 @@ namespace MediaTech\Query\Query\Mixin\Filter;
 
 
 use MediaTech\Query\Query\Condition\BetweenCondition;
+use MediaTech\Query\Query\Mixin\Filterable;
 
 /**
  * Trait RangeCompare
@@ -13,11 +14,23 @@ use MediaTech\Query\Query\Condition\BetweenCondition;
  */
 trait RangeCompare
 {
+    /**
+     * @param string $column
+     * @param array $values
+     *
+     * @return Filterable
+     */
     public function between(string $column, array $values)
     {
         return $this->andBetween($column, $values);
     }
 
+    /**
+     * @param string $column
+     * @param array $values
+     *
+     * @return Filterable
+     */
     public function andBetween(string $column, array $values)
     {
         $this->filters->append(
@@ -26,6 +39,12 @@ trait RangeCompare
         return $this;
     }
 
+    /**
+     * @param string $column
+     * @param array $values
+     *
+     * @return Filterable
+     */
     public function orBetween(string $column, array $values)
     {
         $this->filters->append(

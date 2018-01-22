@@ -28,7 +28,7 @@ class InsertTest extends BaseTestCase
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
         $this->assertAttributeEquals('foo.bar', 'table', $query);
 
-        $this->assertAttributeEquals(null, 'columns', $query);
+        $this->assertAttributeEquals([], 'columns', $query);
         $this->assertAttributeEquals(null, 'values', $query);
         $this->assertAttributeEquals(null, 'rowSet', $query);
     }

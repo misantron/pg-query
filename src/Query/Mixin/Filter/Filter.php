@@ -48,7 +48,7 @@ class Filter
      * @param Stringable|string $condition
      * @param string $conjunction
      * @param bool $group
-     * @return static
+     * @return Filter
      */
     public static function create($condition, string $conjunction = '', bool $group = false)
     {

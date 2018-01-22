@@ -53,7 +53,7 @@ class Update extends Query implements Filterable
     public function __toString(): string
     {
         $query = 'UPDATE ' . $this->table . ' SET ' . $this->buildSet();
-        $query .= $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
+        $query .= $this->buildFilters();
 
         return $query;
     }
