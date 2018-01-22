@@ -174,7 +174,7 @@ trait ArrayCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param array $values
      *
      * @return Filterable
      */
@@ -185,7 +185,7 @@ trait ArrayCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param array $values
      *
      * @return Filterable
      */
@@ -199,7 +199,7 @@ trait ArrayCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param array $values
      *
      * @return Filterable
      */
