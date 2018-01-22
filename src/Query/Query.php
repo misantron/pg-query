@@ -41,7 +41,7 @@ abstract class Query implements Stringable
         }
 
         $this->pdo = $pdo;
-        $this->table = $this->escapeIdentifier($table, false);
+        $this->table = $this->escapeIdentifier($table);
     }
 
     /**
@@ -70,7 +70,7 @@ abstract class Query implements Stringable
         return array_filter(array_map(function ($item) {
             return $item instanceof Field ?
                 (string)$item :
-                $this->escapeIdentifier(trim($item), false);
+                $this->escapeIdentifier(trim($item));
         }, $items));
     }
 }

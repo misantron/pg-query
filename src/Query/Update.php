@@ -3,9 +3,9 @@
 namespace MediaTech\Query\Query;
 
 
-use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
-use MediaTech\Query\Query\Mixin\Filters;
+use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Filterable;
+use MediaTech\Query\Query\Mixin\Filters;
 
 /**
  * Class Update
@@ -42,7 +42,7 @@ class Update extends Query implements Filterable
         }
 
         foreach ($data as $field => $value) {
-            $this->set[$this->escapeIdentifier($field, false)] = $this->escapeValue($value);
+            $this->set[$this->escapeIdentifier($field)] = $this->escapeValue($value);
         }
         return $this;
     }

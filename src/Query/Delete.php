@@ -3,9 +3,9 @@
 namespace MediaTech\Query\Query;
 
 
-use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
-use MediaTech\Query\Query\Mixin\Filters;
+use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Filterable;
+use MediaTech\Query\Query\Mixin\Filters;
 
 /**
  * Class Delete

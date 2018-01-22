@@ -6,6 +6,8 @@ namespace MediaTech\Query\Query\Mixin\Filter;
 use MediaTech\Query\Query\Condition\ArrayContainsCondition;
 use MediaTech\Query\Query\Condition\InArrayCondition;
 use MediaTech\Query\Query\Condition\InCondition;
+use MediaTech\Query\Query\Filter\Filter;
+use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Filterable;
 
 /**

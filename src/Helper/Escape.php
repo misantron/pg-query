@@ -11,10 +11,9 @@ trait Escape
 {
     /**
      * @param string $value
-     * @param bool $quote
      * @return string
      */
-    protected function escapeIdentifier(string $value, bool $quote = true): string
+    protected function escapeIdentifier(string $value): string
     {
         $str = preg_replace('/[^\.0-9a-z_]/i', '', $value);
         if ($str !== trim($value)) {
@@ -25,7 +24,7 @@ trait Escape
             throw new \InvalidArgumentException('Invalid identifier: must begin with a letter or underscore');
         }
 
-        return $quote ? '"' . $str . '"' : $str;
+        return $str;
     }
 
     /**

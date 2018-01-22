@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin\Filter;
+namespace MediaTech\Query\Query\Filter;
 
 
 use MediaTech\Query\Stringable;

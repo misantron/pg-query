@@ -32,7 +32,7 @@ class InArrayCondition extends Condition
      * @param string $operator
      * @return InArrayCondition
      */
-    public static function create(string $column, $value, string $operator)
+    public static function create(string $column, $value, string $operator): InArrayCondition
     {
         return new static($column, $value, $operator);
     }

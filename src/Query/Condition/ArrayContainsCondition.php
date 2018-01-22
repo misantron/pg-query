@@ -22,6 +22,10 @@ class ArrayContainsCondition extends Condition
     {
         parent::__construct($column);
 
+        if (empty($values)) {
+            throw new \InvalidArgumentException('Invalid condition value: value list is empty');
+        }
+
         $this->values = $this->escapeArray($values);
     }
 

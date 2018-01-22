@@ -3,9 +3,9 @@
 namespace MediaTech\Query\Query\Mixin;
 
 
+use MediaTech\Query\Query\Filter\Filter;
+use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Filter\ArrayCompare;
-use MediaTech\Query\Query\Mixin\Filter\Filter;
-use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Filter\NullCompare;
 use MediaTech\Query\Query\Mixin\Filter\RangeCompare;
 use MediaTech\Query\Query\Mixin\Filter\ValueCompare;

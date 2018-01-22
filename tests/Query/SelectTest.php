@@ -3,9 +3,9 @@
 namespace MediaTech\Query\Tests\Query;
 
 
-use MediaTech\Query\Factory;
 use MediaTech\Query\Expression\Field;
-use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
+use MediaTech\Query\Factory;
+use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Select;
 use MediaTech\Query\Tests\BaseTestCase;
 

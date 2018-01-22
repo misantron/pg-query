@@ -31,7 +31,7 @@ class Field implements Stringable
     private function __construct(string $expression, string $alias)
     {
         $this->expression = $expression;
-        $this->alias = $this->escapeIdentifier($alias, false);
+        $this->alias = $this->escapeIdentifier($alias);
     }
 
     /**

@@ -3,9 +3,9 @@
 namespace MediaTech\Query\Query;
 
 
+use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Columns;
 use MediaTech\Query\Query\Mixin\DataFetching;
-use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Filterable;
 use MediaTech\Query\Query\Mixin\Filters;
 use MediaTech\Query\Query\Mixin\Retrievable;
@@ -78,7 +78,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     {
         parent::__construct($pdo, $table);
 
-        $this->alias = $this->escapeIdentifier($alias, false);
+        $this->alias = $this->escapeIdentifier($alias);
         $this->filters = new FilterGroup();
     }
 
@@ -88,7 +88,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     public function alias(string $value): Select
     {
-        $this->alias = $this->escapeIdentifier($value, false);
+        $this->alias = $this->escapeIdentifier($value);
 
         return $this;
     }
@@ -149,19 +149,9 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     private function appendJoin(string $type, string $table, string $alias, string $condition)
     {
-        $table = $this->escapeIdentifier($table, false);
-        $alias = $this->escapeIdentifier($alias, false);
+        $hash = $this->getHash($table, $alias);
 
-        $hash = hash('crc32', $table . '_' . $alias);
-
-        if (isset($this->joins[$hash])) {
-            throw new \InvalidArgumentException('Table has already joined');
-        }
-        foreach ($this->joins as $join) {
-            if ($alias === $join['alias']) {
-                throw new \InvalidArgumentException('Alias is already in use');
-            }
-        }
+        $this->assertAliasInUse($alias);
 
         $this->joins[$hash] = [
             'type' => $type,
@@ -172,13 +162,44 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
+     * @param string $table
+     * @param string $alias
+     * @return string
+     */
+    private function getHash(string &$table, string &$alias): string
+    {
+        $table = $this->escapeIdentifier($table);
+        $alias = $this->escapeIdentifier($alias);
+
+        $hash = hash('crc32', $table . '_' . $alias);
+
+        if (isset($this->joins[$hash])) {
+            throw new \InvalidArgumentException('Table has already joined');
+        }
+
+        return $hash;
+    }
+
+    /**
+     * @param string $alias
+     */
+    private function assertAliasInUse(string $alias)
+    {
+        foreach ($this->joins as $join) {
+            if ($alias === $join['alias']) {
+                throw new \InvalidArgumentException('Alias is already in use');
+            }
+        }
+    }
+
+    /**
      * @param Select[] $values
      * @return Select
      */
     public function with(array $values): Select
     {
         foreach ($values as $alias => $value) {
-            $alias = $this->escapeIdentifier($alias, false);
+            $alias = $this->escapeIdentifier($alias);
             if (!$value instanceof Select) {
                 throw new \InvalidArgumentException('Only select query can be used');
             }

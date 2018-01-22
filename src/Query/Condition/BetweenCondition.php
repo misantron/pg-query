@@ -25,6 +25,10 @@ class BetweenCondition extends Condition
         $this->values = array_map(function ($value) {
             return $this->escapeValue($value);
         }, $values);
+
+        if (sizeof($this->values) !== 2) {
+            throw new \InvalidArgumentException('Invalid value: array must contains two elements - begin and end of period');
+        }
     }
 
     /**
@@ -32,7 +36,7 @@ class BetweenCondition extends Condition
      * @param array $values
      * @return BetweenCondition
      */
-    public static function create(string $column, array $values)
+    public static function create(string $column, array $values): BetweenCondition
     {
         return new static($column, $values);
     }

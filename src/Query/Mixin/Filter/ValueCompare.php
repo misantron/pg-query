@@ -4,6 +4,8 @@ namespace MediaTech\Query\Query\Mixin\Filter;
 
 
 use MediaTech\Query\Query\Condition\ValueCondition;
+use MediaTech\Query\Query\Filter\Filter;
+use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Mixin\Filterable;
 
 /**

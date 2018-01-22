@@ -30,11 +30,13 @@ abstract class Condition implements Stringable
      */
     public function __construct(string $column, string $operator = '')
     {
-        if (!empty($operator) && !in_array($operator, $this->getAcceptableOperators())) {
-            throw new \InvalidArgumentException('Invalid condition operator');
+        $operators = $this->getAcceptableOperators();
+
+        if (!empty($operators) && !in_array($operator, $operators)) {
+            throw new \InvalidArgumentException('Invalid condition operator: unexpected value');
         }
 
-        $this->column = $this->escapeIdentifier($column, false);
+        $this->column = $this->escapeIdentifier($column);
         $this->operator = $operator;
     }
 

@@ -4,7 +4,7 @@ namespace MediaTech\Query\Tests\Query;
 
 
 use MediaTech\Query\Query\Delete;
-use MediaTech\Query\Query\Mixin\Filter\FilterGroup;
+use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Tests\BaseTestCase;
 
 class DeleteTest extends BaseTestCase

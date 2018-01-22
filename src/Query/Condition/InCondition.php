@@ -32,7 +32,7 @@ class InCondition extends Condition
      * @param string $operator
      * @return InCondition
      */
-    public static function create(string $column, array $values, string $operator)
+    public static function create(string $column, array $values, string $operator): InCondition
     {
         return new static($column, $values, $operator);
     }
