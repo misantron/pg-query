@@ -20,6 +20,15 @@ class InArrayConditionTest extends BaseTestCase
         new InArrayCondition('foo', 3, '>');
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid value: value must be a scalar
+     */
+    public function testConstructorWithNotScalarValue()
+    {
+        new InArrayCondition('foo', [], '=');
+    }
+
     public function testConstructor()
     {
         $condition = new InArrayCondition('foo', 5, '=');
@@ -46,12 +55,12 @@ class InArrayConditionTest extends BaseTestCase
     {
         $condition = new InArrayCondition('foo', 5, '=');
 
-        $this->assertEquals("5 = ANY (foo)", $condition->__toString());
-        $this->assertEquals("5 = ANY (foo)", (string)$condition);
+        $this->assertEquals("5 = ANY(foo)", $condition->__toString());
+        $this->assertEquals("5 = ANY(foo)", (string)$condition);
 
         $condition = new InArrayCondition('foo', 'bar', '!=');
 
-        $this->assertEquals("'bar' != ANY (foo)", $condition->__toString());
-        $this->assertEquals("'bar' != ANY (foo)", (string)$condition);
+        $this->assertEquals("'bar' != ANY(foo)", $condition->__toString());
+        $this->assertEquals("'bar' != ANY(foo)", (string)$condition);
     }
 }

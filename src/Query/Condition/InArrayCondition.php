@@ -10,25 +10,29 @@ namespace MediaTech\Query\Query\Condition;
 class InArrayCondition extends Condition
 {
     /**
-     * @var mixed
+     * @var string|int|float|bool
      */
     private $value;
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param string|int|float|bool $value
      * @param string $operator
      */
     public function __construct(string $column, $value, string $operator)
     {
         parent::__construct($column, $operator);
 
+        if (!is_scalar($value)) {
+            throw new \InvalidArgumentException('Invalid value: value must be a scalar');
+        }
+
         $this->value = $this->escapeValue($value);
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param string|int|float|bool $value
      * @param string $operator
      * @return InArrayCondition
      */
@@ -50,6 +54,6 @@ class InArrayCondition extends Condition
      */
     public function __toString(): string
     {
-        return sprintf('%s %s ANY (%s)', $this->value, $this->operator, $this->column);
+        return sprintf('%s %s ANY(%s)', $this->value, $this->operator, $this->column);
     }
 }

@@ -69,21 +69,21 @@ trait Escape
 
     /**
      * @param array $items
-     * @return string
+     * @return array
      */
-    protected function escapeList(array $items): string
+    protected function escapeList(array $items): array
     {
         $type = $this->isIntegerArray($items) ? 'integer': 'string';
-        $filtered = array_filter($items);
+        $filtered = array_unique(array_filter($items));
         if (empty($filtered)) {
-            throw new \InvalidArgumentException('Value list is empty');
+            throw new \InvalidArgumentException('Invalid values: value list is empty');
         }
         if ($type === 'string') {
             $filtered = array_map(function (string $item) {
                 return $this->quote($item);
             }, $filtered);
         }
-        return implode(',', $filtered);
+        return $filtered;
     }
 
     /**

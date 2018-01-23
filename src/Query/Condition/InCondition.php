@@ -10,7 +10,7 @@ namespace MediaTech\Query\Query\Condition;
 class InCondition extends Condition
 {
     /**
-     * @var string
+     * @var array
      */
     private $values;
 
@@ -50,6 +50,6 @@ class InCondition extends Condition
      */
     public function __toString(): string
     {
-        return sprintf('%s %s (%s)', $this->column, $this->operator, $this->values);
+        return sprintf('%s %s (%s)', $this->column, $this->operator, implode(',', $this->values));
     }
 }
