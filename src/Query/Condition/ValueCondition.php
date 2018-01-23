@@ -32,7 +32,7 @@ class ValueCondition extends Condition
      * @param string $operator
      * @return ValueCondition
      */
-    public static function create(string $column, $value, string $operator)
+    public static function create(string $column, $value, string $operator): ValueCondition
     {
         return new static($column, $value, $operator);
     }

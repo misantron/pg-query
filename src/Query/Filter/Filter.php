@@ -36,7 +36,7 @@ class Filter
     private function __construct(string $condition, string $conjunction, bool $group)
     {
         if (!in_array($conjunction, self::CONJUNCTIONS)) {
-            throw new \InvalidArgumentException('Invalid conjunction');
+            throw new \InvalidArgumentException('Invalid condition conjunction: unexpected value');
         }
 
         $this->condition = $condition;

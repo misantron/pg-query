@@ -14,7 +14,7 @@ class NullCondition extends Condition
      * @param string $operator
      * @return NullCondition
      */
-    public static function create(string $column, string $operator)
+    public static function create(string $column, string $operator): NullCondition
     {
         return new static($column, $operator);
     }
@@ -24,7 +24,7 @@ class NullCondition extends Condition
      */
     protected function getAcceptableOperators(): array
     {
-        return ['IS', 'NOT IS'];
+        return ['IS', 'IS NOT'];
     }
 
     /**
