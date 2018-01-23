@@ -268,10 +268,10 @@ class SelectTest extends BaseTestCase
             ->limit(1000)
             ->offset(150);
 
-        $this->assertEquals('WITH regional_sales AS (SELECT region,SUM(amount) AS total_sales FROM orders t1 GROUP BY region), top_regions AS (SELECT region FROM regional_sales t1 WHERE total_sales > 1000) SELECT field1,field2 FROM foo.bar t1 INNER JOIN test t2 ON t2.id = t1.user_id WHERE field1 IN (3,7,9) OR field2 IS NULL GROUP BY region HAVING total_amount >= 1500 ORDER BY region desc LIMIT 1000 OFFSET 150', $query->__toString());
+        $this->assertEquals('WITH regional_sales AS (SELECT region,SUM(amount) AS total_sales FROM orders t1 GROUP BY region), top_regions AS (SELECT region FROM regional_sales t1 WHERE total_sales > 1000) SELECT field1,field2 FROM foo.bar t1 INNER JOIN test t2 ON t2.id = t1.user_id WHERE field1 IN (3,7,9) OR field2 IS NULL GROUP BY region HAVING total_amount >= 1500 ORDER BY region desc LIMIT 1000 OFFSET 150', (string)$query);
     }
 
-    public function testBuildConditionsGroup()
+    public function testBuildConditionGroups()
     {
         $query = $this->createQuery();
 
@@ -281,22 +281,102 @@ class SelectTest extends BaseTestCase
             ->orIsNull('bar')
             ->endGroup();
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE ( foo = 1 OR bar IS NULL )', $query->__toString());
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE ( foo = 1 OR bar IS NULL )', (string)$query);
+
+        $query = $this->createQuery();
+
+        $query
+            ->equals('test', 5)
+            ->orGroup()
+            ->equals('foo', 1)
+            ->orIsNull('bar')
+            ->endGroup();
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE test = 5 OR ( foo = 1 OR bar IS NULL )', (string)$query);
     }
 
-    public function testBuildConditionsWithDifferentEquals()
+    public function testBuildConditionsWithEqualFilters()
     {
         $query = $this->createQuery();
 
         $query
             ->equals('foo', 1)
             ->andEquals('bar', false)
-            ->orEquals('baz', 10)
-            ->notEquals('foo', 2)
-            ->orNotEquals('bar', true)
-            ->andNotEquals('baz', 20);
+            ->orEquals('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo = 1 AND bar = false OR baz = 10 AND foo != 2 OR bar != true AND baz != 20', $query->__toString());
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo = 1 AND bar = false OR baz = 10', (string)$query);
+    }
+
+    public function testBuildConditionsWithNotEqualFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->notEquals('foo', 1)
+            ->andNotEquals('bar', false)
+            ->orNotEquals('baz', 10);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo != 1 AND bar != false OR baz != 10', (string)$query);
+    }
+
+    public function testBuildConditionsWithMoreFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->more('foo', 1)
+            ->andMore('bar', 5)
+            ->orMore('baz', 10);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo > 1 AND bar > 5 OR baz > 10', (string)$query);
+    }
+
+    public function testBuildConditionsWithMoreOrEqualsFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->moreOrEquals('foo', 1)
+            ->andMoreOrEquals('bar', 5)
+            ->orMoreOrEquals('baz', 10);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo >= 1 AND bar >= 5 OR baz >= 10', (string)$query);
+    }
+
+    public function testBuildConditionsWithLessFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->less('foo', 1)
+            ->andLess('bar', 5)
+            ->orLess('baz', 10);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo < 1 AND bar < 5 OR baz < 10', (string)$query);
+    }
+
+    public function testBuildConditionsWithLessOrEqualsFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->lessOrEquals('foo', 1)
+            ->andLessOrEquals('bar', 5)
+            ->orLessOrEquals('baz', 10);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo <= 1 AND bar <= 5 OR baz <= 10', (string)$query);
+    }
+
+    public function testBuildConditionsWithRangeFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->between('foo', [1,2])
+            ->andBetween('bar', [5,6])
+            ->orBetween('baz', [10,20]);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo BETWEEN 1 AND 2 AND bar BETWEEN 5 AND 6 OR baz BETWEEN 10 AND 20', (string)$query);
     }
 
     public function testExecute()
