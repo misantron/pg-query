@@ -8,6 +8,24 @@ use MediaTech\Query\Tests\BaseTestCase;
 
 class FieldTest extends BaseTestCase
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid identifier: invalid characters supplied
+     */
+    public function testConstructorWithAliasWithInvalidChars()
+    {
+        Field::create('SUM(field)', '$f');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid identifier: must begin with a letter or underscore
+     */
+    public function testConstructorWithAliasBeginsFromInvalidChar()
+    {
+        Field::create('SUM(field)', '5f');
+    }
+
     public function testConstructor()
     {
         $field = Field::create('SUM(field)');

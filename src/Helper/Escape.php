@@ -56,9 +56,6 @@ trait Escape
         $type = $this->isIntegerArray($values) ? 'integer': 'string';
         $cast = $type === 'integer' ? 'INTEGER[]' : 'VARCHAR[]';
 
-        if (empty($values)) {
-            return 'ARRAY[]::' . $cast;
-        }
         if ($type === 'string') {
             $values = array_map(function (string $value) {
                 return $this->quote($value);

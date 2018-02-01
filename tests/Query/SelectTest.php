@@ -379,6 +379,90 @@ class SelectTest extends BaseTestCase
         $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo BETWEEN 1 AND 2 AND bar BETWEEN 5 AND 6 OR baz BETWEEN 10 AND 20', (string)$query);
     }
 
+    public function testBuildConditionsWithNullFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->isNull('foo')
+            ->andIsNull('bar')
+            ->orIsNull('baz');
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo IS NULL AND bar IS NULL OR baz IS NULL', (string)$query);
+    }
+
+    public function testBuildConditionsWithNotNullFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->isNotNull('foo')
+            ->andIsNotNull('bar')
+            ->orIsNotNull('baz');
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo IS NOT NULL AND bar IS NOT NULL OR baz IS NOT NULL', (string)$query);
+    }
+
+    public function testBuildConditionsWithInFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->in('foo', [1,2])
+            ->andIn('bar', [5,6])
+            ->orIn('baz', [10,20]);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo IN (1,2) AND bar IN (5,6) OR baz IN (10,20)', (string)$query);
+    }
+
+    public function testBuildConditionsWithNotInFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->notIn('foo', [1,2])
+            ->andNotIn('bar', [5,6])
+            ->orNotIn('baz', [10,20]);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo NOT IN (1,2) AND bar NOT IN (5,6) OR baz NOT IN (10,20)', (string)$query);
+    }
+
+    public function testBuildConditionsWithInArrayFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->inArray('foo', 1)
+            ->andInArray('bar', 5)
+            ->orInArray('baz', 10);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE 1 = ANY(foo) AND 5 = ANY(bar) OR 10 = ANY(baz)', (string)$query);
+    }
+
+    public function testBuildConditionsWithNotInArrayFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->notInArray('foo', 1)
+            ->andNotInArray('bar', 5)
+            ->orNotInArray('baz', 10);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE 1 != ANY(foo) AND 5 != ANY(bar) OR 10 != ANY(baz)', (string)$query);
+    }
+
+    public function testBuildConditionsWithArrayContainsFilters()
+    {
+        $query = $this->createQuery();
+
+        $query
+            ->arrayContains('foo', [1,2])
+            ->andArrayContains('bar', [5,6])
+            ->orArrayContains('baz', [10,20]);
+
+        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo @> ARRAY[1,2]::INTEGER[] AND bar @> ARRAY[5,6]::INTEGER[] OR baz @> ARRAY[10,20]::INTEGER[]', (string)$query);
+    }
+
     public function testExecute()
     {
         $pdo = $this->createPDOMock();
