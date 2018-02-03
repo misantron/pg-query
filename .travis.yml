@@ -24,8 +24,7 @@ install:
   - travis_retry composer install --prefer-dist --no-interaction
 
 before_script:
-  - psql -c 'DROP DATABASE IF EXISTS test;' -U postgres
-  - psql -c 'CREATE DATABASE IF NOT EXISTS test;' -U postgres
+  - psql -c 'CREATE DATABASE test;' -U postgres
   - php ./tests/setup.php
 
 script:
