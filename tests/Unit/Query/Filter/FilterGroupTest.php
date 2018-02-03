@@ -7,7 +7,7 @@ use MediaTech\Query\Query\Condition\NullCondition;
 use MediaTech\Query\Query\Condition\ValueCondition;
 use MediaTech\Query\Query\Filter\Filter;
 use MediaTech\Query\Query\Filter\FilterGroup;
-use MediaTech\Query\Tests\BaseTestCase;
+use MediaTech\Query\Tests\Unit\BaseTestCase;
 
 class FilterGroupTest extends BaseTestCase
 {

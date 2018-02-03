@@ -4,7 +4,7 @@ namespace MediaTech\Query\Tests\Unit\Expression;
 
 
 use MediaTech\Query\Expression\Field;
-use MediaTech\Query\Tests\BaseTestCase;
+use MediaTech\Query\Tests\Unit\BaseTestCase;
 
 class FieldTest extends BaseTestCase
 {

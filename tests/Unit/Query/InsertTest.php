@@ -6,7 +6,7 @@ namespace MediaTech\Query\Tests\Unit\Query;
 use MediaTech\Query\Factory;
 use MediaTech\Query\Query\Insert;
 use MediaTech\Query\Query\Select;
-use MediaTech\Query\Tests\BaseTestCase;
+use MediaTech\Query\Tests\Unit\BaseTestCase;
 
 class InsertTest extends BaseTestCase
 {

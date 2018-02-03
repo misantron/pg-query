@@ -8,7 +8,6 @@ use MediaTech\Query\Query\Delete;
 use MediaTech\Query\Query\Insert;
 use MediaTech\Query\Query\Select;
 use MediaTech\Query\Query\Update;
-use MediaTech\Query\Tests\BaseTestCase;
 
 class FactoryTest extends BaseTestCase
 {
@@ -59,8 +58,6 @@ class FactoryTest extends BaseTestCase
 
     private function createFactory()
     {
-        $pdo = $pdo = $this->createPDOMock();
-
-        return new Factory($pdo);
+        return new Factory($this->createPDOMock());
     }
 }

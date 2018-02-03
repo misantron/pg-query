@@ -5,7 +5,7 @@ namespace MediaTech\Query\Tests\Unit\Query;
 
 use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Update;
-use MediaTech\Query\Tests\BaseTestCase;
+use MediaTech\Query\Tests\Unit\BaseTestCase;
 
 class UpdateTest extends BaseTestCase
 {

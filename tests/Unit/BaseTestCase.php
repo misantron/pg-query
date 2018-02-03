@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query\Tests;
+namespace MediaTech\Query\Tests\Unit;
 
 
 use PHPUnit\Framework\TestCase;

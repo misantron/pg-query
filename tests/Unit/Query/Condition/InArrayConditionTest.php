@@ -5,7 +5,7 @@ namespace MediaTech\Query\Tests\Unit\Query\Condition;
 
 use MediaTech\Query\Helper\Escape;
 use MediaTech\Query\Query\Condition\InArrayCondition;
-use MediaTech\Query\Tests\BaseTestCase;
+use MediaTech\Query\Tests\Unit\BaseTestCase;
 
 class InArrayConditionTest extends BaseTestCase
 {

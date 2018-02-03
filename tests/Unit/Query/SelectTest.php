@@ -7,7 +7,7 @@ use MediaTech\Query\Expression\Field;
 use MediaTech\Query\Factory;
 use MediaTech\Query\Query\Filter\FilterGroup;
 use MediaTech\Query\Query\Select;
-use MediaTech\Query\Tests\BaseTestCase;
+use MediaTech\Query\Tests\Unit\BaseTestCase;
 
 class SelectTest extends BaseTestCase
 {
