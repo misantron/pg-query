@@ -1,0 +1,9 @@
+CREATE EXTENSION intarray;
+
+CREATE SCHEMA test;
+
+CREATE TABLE test.foo {
+  id SERIAL PRIMARY KEY,
+  type INTEGER NOT NULL,
+  title VARCHAR NOT NULL
+}

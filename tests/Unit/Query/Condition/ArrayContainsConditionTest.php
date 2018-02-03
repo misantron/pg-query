@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query\Tests\Query\Condition;
+namespace MediaTech\Query\Tests\Unit\Query\Condition;
 
 
 use MediaTech\Query\Helper\Escape;

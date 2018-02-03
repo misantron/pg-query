@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query\Tests\Query\Filter;
+namespace MediaTech\Query\Tests\Unit\Query\Filter;
 
 
 use MediaTech\Query\Query\Condition\NullCondition;

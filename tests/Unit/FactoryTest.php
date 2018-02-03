@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query\Tests;
+namespace MediaTech\Query\Tests\Unit;
 
 
 use MediaTech\Query\Factory;
@@ -8,6 +8,7 @@ use MediaTech\Query\Query\Delete;
 use MediaTech\Query\Query\Insert;
 use MediaTech\Query\Query\Select;
 use MediaTech\Query\Query\Update;
+use MediaTech\Query\Tests\BaseTestCase;
 
 class FactoryTest extends BaseTestCase
 {

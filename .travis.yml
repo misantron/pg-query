@@ -5,7 +5,13 @@ php:
   - 7.1
   - 7.2
 
-sudo: false
+sudo: true
+
+services:
+  - postgresql
+
+addons:
+  postgresql: "9.2"
 
 cache:
   directories:
@@ -16,6 +22,11 @@ install:
   - travis_retry composer self-update && composer --version
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - travis_retry composer install --prefer-dist --no-interaction
+
+before_script:
+  - psql -c 'DROP DATABASE IF EXISTS test;' -U postgres
+  - psql -c 'CREATE DATABASE IF NOT EXISTS test;' -U postgres
+  - php ./tests/setup.php
 
 script:
   - vendor/bin/phpunit --verbose --coverage-clover=coverage.clover

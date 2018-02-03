@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query\Tests\Query;
+namespace MediaTech\Query\Tests\Unit\Query;
 
 
 use MediaTech\Query\Factory;

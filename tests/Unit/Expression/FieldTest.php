@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaTech\Query\Tests\Expression;
+namespace MediaTech\Query\Tests\Unit\Expression;
 
 
 use MediaTech\Query\Expression\Field;
