@@ -11,8 +11,11 @@
          bootstrap="./tests/bootstrap.php"
 >
     <testsuites>
-        <testsuite>
-            <directory>tests</directory>
+        <testsuite name="Unit">
+            <directory>./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>./tests/Integration</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -23,7 +26,4 @@
             </exclude>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-    </logging>
 </phpunit>

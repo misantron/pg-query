@@ -28,7 +28,8 @@ before_script:
   - php ./tests/setup.php
 
 script:
-  - vendor/bin/phpunit --verbose --coverage-clover=coverage.clover
+  - vendor/bin/phpunit --testsuite Unit --verbose --coverage-clover=coverage.clover
+  - vendor/bin/phpunit --testsuite Integration --verbose
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
