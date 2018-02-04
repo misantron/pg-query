@@ -21,7 +21,7 @@ abstract class BaseTestCase extends TestCase
     protected function setUp()
     {
         $this->pdo = new \PDO(
-            'pgsql:host=localhost;port=5432;dbname=test', 'postgres', '1',
+            'pgsql:host=localhost;port=5432;dbname=test', 'postgres', '',
             [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_EMULATE_PREPARES => false,
