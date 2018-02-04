@@ -1,3 +1,4 @@
+
 create table foo.users (
    id serial primary key,
    role_id integer not null,
@@ -20,7 +21,7 @@ create table foo.categories (
    id serial primary key,
    name varchar(255),
    inserted_at timestamp with time zone,
-   updated_at timestamp with time zone,
+   updated_at timestamp with time zone
 );
 
 create table foo.products (
