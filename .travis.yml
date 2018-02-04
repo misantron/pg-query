@@ -5,7 +5,8 @@ php:
   - 7.1
   - 7.2
 
-sudo: true
+dist: trusty
+sudo: required
 
 services:
   - postgresql
@@ -25,7 +26,8 @@ install:
 
 before_script:
   - psql -c 'CREATE DATABASE test;' -U postgres
-  - psql -c 'CREATE SCHEMA foo;' -U postgres
+  - psql -c 'CREATE EXTENSION intarray;' -U postgres -d test
+  - psql -c 'CREATE SCHEMA foo;' -U postgres -d test
   - php ./tests/setup.php
 
 script:

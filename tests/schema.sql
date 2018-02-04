@@ -1,5 +1,3 @@
-create extension intarray;
-
 create table foo.users (
    id serial primary key,
    role_id integer not null,
@@ -9,7 +7,7 @@ create table foo.users (
    active bool,
    inserted_at timestamp with time zone,
    updated_at timestamp with time zone
-)
+);
 
 create table foo.tags (
    id serial primary key,
@@ -61,4 +59,4 @@ create table foo.orders (
    user_id integer,
    inserted_at timestamp with time zone,
    updated_at timestamp with time zone
-)
+);
