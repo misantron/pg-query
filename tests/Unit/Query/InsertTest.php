@@ -136,14 +136,7 @@ class InsertTest extends BaseTestCase
             ['foo' => 5, 'bar' => [5,8]],
         ];
 
-        $pdo = $this->createPDOMock();
-
-        $pdo
-            ->method('quote')
-            ->withConsecutive(['test1', \PDO::PARAM_STR])
-            ->willReturnOnConsecutiveCalls("'test1'");
-
-        $query = new Insert($pdo, 'foo.bar');
+        $query = $this->createQuery();
         $query->values($values);
 
         $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[]) RETURNING *", $query->__toString());
@@ -175,6 +168,132 @@ class InsertTest extends BaseTestCase
         $query->values(['foo' => 1]);
 
         $this->assertEquals((string)$query, $query->__toString());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
+     */
+    public function testGetInsertedRowBeforeQueryExecute()
+    {
+        $query = $this->createQuery();
+        $query
+            ->values(['foo' => 1])
+            ->getInsertedRow();
+    }
+
+    public function testGetInsertedRow()
+    {
+        $pdo = $this->createPDOMock();
+
+        $statement = $this->getMockBuilder(\PDOStatement::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
+            ->method('fetch')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn([
+                'id' => 1,
+                'foo' => 'bar'
+            ]);
+
+        $pdo
+            ->expects($this->once())
+            ->method('prepare')
+            ->with("INSERT INTO foo.bar (foo) VALUES ('bar') RETURNING *")
+            ->willReturn($statement);
+
+        $query = new Insert($pdo, 'foo.bar');
+
+        $inserted = $query
+            ->values([
+                'foo' => 'bar'
+            ])
+            ->execute()
+            ->getInsertedRow();
+
+        $this->assertEquals([
+            'id' => 1,
+            'foo' => 'bar'
+        ], $inserted);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
+     */
+    public function testGetInsertedRowsBeforeQueryExecute()
+    {
+        $query = $this->createQuery();
+        $query
+            ->values([
+                ['foo' => 1],
+                ['foo' => 2],
+            ])
+            ->getInsertedRows();
+    }
+
+    public function testGetInsertedRows()
+    {
+        $pdo = $this->createPDOMock();
+
+        $statement = $this->getMockBuilder(\PDOStatement::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'foo' => 'bar'
+                ],
+                [
+                    'id' => 2,
+                    'foo' => 'baz'
+                ]
+            ]);
+
+        $pdo
+            ->expects($this->once())
+            ->method('prepare')
+            ->with("INSERT INTO foo.bar (foo) VALUES ('bar'),('baz') RETURNING *")
+            ->willReturn($statement);
+
+        $query = new Insert($pdo, 'foo.bar');
+
+        $inserted = $query
+            ->values([
+                ['foo' => 'bar'],
+                ['foo' => 'baz'],
+            ])
+            ->execute()
+            ->getInsertedRows();
+
+        $this->assertEquals([
+            [
+                'id' => 1,
+                'foo' => 'bar'
+            ],
+            [
+                'id' => 2,
+                'foo' => 'baz'
+            ]
+        ], $inserted);
     }
 
     private function createQuery()

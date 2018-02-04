@@ -58,6 +58,16 @@ abstract class Query implements Stringable
     }
 
     /**
+     * @throws \RuntimeException
+     */
+    protected function assertQueryExecuted()
+    {
+        if (!$this->statement instanceof \PDOStatement) {
+            throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
+        }
+    }
+
+    /**
      * @param array|string $items
      * @return array
      */

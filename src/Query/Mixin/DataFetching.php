@@ -17,7 +17,7 @@ trait DataFetching
      */
     public function fetchAllObject(string $className): array
     {
-        $this->assertStatementCreated();
+        $this->assertQueryExecuted();
 
         return $this->statement->fetchAll(\PDO::FETCH_CLASS, $className);
     }
@@ -28,7 +28,7 @@ trait DataFetching
      */
     public function fetchOneObject(string $className)
     {
-        $this->assertStatementCreated();
+        $this->assertQueryExecuted();
 
         $response = $this->statement->fetchObject($className);
 
@@ -41,7 +41,7 @@ trait DataFetching
      */
     public function fetchCallback(callable $callback): array
     {
-        $this->assertStatementCreated();
+        $this->assertQueryExecuted();
 
         return $this->statement->fetchAll(\PDO::FETCH_FUNC, $callback);
     }
@@ -51,7 +51,7 @@ trait DataFetching
      */
     public function fetchAllAssoc(): array
     {
-        $this->assertStatementCreated();
+        $this->assertQueryExecuted();
 
         return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -61,7 +61,7 @@ trait DataFetching
      */
     public function fetchOneAssoc()
     {
-        $this->assertStatementCreated();
+        $this->assertQueryExecuted();
 
         $response = $this->statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -73,7 +73,7 @@ trait DataFetching
      */
     public function fetchKeyValue(): array
     {
-        $this->assertStatementCreated();
+        $this->assertQueryExecuted();
 
         return $this->statement->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
@@ -83,7 +83,7 @@ trait DataFetching
      */
     public function fetchAllColumn(): array
     {
-        $this->assertStatementCreated();
+        $this->assertQueryExecuted();
 
         return $this->statement->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -93,20 +93,10 @@ trait DataFetching
      */
     public function fetchColumn()
     {
-        $this->assertStatementCreated();
+        $this->assertQueryExecuted();
 
         $response = $this->statement->fetchColumn();
 
         return $response === false ? null : $response;
-    }
-
-    /**
-     * @throws \RuntimeException
-     */
-    private function assertStatementCreated()
-    {
-        if (!$this->statement instanceof \PDOStatement) {
-            throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
-        }
     }
 }

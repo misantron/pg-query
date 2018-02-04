@@ -11,6 +11,7 @@ use MediaTech\Query\Query\Mixin\Selectable;
  * @package MediaTech\Query\Query
  *
  * @method Insert columns($items)
+ * @method Insert execute()
  */
 class Insert extends Query implements Selectable
 {
@@ -59,6 +60,26 @@ class Insert extends Query implements Selectable
         $this->rowSet = $rowSet;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInsertedRow(): array
+    {
+        $this->assertQueryExecuted();
+
+        return $this->statement->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @return array
+     */
+    public function getInsertedRows(): array
+    {
+        $this->assertQueryExecuted();
+
+        return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
