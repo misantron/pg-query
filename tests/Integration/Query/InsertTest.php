@@ -9,7 +9,7 @@ class InsertTest extends BaseTestCase
 {
     public function testInsertSingleRow()
     {
-        $query = $this->getFactory()->insert('products');
+        $query = $this->getFactory()->insert('public.products');
 
         $response = $query
             ->values([
@@ -34,7 +34,7 @@ class InsertTest extends BaseTestCase
 
     public function testInsertMultipleRows()
     {
-        $query = $this->getFactory()->insert('products');
+        $query = $this->getFactory()->insert('public.products');
 
         $response = $query
             ->values([
@@ -71,7 +71,7 @@ class InsertTest extends BaseTestCase
     protected function tearDown()
     {
         $this->getFactory()
-            ->delete('products')
+            ->delete('public.products')
             ->execute();
     }
 }
