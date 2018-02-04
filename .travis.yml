@@ -28,7 +28,7 @@ before_script:
   - psql -c 'CREATE DATABASE test;' -U postgres
   - psql -c 'CREATE EXTENSION intarray;' -U postgres -d test
   - psql -c 'CREATE SCHEMA foo;' -U postgres -d test
-  - php ./tests/setup.php
+  - psql -f ./tests/schema.sql -U postgres -d test
 
 script:
   - vendor/bin/phpunit --testsuite Unit --verbose --coverage-clover=coverage.clover
