@@ -30,6 +30,14 @@ trait Columns
     }
 
     /**
+     * @return array
+     */
+    public function getColumns(): array
+    {
+        return $this->columns;
+    }
+
+    /**
      * @param array|string $items
      */
     private function assertColumnsEmpty($items)

@@ -58,6 +58,7 @@ class Insert extends Query implements Selectable
     public function fromRows(Select $rowSet): Insert
     {
         $this->rowSet = $rowSet;
+        $this->columns = $rowSet->getColumns();
 
         return $this;
     }

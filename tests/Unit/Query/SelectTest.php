@@ -467,12 +467,12 @@ class SelectTest extends BaseTestCase
     {
         $pdo = $this->createPDOMock();
 
-        $query = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 10';
+        $qs = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 10';
         $statement = new \PDOStatement();
 
         $pdo
             ->method('prepare')
-            ->with($query)
+            ->with($qs)
             ->willReturn($statement);
 
         $query = new Select($pdo, 'foo.bar');
@@ -490,6 +490,48 @@ class SelectTest extends BaseTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
      */
+    public function testRowCountBeforeQueryExecute()
+    {
+        $query = $this->createQuery();
+        $query->rowsCount();
+    }
+
+    public function testRowCount()
+    {
+        $pdo = $this->createPDOMock();
+        $statement = $this->createStatementMock();
+
+        $qs = 'SELECT * FROM foo.bar t1 LIMIT 10';
+
+        $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
+            ->method('rowCount')
+            ->willReturn(5);
+
+        $pdo
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($qs)
+            ->willReturn($statement);
+
+        $query = new Select($pdo, 'foo.bar');
+
+        $query
+            ->limit(10)
+            ->execute();
+
+        $this->assertEquals(5, $query->rowsCount());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
+     */
     public function testFetchAllObjectBeforeExecute()
     {
         $query = $this->createQuery();
@@ -500,25 +542,30 @@ class SelectTest extends BaseTestCase
     {
         $pdo = $this->createPDOMock();
 
-        $query = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 10';
+        $qs = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 10';
 
         $data = [
             new \stdClass(),
             new \stdClass(),
         ];
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statement = $this->createStatementMock();
 
         $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_CLASS, \stdClass::class)
             ->willReturn($data);
 
         $pdo
+            ->expects($this->once())
             ->method('prepare')
-            ->with($query)
+            ->with($qs)
             ->willReturn($statement);
 
         $query = new Select($pdo, 'foo.bar');
@@ -544,16 +591,21 @@ class SelectTest extends BaseTestCase
         ];
         $callback = function () {};
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statement = $this->createStatementMock();
 
         $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_FUNC, $callback)
             ->willReturn($data);
 
         $pdo
+            ->expects($this->once())
             ->method('prepare')
             ->with($query)
             ->willReturn($statement);
@@ -580,16 +632,21 @@ class SelectTest extends BaseTestCase
             ['foo' => 3, 'bar' => 4],
         ];
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statement = $this->createStatementMock();
 
         $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn($data);
 
         $pdo
+            ->expects($this->once())
             ->method('prepare')
             ->with($query)
             ->willReturn($statement);
@@ -616,16 +673,21 @@ class SelectTest extends BaseTestCase
             [2 => 'bar'],
         ];
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statement = $this->createStatementMock();
 
         $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_KEY_PAIR)
             ->willReturn($data);
 
         $pdo
+            ->expects($this->once())
             ->method('prepare')
             ->with($query)
             ->willReturn($statement);
@@ -650,16 +712,21 @@ class SelectTest extends BaseTestCase
 
         $data = [1, 2];
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statement = $this->createStatementMock();
 
         $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_COLUMN)
             ->willReturn($data);
 
         $pdo
+            ->expects($this->once())
             ->method('prepare')
             ->with($query)
             ->willReturn($statement);
@@ -694,16 +761,21 @@ class SelectTest extends BaseTestCase
 
         $data = new \stdClass();
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statement = $this->createStatementMock();
 
         $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
             ->method('fetchObject')
             ->with(\stdClass::class)
             ->willReturn($data);
 
         $pdo
+            ->expects($this->once())
             ->method('prepare')
             ->with($query)
             ->willReturn($statement);
@@ -727,15 +799,20 @@ class SelectTest extends BaseTestCase
 
         $data = ['foo' => 1, 'bar' => 2];
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statement = $this->createStatementMock();
 
         $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
             ->method('fetch')
             ->willReturn($data);
 
         $pdo
+            ->expects($this->once())
             ->method('prepare')
             ->with($query)
             ->willReturn($statement);
@@ -759,15 +836,20 @@ class SelectTest extends BaseTestCase
 
         $data = 1;
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statement = $this->createStatementMock();
 
         $statement
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $statement
+            ->expects($this->once())
             ->method('fetchColumn')
             ->willReturn($data);
 
         $pdo
+            ->expects($this->once())
             ->method('prepare')
             ->with($query)
             ->willReturn($statement);

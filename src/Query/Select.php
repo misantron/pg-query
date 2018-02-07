@@ -278,6 +278,16 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
+     * @return int
+     */
+    public function rowsCount(): int
+    {
+        $this->assertQueryExecuted();
+
+        return $this->statement->rowCount();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __toString(): string

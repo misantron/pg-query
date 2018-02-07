@@ -68,10 +68,51 @@ class InsertTest extends BaseTestCase
         $this->assertCount(2, $response);
     }
 
+    public function testInsertFromRows()
+    {
+        $query = $this->getFactory()->insert('foo.tags');
+
+        $query
+            ->values([
+                [
+                    'name' => 'Green',
+                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s')
+                ],
+                [
+                    'name' => 'Red',
+                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s')
+                ]
+            ])
+            ->execute();
+
+        $select = $this->getFactory()
+            ->select('foo.tags')
+            ->columns(['name', 'inserted_at']);
+
+        $response = $this->getFactory()
+            ->insert('foo.tags')
+            ->fromRows($select)
+            ->execute()
+            ->getInsertedRows();
+
+        $this->assertInternalType('array', $response);
+        $this->assertCount(2, $response);
+
+        $select = $this->getFactory()
+            ->select('foo.tags')
+            ->execute();
+
+        $this->assertEquals(4, $select->rowsCount());
+    }
+
     protected function tearDown()
     {
         $this->getFactory()
             ->delete('foo.products')
+            ->execute();
+
+        $this->getFactory()
+            ->delete('foo.tags')
             ->execute();
     }
 }
