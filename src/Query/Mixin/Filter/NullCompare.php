@@ -8,8 +8,7 @@ use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 
 /**
- * Trait NullCompare
- * @package Misantron\QueryBuilder\Query\Mixin\Filter
+ * Trait NullCompare.
  *
  * @property FilterGroup $filters
  */
@@ -37,6 +36,7 @@ trait NullCompare
                 NullCondition::create($column, 'IS'), 'AND'
             )
         );
+
         return $this;
     }
 
@@ -52,6 +52,7 @@ trait NullCompare
                 NullCondition::create($column, 'IS'), 'OR'
             )
         );
+
         return $this;
     }
 
@@ -77,6 +78,7 @@ trait NullCompare
                 NullCondition::create($column, 'IS NOT'), 'AND'
             )
         );
+
         return $this;
     }
 
@@ -92,6 +94,7 @@ trait NullCompare
                 NullCondition::create($column, 'IS NOT'), 'OR'
             )
         );
+
         return $this;
     }
 }

@@ -10,8 +10,7 @@ use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 
 /**
- * Trait ArrayCompare
- * @package Misantron\QueryBuilder\Query\Mixin\Filter
+ * Trait ArrayCompare.
  *
  * @property FilterGroup $filters
  */
@@ -19,7 +18,7 @@ trait ArrayCompare
 {
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -30,7 +29,7 @@ trait ArrayCompare
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -39,12 +38,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(InCondition::create($column, $values, 'IN'), 'AND')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -53,12 +53,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(InCondition::create($column, $values, 'IN'), 'OR')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -69,7 +70,7 @@ trait ArrayCompare
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -78,12 +79,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(InCondition::create($column, $values, 'NOT IN'), 'AND')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -92,12 +94,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(InCondition::create($column, $values, 'NOT IN'), 'OR')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -108,7 +111,7 @@ trait ArrayCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -117,12 +120,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(InArrayCondition::create($column, $value, '='), 'AND')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -131,12 +135,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(InArrayCondition::create($column, $value, '='), 'OR')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -147,7 +152,7 @@ trait ArrayCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -156,12 +161,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(InArrayCondition::create($column, $value, '!='), 'AND')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -170,12 +176,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(InArrayCondition::create($column, $value, '!='), 'OR')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -186,7 +193,7 @@ trait ArrayCompare
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -195,12 +202,13 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(ArrayContainsCondition::create($column, $values), 'AND')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -209,6 +217,7 @@ trait ArrayCompare
         $this->filters->append(
             Filter::create(ArrayContainsCondition::create($column, $values), 'OR')
         );
+
         return $this;
     }
 }

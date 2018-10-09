@@ -8,8 +8,7 @@ use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 
 /**
- * Trait RangeCompare
- * @package Misantron\QueryBuilder\Query\Mixin\Filter
+ * Trait RangeCompare.
  *
  * @property FilterGroup $filters
  */
@@ -17,7 +16,7 @@ trait RangeCompare
 {
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -28,7 +27,7 @@ trait RangeCompare
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -37,12 +36,13 @@ trait RangeCompare
         $this->filters->append(
             Filter::create(BetweenCondition::create($column, $values), 'AND')
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      *
      * @return Filterable
      */
@@ -51,6 +51,7 @@ trait RangeCompare
         $this->filters->append(
             Filter::create(BetweenCondition::create($column, $values), 'OR')
         );
+
         return $this;
     }
 }

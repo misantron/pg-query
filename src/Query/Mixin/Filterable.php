@@ -3,8 +3,7 @@
 namespace Misantron\QueryBuilder\Query\Mixin;
 
 /**
- * Interface Filterable
- * @package Misantron\QueryBuilder\Query\Mixin
+ * Interface Filterable.
  */
 interface Filterable
 {
@@ -30,7 +29,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -38,7 +37,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -46,7 +45,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -54,7 +53,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -62,7 +61,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -70,7 +69,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -78,7 +77,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -86,7 +85,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -94,7 +93,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -102,7 +101,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -110,7 +109,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -118,7 +117,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -126,7 +125,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -134,7 +133,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -142,7 +141,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -150,7 +149,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -158,7 +157,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -166,7 +165,7 @@ interface Filterable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */

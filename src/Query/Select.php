@@ -332,7 +332,9 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     private function buildSelect(): string
     {
         $str = 'SELECT ' . ($this->distinct ? 'DISTINCT ' : '');
-        $str .= (empty($this->columns) ? '*' : implode(',', $this->columns)) . ' FROM ' . $this->table . ' ' . $this->alias;
+        $str .= (empty($this->columns)
+                ? '*'
+                : implode(',', $this->columns)) . ' FROM ' . $this->table . ' ' . $this->alias;
 
         return $str;
     }

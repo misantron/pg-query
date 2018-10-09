@@ -8,8 +8,7 @@ use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 
 /**
- * Trait ValueCompare
- * @package Misantron\QueryBuilder\Query\Mixin\Filter
+ * Trait ValueCompare.
  *
  * @property FilterGroup $filters
  */
@@ -17,7 +16,7 @@ trait ValueCompare
 {
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -28,7 +27,7 @@ trait ValueCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -39,12 +38,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '='), 'AND'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -55,12 +55,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '='), 'OR'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -71,7 +72,7 @@ trait ValueCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -82,12 +83,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '!='), 'AND'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -98,12 +100,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '!='), 'OR'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -114,7 +117,7 @@ trait ValueCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -125,12 +128,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '>'), 'AND'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -141,12 +145,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '>'), 'OR'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -157,7 +162,7 @@ trait ValueCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -168,12 +173,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '>='), 'AND'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -184,12 +190,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '>='), 'OR'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -200,7 +207,7 @@ trait ValueCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -211,12 +218,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '<'), 'AND'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -227,12 +235,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '<'), 'OR'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -243,7 +252,7 @@ trait ValueCompare
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -254,12 +263,13 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '<='), 'AND'
             )
         );
+
         return $this;
     }
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Filterable
      */
@@ -270,6 +280,7 @@ trait ValueCompare
                 ValueCondition::create($column, $value, '<='), 'OR'
             )
         );
+
         return $this;
     }
 }
