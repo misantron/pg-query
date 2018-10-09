@@ -1,10 +1,9 @@
 <?php
 
-namespace MediaTech\Query\Expression;
+namespace Misantron\QueryBuilder\Expression;
 
-
-use MediaTech\Query\Helper\Escape;
-use MediaTech\Query\Stringable;
+use Misantron\QueryBuilder\Helper\Escape;
+use Misantron\QueryBuilder\Stringable;
 
 /**
  * Class Field
@@ -39,7 +38,7 @@ class Field implements Stringable
      * @param string $alias
      * @return Field
      */
-    public static function create(string $expression, string $alias = '')
+    public static function create(string $expression, string $alias = ''): Field
     {
         return new static($expression, $alias);
     }

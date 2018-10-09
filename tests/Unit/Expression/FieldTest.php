@@ -1,12 +1,11 @@
 <?php
 
-namespace MediaTech\Query\Tests\Unit\Expression;
+namespace Misantron\QueryBuilder\Tests\Unit\Expression;
 
+use Misantron\QueryBuilder\Expression\Field;
+use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
-use MediaTech\Query\Expression\Field;
-use MediaTech\Query\Tests\Unit\BaseTestCase;
-
-class FieldTest extends BaseTestCase
+class FieldTest extends UnitTestCase
 {
     /**
      * @expectedException \InvalidArgumentException

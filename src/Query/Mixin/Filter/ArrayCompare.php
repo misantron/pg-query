@@ -1,18 +1,17 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin\Filter;
+namespace Misantron\QueryBuilder\Query\Mixin\Filter;
 
-
-use MediaTech\Query\Query\Condition\ArrayContainsCondition;
-use MediaTech\Query\Query\Condition\InArrayCondition;
-use MediaTech\Query\Query\Condition\InCondition;
-use MediaTech\Query\Query\Filter\Filter;
-use MediaTech\Query\Query\Filter\FilterGroup;
-use MediaTech\Query\Query\Mixin\Filterable;
+use Misantron\QueryBuilder\Query\Condition\ArrayContainsCondition;
+use Misantron\QueryBuilder\Query\Condition\InArrayCondition;
+use Misantron\QueryBuilder\Query\Condition\InCondition;
+use Misantron\QueryBuilder\Query\Filter\Filter;
+use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Query\Mixin\Filterable;
 
 /**
  * Trait ArrayCompare
- * @package MediaTech\Query\Query\Mixin\Filter
+ * @package Misantron\QueryBuilder\Query\Mixin\Filter
  *
  * @property FilterGroup $filters
  */

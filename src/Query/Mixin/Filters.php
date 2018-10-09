@@ -1,18 +1,17 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin;
+namespace Misantron\QueryBuilder\Query\Mixin;
 
-
-use MediaTech\Query\Query\Filter\Filter;
-use MediaTech\Query\Query\Filter\FilterGroup;
-use MediaTech\Query\Query\Mixin\Filter\ArrayCompare;
-use MediaTech\Query\Query\Mixin\Filter\NullCompare;
-use MediaTech\Query\Query\Mixin\Filter\RangeCompare;
-use MediaTech\Query\Query\Mixin\Filter\ValueCompare;
+use Misantron\QueryBuilder\Query\Filter\Filter;
+use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Query\Mixin\Filter\ArrayCompare;
+use Misantron\QueryBuilder\Query\Mixin\Filter\NullCompare;
+use Misantron\QueryBuilder\Query\Mixin\Filter\RangeCompare;
+use Misantron\QueryBuilder\Query\Mixin\Filter\ValueCompare;
 
 /**
  * Trait Filters
- * @package MediaTech\Query\Query\Mixin
+ * @package Misantron\QueryBuilder\Query\Mixin
  */
 trait Filters
 {

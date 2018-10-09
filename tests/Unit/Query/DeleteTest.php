@@ -1,13 +1,12 @@
 <?php
 
-namespace MediaTech\Query\Tests\Unit\Query;
+namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use Misantron\QueryBuilder\Query\Delete;
+use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
-use MediaTech\Query\Query\Delete;
-use MediaTech\Query\Query\Filter\FilterGroup;
-use MediaTech\Query\Tests\Unit\BaseTestCase;
-
-class DeleteTest extends BaseTestCase
+class DeleteTest extends UnitTestCase
 {
     public function testConstructor()
     {

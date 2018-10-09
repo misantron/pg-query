@@ -1,14 +1,13 @@
 <?php
 
-namespace MediaTech\Query\Query;
+namespace Misantron\QueryBuilder\Query;
 
-
-use MediaTech\Query\Query\Mixin\Columns;
-use MediaTech\Query\Query\Mixin\Selectable;
+use Misantron\QueryBuilder\Query\Mixin\Columns;
+use Misantron\QueryBuilder\Query\Mixin\Selectable;
 
 /**
  * Class Insert
- * @package MediaTech\Query\Query
+ * @package Misantron\QueryBuilder\Query
  *
  * @method Insert columns($items)
  * @method Insert execute()

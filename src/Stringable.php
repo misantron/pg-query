@@ -1,11 +1,10 @@
 <?php
 
-namespace MediaTech\Query;
-
+namespace Misantron\QueryBuilder;
 
 /**
  * Interface Stringable
- * @package MediaTech\Query
+ * @package Misantron\QueryBuilder
  */
 interface Stringable
 {

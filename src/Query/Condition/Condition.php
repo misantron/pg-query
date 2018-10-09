@@ -1,14 +1,13 @@
 <?php
 
-namespace MediaTech\Query\Query\Condition;
+namespace Misantron\QueryBuilder\Query\Condition;
 
-
-use MediaTech\Query\Helper\Escape;
-use MediaTech\Query\Stringable;
+use Misantron\QueryBuilder\Helper\Escape;
+use Misantron\QueryBuilder\Stringable;
 
 /**
  * Class Condition
- * @package MediaTech\Query\Query\Condition
+ * @package Misantron\QueryBuilder\Query\Condition
  */
 abstract class Condition implements Stringable
 {

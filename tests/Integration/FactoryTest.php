@@ -1,12 +1,11 @@
 <?php
 
-namespace MediaTech\Query\Tests\Integration;
+namespace Misantron\QueryBuilder\Tests\Integration;
 
+use Misantron\QueryBuilder\Factory;
+use Misantron\QueryBuilder\Query;
 
-use MediaTech\Query\Factory;
-use MediaTech\Query\Query;
-
-class FactoryTest extends BaseTestCase
+class FactoryTest extends IntegrationTestCase
 {
     public function testInsert()
     {

@@ -1,11 +1,10 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin;
-
+namespace Misantron\QueryBuilder\Query\Mixin;
 
 /**
  * Trait Columns
- * @package MediaTech\Query\Query\Mixin
+ * @package Misantron\QueryBuilder\Query\Mixin
  *
  * @method array parseList($items)
  */

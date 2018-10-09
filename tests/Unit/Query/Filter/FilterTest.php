@@ -1,15 +1,14 @@
 <?php
 
-namespace MediaTech\Query\Tests\Unit\Query\Filter;
+namespace Misantron\QueryBuilder\Tests\Unit\Query\Filter;
 
+use Misantron\QueryBuilder\Query\Condition\InCondition;
+use Misantron\QueryBuilder\Query\Condition\NullCondition;
+use Misantron\QueryBuilder\Query\Condition\ValueCondition;
+use Misantron\QueryBuilder\Query\Filter\Filter;
+use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
-use MediaTech\Query\Query\Condition\InCondition;
-use MediaTech\Query\Query\Condition\NullCondition;
-use MediaTech\Query\Query\Condition\ValueCondition;
-use MediaTech\Query\Query\Filter\Filter;
-use MediaTech\Query\Tests\Unit\BaseTestCase;
-
-class FilterTest extends BaseTestCase
+class FilterTest extends UnitTestCase
 {
     /**
      * @expectedException \InvalidArgumentException

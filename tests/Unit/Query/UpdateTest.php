@@ -1,13 +1,12 @@
 <?php
 
-namespace MediaTech\Query\Tests\Unit\Query;
+namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Query\Update;
+use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
-use MediaTech\Query\Query\Filter\FilterGroup;
-use MediaTech\Query\Query\Update;
-use MediaTech\Query\Tests\Unit\BaseTestCase;
-
-class UpdateTest extends BaseTestCase
+class UpdateTest extends UnitTestCase
 {
     public function testConstructor()
     {

@@ -1,12 +1,11 @@
 <?php
 
-namespace MediaTech\Query\Tests\Unit;
-
+namespace Misantron\QueryBuilder\Tests\Unit;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-abstract class BaseTestCase extends TestCase
+abstract class UnitTestCase extends TestCase
 {
     /**
      * @return MockObject|\PDO

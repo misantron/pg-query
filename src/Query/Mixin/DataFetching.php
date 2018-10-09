@@ -1,11 +1,10 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin;
-
+namespace Misantron\QueryBuilder\Query\Mixin;
 
 /**
  * Trait DataFetch
- * @package MediaTech\Query\Query\Mixin
+ * @package Misantron\QueryBuilder\Query\Mixin
  *
  * @property \PDOStatement $statement
  */

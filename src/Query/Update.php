@@ -1,15 +1,15 @@
 <?php
 
-namespace MediaTech\Query\Query;
+namespace Misantron\QueryBuilder\Query;
 
 
-use MediaTech\Query\Query\Filter\FilterGroup;
-use MediaTech\Query\Query\Mixin\Filterable;
-use MediaTech\Query\Query\Mixin\Filters;
+use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Query\Mixin\Filterable;
+use Misantron\QueryBuilder\Query\Mixin\Filters;
 
 /**
  * Class Update
- * @package MediaTech\Query\Query
+ * @package Misantron\QueryBuilder\Query
  */
 class Update extends Query implements Filterable
 {

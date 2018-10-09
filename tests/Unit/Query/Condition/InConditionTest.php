@@ -1,13 +1,12 @@
 <?php
 
-namespace MediaTech\Query\Tests\Unit\Query\Condition;
+namespace Misantron\QueryBuilder\Tests\Unit\Query\Condition;
 
+use Misantron\QueryBuilder\Helper\Escape;
+use Misantron\QueryBuilder\Query\Condition\InCondition;
+use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
-use MediaTech\Query\Helper\Escape;
-use MediaTech\Query\Query\Condition\InCondition;
-use MediaTech\Query\Tests\Unit\BaseTestCase;
-
-class InConditionTest extends BaseTestCase
+class InConditionTest extends UnitTestCase
 {
     use Escape;
 

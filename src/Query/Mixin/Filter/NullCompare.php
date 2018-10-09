@@ -1,16 +1,15 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin\Filter;
+namespace Misantron\QueryBuilder\Query\Mixin\Filter;
 
-
-use MediaTech\Query\Query\Condition\NullCondition;
-use MediaTech\Query\Query\Filter\Filter;
-use MediaTech\Query\Query\Filter\FilterGroup;
-use MediaTech\Query\Query\Mixin\Filterable;
+use Misantron\QueryBuilder\Query\Condition\NullCondition;
+use Misantron\QueryBuilder\Query\Filter\Filter;
+use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Query\Mixin\Filterable;
 
 /**
  * Trait NullCompare
- * @package MediaTech\Query\Query\Mixin\Filter
+ * @package Misantron\QueryBuilder\Query\Mixin\Filter
  *
  * @property FilterGroup $filters
  */

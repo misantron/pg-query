@@ -1,15 +1,14 @@
 <?php
 
-namespace MediaTech\Query\Query;
+namespace Misantron\QueryBuilder\Query;
 
-
-use MediaTech\Query\Expression\Field;
-use MediaTech\Query\Helper\Escape;
-use MediaTech\Query\Stringable;
+use Misantron\QueryBuilder\Expression\Field;
+use Misantron\QueryBuilder\Helper\Escape;
+use Misantron\QueryBuilder\Stringable;
 
 /**
  * Class Query
- * @package MediaTech\Query\Query
+ * @package Misantron\QueryBuilder\Query
  */
 abstract class Query implements Stringable
 {

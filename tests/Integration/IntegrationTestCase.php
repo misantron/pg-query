@@ -1,12 +1,11 @@
 <?php
 
-namespace MediaTech\Query\Tests\Integration;
+namespace Misantron\QueryBuilder\Tests\Integration;
 
-
-use MediaTech\Query\Factory;
+use Misantron\QueryBuilder\Factory;
 use PHPUnit\Framework\TestCase;
 
-abstract class BaseTestCase extends TestCase
+abstract class IntegrationTestCase extends TestCase
 {
     /**
      * @var \PDO

@@ -1,16 +1,15 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin\Filter;
+namespace Misantron\QueryBuilder\Query\Mixin\Filter;
 
-
-use MediaTech\Query\Query\Condition\ValueCondition;
-use MediaTech\Query\Query\Filter\Filter;
-use MediaTech\Query\Query\Filter\FilterGroup;
-use MediaTech\Query\Query\Mixin\Filterable;
+use Misantron\QueryBuilder\Query\Condition\ValueCondition;
+use Misantron\QueryBuilder\Query\Filter\Filter;
+use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Query\Mixin\Filterable;
 
 /**
  * Trait ValueCompare
- * @package MediaTech\Query\Query\Mixin\Filter
+ * @package Misantron\QueryBuilder\Query\Mixin\Filter
  *
  * @property FilterGroup $filters
  */

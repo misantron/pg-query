@@ -1,13 +1,12 @@
 <?php
 
-namespace MediaTech\Query\Query\Filter;
+namespace Misantron\QueryBuilder\Query\Filter;
 
-
-use MediaTech\Query\Stringable;
+use Misantron\QueryBuilder\Stringable;
 
 /**
  * Class FilterGroup
- * @package MediaTech\Query\Query\Mixin\Filter
+ * @package Misantron\QueryBuilder\Query\Mixin\Filter
  */
 class FilterGroup implements Stringable
 {

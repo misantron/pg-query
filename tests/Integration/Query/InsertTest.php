@@ -1,11 +1,10 @@
 <?php
 
-namespace MediaTech\Query\Tests\Integration\Query;
+namespace Misantron\QueryBuilder\Tests\Integration\Query;
 
+use Misantron\QueryBuilder\Tests\Integration\IntegrationTestCase;
 
-use MediaTech\Query\Tests\Integration\BaseTestCase;
-
-class InsertTest extends BaseTestCase
+class InsertTest extends IntegrationTestCase
 {
     public function testInsertSingleRow()
     {

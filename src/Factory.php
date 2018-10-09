@@ -1,13 +1,13 @@
 <?php
 
-namespace MediaTech\Query;
+namespace Misantron\QueryBuilder;
 
+use Misantron\QueryBuilder\Query;
 
-use MediaTech\Query\Query\Delete;
-use MediaTech\Query\Query\Insert;
-use MediaTech\Query\Query\Select;
-use MediaTech\Query\Query\Update;
-
+/**
+ * Class Factory
+ * @package Misantron\QueryBuilder
+ */
 class Factory
 {
     /**
@@ -27,7 +27,7 @@ class Factory
      * @param \PDO $pdo
      * @return Factory
      */
-    public static function create(\PDO $pdo)
+    public static function create(\PDO $pdo): Factory
     {
         return new static($pdo);
     }
@@ -36,7 +36,7 @@ class Factory
      * @param \PDO $pdo
      * @return Factory
      */
-    public function setPDO(\PDO $pdo)
+    public function setPDO(\PDO $pdo): Factory
     {
         $this->pdo = $pdo;
 
@@ -49,44 +49,44 @@ class Factory
     /**
      * @return \PDO
      */
-    public function getPDO()
+    public function getPDO(): \PDO
     {
         return $this->pdo;
     }
 
     /**
      * @param string $table
-     * @return Select
+     * @return Query\Select
      */
-    public function select(string $table)
+    public function select(string $table): Query\Select
     {
-        return new Select($this->pdo, $table);
+        return new Query\Select($this->pdo, $table);
     }
 
     /**
      * @param string $table
-     * @return Update
+     * @return Query\Update
      */
-    public function update(string $table)
+    public function update(string $table): Query\Update
     {
-        return new Update($this->pdo, $table);
+        return new Query\Update($this->pdo, $table);
     }
 
     /**
      * @param string $table
-     * @return Delete
+     * @return Query\Delete
      */
-    public function delete(string $table)
+    public function delete(string $table): Query\Delete
     {
-        return new Delete($this->pdo, $table);
+        return new Query\Delete($this->pdo, $table);
     }
 
     /**
      * @param string $table
-     * @return Insert
+     * @return Query\Insert
      */
-    public function insert(string $table)
+    public function insert(string $table): Query\Insert
     {
-        return new Insert($this->pdo, $table);
+        return new Query\Insert($this->pdo, $table);
     }
 }

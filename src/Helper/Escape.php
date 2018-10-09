@@ -1,11 +1,10 @@
 <?php
 
-namespace MediaTech\Query\Helper;
-
+namespace Misantron\QueryBuilder\Helper;
 
 /**
  * Trait Escape
- * @package MediaTech\Query
+ * @package Misantron\QueryBuilder\Helper
  */
 trait Escape
 {

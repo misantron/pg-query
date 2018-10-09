@@ -1,11 +1,10 @@
 <?php
 
-namespace MediaTech\Query\Query\Condition;
-
+namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
  * Class InCondition
- * @package MediaTech\Query\Query\Condition
+ * @package Misantron\QueryBuilder\Query\Condition
  */
 class InCondition extends Condition
 {

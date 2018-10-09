@@ -1,15 +1,11 @@
 <?php
 
-namespace MediaTech\Query\Tests\Unit;
+namespace Misantron\QueryBuilder\Tests\Unit;
 
+use Misantron\QueryBuilder\Factory;
+use Misantron\QueryBuilder\Query;
 
-use MediaTech\Query\Factory;
-use MediaTech\Query\Query\Delete;
-use MediaTech\Query\Query\Insert;
-use MediaTech\Query\Query\Select;
-use MediaTech\Query\Query\Update;
-
-class FactoryTest extends BaseTestCase
+class FactoryTest extends UnitTestCase
 {
     public function testConstructor()
     {
@@ -29,7 +25,7 @@ class FactoryTest extends BaseTestCase
         $factory = $this->createFactory();
 
         $query = $factory->insert('foo.bar');
-        $this->assertInstanceOf(Insert::class, $query);
+        $this->assertInstanceOf(Query\Insert::class, $query);
     }
 
     public function testSelect()
@@ -37,7 +33,7 @@ class FactoryTest extends BaseTestCase
         $factory = $this->createFactory();
 
         $query = $factory->select('foo.bar');
-        $this->assertInstanceOf(Select::class, $query);
+        $this->assertInstanceOf(Query\Select::class, $query);
     }
 
     public function testUpdate()
@@ -45,7 +41,7 @@ class FactoryTest extends BaseTestCase
         $factory = $this->createFactory();
 
         $query = $factory->update('foo.bar');
-        $this->assertInstanceOf(Update::class, $query);
+        $this->assertInstanceOf(Query\Update::class, $query);
     }
 
     public function testDelete()
@@ -53,7 +49,7 @@ class FactoryTest extends BaseTestCase
         $factory = $this->createFactory();
 
         $query = $factory->delete('foo.bar');
-        $this->assertInstanceOf(Delete::class, $query);
+        $this->assertInstanceOf(Query\Delete::class, $query);
     }
 
     private function createFactory()

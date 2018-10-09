@@ -1,8 +1,11 @@
 <?php
 
-namespace MediaTech\Query\Query\Mixin;
+namespace Misantron\QueryBuilder\Query\Mixin;
 
-
+/**
+ * Interface Selectable
+ * @package Misantron\QueryBuilder\Query\Mixin
+ */
 interface Selectable
 {
     /**
