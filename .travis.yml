@@ -35,6 +35,8 @@ before_script:
   - psql -f ./tests/schema.sql -U postgres -d test
 
 script:
+  - vendor/bin/php-cs-fixer fix --config=.php_cs --diff --dry-run -v
+  - vendor/bin/phpcs -s --config-set ignore_warnings_on_exit 1
   - vendor/bin/phpunit --testsuite Unit --verbose --coverage-clover=coverage.clover
   - vendor/bin/phpunit --testsuite Integration --verbose
 
