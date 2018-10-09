@@ -344,7 +344,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
         $joins = [];
         foreach ($this->joins as $join) {
             $joins[] = sprintf(
-                "%s JOIN %s %s ON %s",
+                '%s JOIN %s %s ON %s',
                 strtoupper($join['type']),
                 $join['table'],
                 $join['alias'],
