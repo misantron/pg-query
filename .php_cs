@@ -13,7 +13,7 @@ return PhpCsFixer\Config::create()
         'linebreak_after_opening_tag' => true,
         'concat_space' => ['spacing' => 'one'],
         'phpdoc_annotation_without_dot' => false,
-        'phpdoc_no_package' => false,
+        'phpdoc_no_package' => true,
         'cast_spaces' => ['space' => 'none'],
         'yoda_style' => false,
     ]);

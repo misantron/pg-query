@@ -6,8 +6,8 @@ use Misantron\QueryBuilder\Query\Mixin\Columns;
 use Misantron\QueryBuilder\Query\Mixin\Selectable;
 
 /**
- * Class Insert
- * @package Misantron\QueryBuilder\Query
+ * Class Insert.
+ *
  *
  * @method Insert columns($items)
  * @method Insert execute()
@@ -28,6 +28,7 @@ class Insert extends Query implements Selectable
 
     /**
      * @param array $items
+     *
      * @return Insert
      */
     public function values(array $items): Insert
@@ -52,6 +53,7 @@ class Insert extends Query implements Selectable
 
     /**
      * @param Select $rowSet
+     *
      * @return Insert
      */
     public function fromRows(Select $rowSet): Insert

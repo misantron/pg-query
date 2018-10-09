@@ -6,7 +6,7 @@ use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Stringable;
 
 /**
- * Class Field
+ * Class Field.
  */
 class Field implements Stringable
 {
@@ -35,6 +35,7 @@ class Field implements Stringable
     /**
      * @param string $expression
      * @param string $alias
+     *
      * @return Field
      */
     public static function create(string $expression, string $alias = ''): Field

@@ -5,8 +5,7 @@ namespace Misantron\QueryBuilder\Query\Filter;
 use Misantron\QueryBuilder\Stringable;
 
 /**
- * Class Filter
- * @package Misantron\QueryBuilder\Query\Mixin\Filter
+ * Class Filter.
  */
 class Filter
 {
@@ -30,7 +29,7 @@ class Filter
     /**
      * @param string $condition
      * @param string $conjunction
-     * @param bool $group
+     * @param bool   $group
      */
     private function __construct(string $condition, string $conjunction, bool $group)
     {
@@ -45,8 +44,9 @@ class Filter
 
     /**
      * @param Stringable|string $condition
-     * @param string $conjunction
-     * @param bool $group
+     * @param string            $conjunction
+     * @param bool              $group
+     *
      * @return Filter
      */
     public static function create($condition, string $conjunction = '', bool $group = false)

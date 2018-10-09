@@ -3,8 +3,7 @@
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
- * Class ArrayContainsCondition
- * @package Misantron\QueryBuilder\Query\Condition
+ * Class ArrayContainsCondition.
  */
 class ArrayContainsCondition extends Condition
 {
@@ -15,7 +14,7 @@ class ArrayContainsCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      */
     public function __construct(string $column, array $values)
     {
@@ -30,7 +29,8 @@ class ArrayContainsCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
+     *
      * @return ArrayContainsCondition
      */
     public static function create(string $column, array $values)

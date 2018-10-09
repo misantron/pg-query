@@ -11,8 +11,8 @@ use Misantron\QueryBuilder\Query\Mixin\Retrievable;
 use Misantron\QueryBuilder\Query\Mixin\Selectable;
 
 /**
- * Class Select
- * @package Misantron\QueryBuilder\Query
+ * Class Select.
+ *
  *
  * @method Select execute()
  * @method Select columns($items)
@@ -69,7 +69,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     private $with = [];
 
     /**
-     * @param \PDO $pdo
+     * @param \PDO   $pdo
      * @param string $table
      * @param string $alias
      */
@@ -83,6 +83,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param string $value
+     *
      * @return Select
      */
     public function alias(string $value): Select
@@ -94,6 +95,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param bool $value
+     *
      * @return Select
      */
     public function distinct(bool $value = true): Select
@@ -107,6 +109,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      * @param string $table
      * @param string $alias
      * @param string $condition
+     *
      * @return Select
      */
     public function join(string $table, string $alias, string $condition): Select
@@ -118,6 +121,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      * @param string $table
      * @param string $alias
      * @param string $condition
+     *
      * @return Select
      */
     public function innerJoin(string $table, string $alias, string $condition): Select
@@ -131,6 +135,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      * @param string $table
      * @param string $alias
      * @param string $condition
+     *
      * @return Select
      */
     public function leftJoin(string $table, string $alias, string $condition): Select
@@ -163,6 +168,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     /**
      * @param string $table
      * @param string $alias
+     *
      * @return string
      */
     private function getHash(string &$table, string &$alias): string
@@ -193,6 +199,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param Select[] $values
+     *
      * @return Select
      */
     public function with(array $values): Select
@@ -205,11 +212,13 @@ class Select extends Query implements Selectable, Filterable, Retrievable
             // alias name cannot be duplicated
             $this->with[$alias] = $value;
         }
+
         return $this;
     }
 
     /**
      * @param array|string $values
+     *
      * @return Select
      */
     public function groupBy($values): Select
@@ -221,6 +230,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param array $values
+     *
      * @return Select
      */
     public function orderBy(array $values): Select
@@ -232,6 +242,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param string $condition
+     *
      * @return Select
      */
     public function having(string $condition): Select
@@ -243,6 +254,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param int $value
+     *
      * @return Select
      */
     public function limit(int $value): Select
@@ -254,6 +266,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param int $value
+     *
      * @return Select
      */
     public function offset(int $value): Select
@@ -266,6 +279,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     /**
      * @param int $offset
      * @param int $limit
+     *
      * @return Select
      */
     public function range(int $offset, int $limit): Select
@@ -351,6 +365,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
                 $join['condition']
             );
         }
+
         return !empty($joins) ? ' ' . implode(' ', $joins) : '';
     }
 

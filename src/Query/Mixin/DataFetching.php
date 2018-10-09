@@ -3,8 +3,8 @@
 namespace Misantron\QueryBuilder\Query\Mixin;
 
 /**
- * Trait DataFetch
- * @package Misantron\QueryBuilder\Query\Mixin
+ * Trait DataFetch.
+ *
  *
  * @property \PDOStatement $statement
  */
@@ -17,6 +17,7 @@ trait DataFetching
 
     /**
      * @param string $className
+     *
      * @return array
      */
     public function fetchAllObject(string $className): array
@@ -28,6 +29,7 @@ trait DataFetching
 
     /**
      * @param string $className
+     *
      * @return object|null
      */
     public function fetchOneObject(string $className)
@@ -41,6 +43,7 @@ trait DataFetching
 
     /**
      * @param callable $callback
+     *
      * @return array
      */
     public function fetchCallback(callable $callback): array

@@ -3,8 +3,7 @@
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
- * Class InArrayCondition
- * @package Misantron\QueryBuilder\Query\Condition
+ * Class InArrayCondition.
  */
 class InArrayCondition extends Condition
 {
@@ -14,9 +13,9 @@ class InArrayCondition extends Condition
     private $value;
 
     /**
-     * @param string $column
+     * @param string                $column
      * @param string|int|float|bool $value
-     * @param string $operator
+     * @param string                $operator
      */
     public function __construct(string $column, $value, string $operator)
     {
@@ -30,9 +29,10 @@ class InArrayCondition extends Condition
     }
 
     /**
-     * @param string $column
+     * @param string                $column
      * @param string|int|float|bool $value
-     * @param string $operator
+     * @param string                $operator
+     *
      * @return InArrayCondition
      */
     public static function create(string $column, $value, string $operator): InArrayCondition

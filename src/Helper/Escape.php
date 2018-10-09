@@ -3,12 +3,13 @@
 namespace Misantron\QueryBuilder\Helper;
 
 /**
- * Trait Escape
+ * Trait Escape.
  */
 trait Escape
 {
     /**
      * @param string $value
+     *
      * @return string
      */
     protected function escapeIdentifier(string $value): string
@@ -27,6 +28,7 @@ trait Escape
 
     /**
      * @param mixed $value
+     *
      * @return string
      */
     protected function escapeValue($value): string
@@ -42,11 +44,13 @@ trait Escape
         } else {
             $escaped = $this->quote($value);
         }
+
         return $escaped;
     }
 
     /**
      * @param array $values
+     *
      * @return string
      */
     protected function escapeArray(array $values): string
@@ -59,11 +63,13 @@ trait Escape
                 return $this->quote($value);
             }, $values);
         }
+
         return 'ARRAY[' . implode(',', $values) . ']::' . $cast;
     }
 
     /**
      * @param array $items
+     *
      * @return array
      */
     protected function escapeList(array $items): array
@@ -78,11 +84,13 @@ trait Escape
                 return $this->quote($item);
             }, $filtered);
         }
+
         return $filtered;
     }
 
     /**
      * @param array $array
+     *
      * @return bool
      */
     protected function isIntegerArray(array $array): bool
@@ -90,11 +98,13 @@ trait Escape
         $filtered = array_filter($array, function ($value) {
             return !is_int($value);
         });
+
         return empty($filtered);
     }
 
     /**
      * @param mixed $value
+     *
      * @return string
      */
     protected function quote($value): string

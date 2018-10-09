@@ -2,14 +2,12 @@
 
 namespace Misantron\QueryBuilder\Query;
 
-
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
 
 /**
- * Class Update
- * @package Misantron\QueryBuilder\Query
+ * Class Update.
  */
 class Update extends Query implements Filterable
 {
@@ -21,7 +19,7 @@ class Update extends Query implements Filterable
     private $set = [];
 
     /**
-     * @param \PDO $pdo
+     * @param \PDO   $pdo
      * @param string $table
      */
     public function __construct(\PDO $pdo, string $table)
@@ -33,6 +31,7 @@ class Update extends Query implements Filterable
 
     /**
      * @param array $data
+     *
      * @return Update
      */
     public function set(array $data): Update
@@ -44,6 +43,7 @@ class Update extends Query implements Filterable
         foreach ($data as $field => $value) {
             $this->set[$this->escapeIdentifier($field)] = $this->escapeValue($value);
         }
+
         return $this;
     }
 

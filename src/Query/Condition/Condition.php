@@ -6,8 +6,7 @@ use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Stringable;
 
 /**
- * Class Condition
- * @package Misantron\QueryBuilder\Query\Condition
+ * Class Condition.
  */
 abstract class Condition implements Stringable
 {

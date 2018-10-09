@@ -3,14 +3,14 @@
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
- * Class NullCondition
- * @package Misantron\QueryBuilder\Query\Condition
+ * Class NullCondition.
  */
 class NullCondition extends Condition
 {
     /**
      * @param string $column
      * @param string $operator
+     *
      * @return NullCondition
      */
     public static function create(string $column, string $operator): NullCondition

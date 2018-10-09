@@ -3,8 +3,7 @@
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
- * Class BetweenCondition
- * @package Misantron\QueryBuilder\Query\Condition
+ * Class BetweenCondition.
  */
 class BetweenCondition extends Condition
 {
@@ -15,7 +14,7 @@ class BetweenCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      */
     public function __construct(string $column, array $values)
     {
@@ -32,7 +31,8 @@ class BetweenCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
+     *
      * @return BetweenCondition
      */
     public static function create(string $column, array $values): BetweenCondition

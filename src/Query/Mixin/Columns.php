@@ -3,8 +3,8 @@
 namespace Misantron\QueryBuilder\Query\Mixin;
 
 /**
- * Trait Columns
- * @package Misantron\QueryBuilder\Query\Mixin
+ * Trait Columns.
+ *
  *
  * @method array parseList($items)
  */
@@ -17,6 +17,7 @@ trait Columns
 
     /**
      * @param array|string $items
+     *
      * @return Selectable
      */
     public function columns($items)

@@ -7,8 +7,7 @@ use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
 
 /**
- * Class Delete
- * @package Misantron\QueryBuilder\Query
+ * Class Delete.
  */
 class Delete extends Query implements Filterable
 {

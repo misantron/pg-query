@@ -10,8 +10,7 @@ use Misantron\QueryBuilder\Query\Mixin\Filter\RangeCompare;
 use Misantron\QueryBuilder\Query\Mixin\Filter\ValueCompare;
 
 /**
- * Trait Filters
- * @package Misantron\QueryBuilder\Query\Mixin
+ * Trait Filters.
  */
 trait Filters
 {

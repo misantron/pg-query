@@ -3,8 +3,7 @@
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
- * Class ValueCondition
- * @package Misantron\QueryBuilder\Query\Condition
+ * Class ValueCondition.
  */
 class ValueCondition extends Condition
 {
@@ -15,7 +14,7 @@ class ValueCondition extends Condition
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      * @param string $operator
      */
     public function __construct(string $column, $value, string $operator)
@@ -27,8 +26,9 @@ class ValueCondition extends Condition
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      * @param string $operator
+     *
      * @return ValueCondition
      */
     public static function create(string $column, $value, string $operator): ValueCondition

@@ -3,8 +3,7 @@
 namespace Misantron\QueryBuilder;
 
 /**
- * Interface Stringable
- * @package Misantron\QueryBuilder
+ * Interface Stringable.
  */
 interface Stringable
 {

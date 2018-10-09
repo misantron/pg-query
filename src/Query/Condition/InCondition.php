@@ -3,8 +3,7 @@
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
- * Class InCondition
- * @package Misantron\QueryBuilder\Query\Condition
+ * Class InCondition.
  */
 class InCondition extends Condition
 {
@@ -15,7 +14,7 @@ class InCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      * @param string $operator
      */
     public function __construct(string $column, array $values, string $operator)
@@ -27,8 +26,9 @@ class InCondition extends Condition
 
     /**
      * @param string $column
-     * @param array $values
+     * @param array  $values
      * @param string $operator
+     *
      * @return InCondition
      */
     public static function create(string $column, array $values, string $operator): InCondition

@@ -7,8 +7,7 @@ use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Stringable;
 
 /**
- * Class Query
- * @package Misantron\QueryBuilder\Query
+ * Class Query.
  */
 abstract class Query implements Stringable
 {
@@ -30,7 +29,7 @@ abstract class Query implements Stringable
     protected $table;
 
     /**
-     * @param \PDO $pdo
+     * @param \PDO   $pdo
      * @param string $table
      */
     public function __construct(\PDO $pdo, string $table)
@@ -68,6 +67,7 @@ abstract class Query implements Stringable
 
     /**
      * @param array|string $items
+     *
      * @return array
      */
     protected function parseList($items): array

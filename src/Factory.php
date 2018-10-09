@@ -2,11 +2,8 @@
 
 namespace Misantron\QueryBuilder;
 
-use Misantron\QueryBuilder\Query;
-
 /**
- * Class Factory
- * @package Misantron\QueryBuilder
+ * Class Factory.
  */
 class Factory
 {
@@ -25,6 +22,7 @@ class Factory
 
     /**
      * @param \PDO $pdo
+     *
      * @return Factory
      */
     public static function create(\PDO $pdo): Factory
@@ -34,6 +32,7 @@ class Factory
 
     /**
      * @param \PDO $pdo
+     *
      * @return Factory
      */
     public function setPDO(\PDO $pdo): Factory
@@ -56,6 +55,7 @@ class Factory
 
     /**
      * @param string $table
+     *
      * @return Query\Select
      */
     public function select(string $table): Query\Select
@@ -65,6 +65,7 @@ class Factory
 
     /**
      * @param string $table
+     *
      * @return Query\Update
      */
     public function update(string $table): Query\Update
@@ -74,6 +75,7 @@ class Factory
 
     /**
      * @param string $table
+     *
      * @return Query\Delete
      */
     public function delete(string $table): Query\Delete
@@ -83,6 +85,7 @@ class Factory
 
     /**
      * @param string $table
+     *
      * @return Query\Insert
      */
     public function insert(string $table): Query\Insert

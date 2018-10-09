@@ -5,8 +5,7 @@ namespace Misantron\QueryBuilder\Query\Filter;
 use Misantron\QueryBuilder\Stringable;
 
 /**
- * Class FilterGroup
- * @package Misantron\QueryBuilder\Query\Mixin\Filter
+ * Class FilterGroup.
  */
 class FilterGroup implements Stringable
 {
@@ -50,6 +49,7 @@ class FilterGroup implements Stringable
                 if ($filter->group()) {
                     $trimSign = true;
                 }
+
                 return trim($query . ' ' . $condition);
             },
             ''
