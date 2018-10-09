@@ -4,7 +4,6 @@ namespace Misantron\QueryBuilder\Helper;
 
 /**
  * Trait Escape
- * @package Misantron\QueryBuilder\Helper
  */
 trait Escape
 {
@@ -52,7 +51,7 @@ trait Escape
      */
     protected function escapeArray(array $values): string
     {
-        $type = $this->isIntegerArray($values) ? 'integer': 'string';
+        $type = $this->isIntegerArray($values) ? 'integer' : 'string';
         $cast = $type === 'integer' ? 'INTEGER[]' : 'VARCHAR[]';
 
         if ($type === 'string') {
@@ -69,7 +68,7 @@ trait Escape
      */
     protected function escapeList(array $items): array
     {
-        $type = $this->isIntegerArray($items) ? 'integer': 'string';
+        $type = $this->isIntegerArray($items) ? 'integer' : 'string';
         $filtered = array_unique(array_filter($items));
         if (empty($filtered)) {
             throw new \InvalidArgumentException('Invalid values: value list is empty');

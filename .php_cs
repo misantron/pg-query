@@ -12,7 +12,8 @@ return PhpCsFixer\Config::create()
         'trailing_comma_in_multiline_array' => true,
         'linebreak_after_opening_tag' => true,
         'concat_space' => ['spacing' => 'one'],
-        'phpdoc_annotation_without_dot' => true,
-        'phpdoc_no_package' => true,
+        'phpdoc_annotation_without_dot' => false,
+        'phpdoc_no_package' => false,
         'cast_spaces' => ['space' => 'none'],
+        'yoda_style' => false,
     ]);

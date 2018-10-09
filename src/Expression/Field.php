@@ -7,7 +7,6 @@ use Misantron\QueryBuilder\Stringable;
 
 /**
  * Class Field
- * @package MediaTech\Query\Expression
  */
 class Field implements Stringable
 {
