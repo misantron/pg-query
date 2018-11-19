@@ -39,8 +39,11 @@ class FactoryTest extends IntegrationTestCase
         $this->assertInstanceOf(Query\Delete::class, $query);
     }
 
-    private function createFactory()
+    /**
+     * @return Factory
+     */
+    private function createFactory(): Factory
     {
-        return new Factory($this->getConnection());
+        return Factory::create($this->getConnection());
     }
 }

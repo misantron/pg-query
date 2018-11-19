@@ -8,7 +8,7 @@
 Powerful SQL query builder without dependencies, oriented on Postgres database.  
 Using [PDO](http://php.net/PDO) inside. 
 
-## Installation
+## Install
 
 The preferred way to install is through [Composer](https://getcomposer.org).
 Run this command to install the latest stable version:

@@ -7,6 +7,7 @@ namespace Misantron\QueryBuilder\Query\Mixin;
  *
  *
  * @method array parseList($items)
+ * @method assertColumnsEmpty($items)
  */
 trait Columns
 {
@@ -35,15 +36,5 @@ trait Columns
     public function getColumns(): array
     {
         return $this->columns;
-    }
-
-    /**
-     * @param array|string $items
-     */
-    private function assertColumnsEmpty($items)
-    {
-        if (empty($items)) {
-            throw new \InvalidArgumentException('Column list is empty');
-        }
     }
 }

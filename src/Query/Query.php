@@ -82,4 +82,14 @@ abstract class Query implements Stringable
                 $this->escapeIdentifier(trim($item));
         }, $items));
     }
+
+    /**
+     * @param array|string $items
+     */
+    protected function assertColumnsEmpty($items)
+    {
+        if (empty($items)) {
+            throw new \InvalidArgumentException('Column list is empty');
+        }
+    }
 }

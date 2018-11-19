@@ -5,6 +5,10 @@ namespace Misantron\QueryBuilder\Tests\Unit;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class UnitTestCase
+ * @package Misantron\QueryBuilder\Tests\Unit
+ */
 abstract class UnitTestCase extends TestCase
 {
     /**

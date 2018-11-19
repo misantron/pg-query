@@ -105,12 +105,11 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeInstanceOf(Select::class, 'rowSet', $query);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Column list is empty
-     */
     public function testBuildWithoutColumns()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Column list is empty');
+
         $query = $this->createQuery();
         $query->__toString();
     }
@@ -138,7 +137,7 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[]) RETURNING *", $query->__toString());
+        $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])", $query->__toString());
     }
 
     public function testBuildWithRowSet()
@@ -169,15 +168,26 @@ class InsertTest extends UnitTestCase
         $this->assertEquals((string)$query, $query->__toString());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
-     */
-    public function testGetInsertedRowBeforeQueryExecute()
+    public function testGetInsertedRowWithoutReturningSet()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Data fetch error: returning fields must be set');
+
         $query = $this->createQuery();
         $query
             ->values(['foo' => 1])
+            ->getInsertedRow();
+    }
+
+    public function testGetInsertedRowBeforeQueryExecute()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Data fetch error: query must be executed before fetch data');
+
+        $query = $this->createQuery();
+        $query
+            ->values(['foo' => 1])
+            ->returning('bar')
             ->getInsertedRow();
     }
 
@@ -206,7 +216,7 @@ class InsertTest extends UnitTestCase
         $pdo
             ->expects($this->once())
             ->method('prepare')
-            ->with("INSERT INTO foo.bar (foo) VALUES ('bar') RETURNING *")
+            ->with("INSERT INTO foo.bar (foo) VALUES ('bar') RETURNING foo")
             ->willReturn($statement);
 
         $query = new Insert($pdo, 'foo.bar');
@@ -215,6 +225,7 @@ class InsertTest extends UnitTestCase
             ->values([
                 'foo' => 'bar'
             ])
+            ->returning('foo')
             ->execute()
             ->getInsertedRow();
 
@@ -224,18 +235,32 @@ class InsertTest extends UnitTestCase
         ], $inserted);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
-     */
-    public function testGetInsertedRowsBeforeQueryExecute()
+    public function testGetInsertedRowsWithoutReturningSet()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Data fetch error: returning fields must be set');
+
         $query = $this->createQuery();
         $query
             ->values([
                 ['foo' => 1],
                 ['foo' => 2],
             ])
+            ->getInsertedRows();
+    }
+
+    public function testGetInsertedRowsBeforeQueryExecute()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Data fetch error: query must be executed before fetch data');
+
+        $query = $this->createQuery();
+        $query
+            ->values([
+                ['foo' => 1],
+                ['foo' => 2],
+            ])
+            ->returning('bar')
             ->getInsertedRows();
     }
 
@@ -270,7 +295,7 @@ class InsertTest extends UnitTestCase
         $pdo
             ->expects($this->once())
             ->method('prepare')
-            ->with("INSERT INTO foo.bar (foo) VALUES ('bar'),('baz') RETURNING *")
+            ->with("INSERT INTO foo.bar (foo) VALUES ('bar'),('baz') RETURNING id")
             ->willReturn($statement);
 
         $query = new Insert($pdo, 'foo.bar');
@@ -280,6 +305,7 @@ class InsertTest extends UnitTestCase
                 ['foo' => 'bar'],
                 ['foo' => 'baz'],
             ])
+            ->returning('id')
             ->execute()
             ->getInsertedRows();
 

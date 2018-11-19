@@ -15,7 +15,7 @@ class Factory
     /**
      * @param \PDO $pdo
      */
-    public function __construct(\PDO $pdo)
+    private function __construct(\PDO $pdo)
     {
         $this->setPDO($pdo);
     }

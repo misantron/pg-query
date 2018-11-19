@@ -5,13 +5,14 @@ namespace Misantron\QueryBuilder\Query;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
+use Misantron\QueryBuilder\Query\Mixin\Returning;
 
 /**
  * Class Update.
  */
 class Update extends Query implements Filterable
 {
-    use Filters;
+    use Filters, Returning;
 
     /**
      * @var array
@@ -54,6 +55,7 @@ class Update extends Query implements Filterable
     {
         $query = 'UPDATE ' . $this->table . ' SET ' . $this->buildSet();
         $query .= $this->buildFilters();
+        $query .= $this->buildReturning();
 
         return $query;
     }

@@ -23,6 +23,14 @@ class FilterGroup implements Stringable
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->list);
+    }
+
+    /**
      * @param Filter $filter
      */
     public function append(Filter $filter)

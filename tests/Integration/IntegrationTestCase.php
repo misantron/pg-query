@@ -5,6 +5,10 @@ namespace Misantron\QueryBuilder\Tests\Integration;
 use Misantron\QueryBuilder\Factory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class IntegrationTestCase
+ * @package Misantron\QueryBuilder\Tests\Integration
+ */
 abstract class IntegrationTestCase extends TestCase
 {
     /**

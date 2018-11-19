@@ -2,7 +2,9 @@
 
 namespace Misantron\QueryBuilder\Query;
 
+use Misantron\QueryBuilder\Expression\ConflictTarget;
 use Misantron\QueryBuilder\Query\Mixin\Columns;
+use Misantron\QueryBuilder\Query\Mixin\Returning;
 use Misantron\QueryBuilder\Query\Mixin\Selectable;
 
 /**
@@ -10,16 +12,27 @@ use Misantron\QueryBuilder\Query\Mixin\Selectable;
  *
  *
  * @method Insert columns($items)
+ * @method Insert returning($items)
  * @method Insert execute()
  */
 class Insert extends Query implements Selectable
 {
-    use Columns;
+    use Columns, Returning;
 
     /**
      * @var array
      */
     private $values;
+
+    /**
+     * @var ConflictTarget
+     */
+    private $conflictTarget;
+
+    /**
+     * @var Update
+     */
+    private $conflictAction;
 
     /**
      * @var Select
@@ -52,6 +65,19 @@ class Insert extends Query implements Selectable
     }
 
     /**
+     * @param ConflictTarget $target
+     * @param Update|null $action
+     * @return Insert
+     */
+    public function onConflict(ConflictTarget $target, ?Update $action = null): Insert
+    {
+        $this->conflictTarget = $target;
+        $this->conflictAction = $action;
+
+        return $this;
+    }
+
+    /**
      * @param Select $rowSet
      *
      * @return Insert
@@ -69,6 +95,7 @@ class Insert extends Query implements Selectable
      */
     public function getInsertedRow(): array
     {
+        $this->assertReturningSet();
         $this->assertQueryExecuted();
 
         return $this->statement->fetch(\PDO::FETCH_ASSOC);
@@ -79,6 +106,7 @@ class Insert extends Query implements Selectable
      */
     public function getInsertedRows(): array
     {
+        $this->assertReturningSet();
         $this->assertQueryExecuted();
 
         return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -89,9 +117,7 @@ class Insert extends Query implements Selectable
      */
     public function __toString(): string
     {
-        if (empty($this->columns)) {
-            throw new \RuntimeException('Column list is empty');
-        }
+        $this->assertColumnsEmpty($this->columns);
 
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
@@ -99,6 +125,8 @@ class Insert extends Query implements Selectable
             $query .= ' ' . (string)$this->rowSet;
         } else {
             $query .= $this->buildValues();
+            $query .= $this->buildOnConflict();
+            $query .= $this->buildReturning();
         }
 
         return $query;
@@ -124,6 +152,19 @@ class Insert extends Query implements Selectable
             return '(' . implode(',', $row) . ')';
         }, $values);
 
-        return ' VALUES ' . implode(',', $values) . ' RETURNING *';
+        return ' VALUES ' . implode(',', $values);
+    }
+
+    /**
+     * @return string
+     */
+    private function buildOnConflict(): string
+    {
+        $expression = '';
+        if ($this->conflictTarget instanceof ConflictTarget) {
+            $action = $this->conflictAction instanceof Update ? (string)$this->conflictAction : 'NOTHING';
+            $expression .= ' ON CONFLICT ' . (string)$this->conflictTarget . ' DO ' . $action;
+        }
+        return $expression;
     }
 }

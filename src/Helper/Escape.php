@@ -33,7 +33,7 @@ trait Escape
      */
     protected function escapeValue($value): string
     {
-        if (is_numeric($value)) {
+        if (filter_var($value, FILTER_VALIDATE_INT)) {
             $escaped = $value;
         } elseif (is_null($value)) {
             $escaped = 'null';
@@ -96,7 +96,7 @@ trait Escape
     protected function isIntegerArray(array $array): bool
     {
         $filtered = array_filter($array, function ($value) {
-            return !is_int($value);
+            return filter_var($value, FILTER_VALIDATE_INT) === false;
         });
 
         return empty($filtered);

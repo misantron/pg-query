@@ -52,8 +52,11 @@ class FactoryTest extends UnitTestCase
         $this->assertInstanceOf(Query\Delete::class, $query);
     }
 
-    private function createFactory()
+    /**
+     * @return Factory
+     */
+    private function createFactory(): Factory
     {
-        return new Factory($this->createPDOMock());
+        return Factory::create($this->createPDOMock());
     }
 }
