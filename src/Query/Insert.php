@@ -67,6 +67,7 @@ class Insert extends Query implements Selectable
     /**
      * @param ConflictTarget $target
      * @param Update|null    $action
+     *
      * @return Insert
      */
     public function onConflict(ConflictTarget $target, ?Update $action = null): Insert
