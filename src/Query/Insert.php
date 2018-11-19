@@ -166,6 +166,7 @@ class Insert extends Query implements Selectable
             $action = $this->conflictAction instanceof Update ? (string)$this->conflictAction : 'NOTHING';
             $expression .= ' ON CONFLICT ' . (string)$this->conflictTarget . ' DO ' . $action;
         }
+
         return $expression;
     }
 }
