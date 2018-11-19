@@ -15,7 +15,7 @@ class Delete extends Query implements Filterable
     use Filters, Returning;
 
     /**
-     * @param \PDO $pdo
+     * @param \PDO   $pdo
      * @param string $table
      */
     public function __construct(\PDO $pdo, string $table)

@@ -22,6 +22,10 @@ class InsertTest extends IntegrationTestCase
                 'tag_ids' => [5,8],
                 'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
             ])
+            ->returning([
+                'sku',
+                'status_id',
+            ])
             ->execute()
             ->getInsertedRow();
 
@@ -60,6 +64,11 @@ class InsertTest extends IntegrationTestCase
                     'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
                 ]
             ])
+            ->returning([
+                'sku',
+                'name',
+                'quantity',
+            ])
             ->execute()
             ->getInsertedRows();
 
@@ -91,6 +100,9 @@ class InsertTest extends IntegrationTestCase
         $response = $this->getFactory()
             ->insert('foo.tags')
             ->fromRows($select)
+            ->returning([
+                'name', 'inserted_at'
+            ])
             ->execute()
             ->getInsertedRows();
 

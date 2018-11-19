@@ -7,7 +7,7 @@ namespace Misantron\QueryBuilder\Query\Mixin;
  *
  *
  * @method array parseList($items)
- * @method assertColumnsEmpty($items)
+ * @method       assertColumnsEmpty($items)
  */
 trait Columns
 {
