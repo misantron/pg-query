@@ -4,11 +4,14 @@ namespace Misantron\QueryBuilder\Assert;
 
 /**
  * Trait Assert.
+ *
+ *
+ * @property \PDOStatement $statement
  */
 trait Assert
 {
     /**
-     * @param array $data
+     * @param array $items
      *
      * @throws \InvalidArgumentException
      */
