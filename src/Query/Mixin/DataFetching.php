@@ -7,14 +7,11 @@ namespace Misantron\QueryBuilder\Query\Mixin;
  *
  *
  * @property \PDOStatement $statement
+ *
+ * @method assertQueryExecuted()
  */
 trait DataFetching
 {
-    /**
-     * @throws \RuntimeException
-     */
-    abstract protected function assertQueryExecuted();
-
     /**
      * @param string $className
      *

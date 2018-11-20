@@ -6,7 +6,8 @@ namespace Misantron\QueryBuilder\Query\Mixin;
  * Trait Returning.
  *
  *
- * @method assertColumnsNotEmpty($items)
+ * @method array parseList($items)
+ * @method       assertColumnsNotEmpty($items)
  */
 trait Returning
 {
