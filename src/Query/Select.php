@@ -155,7 +155,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     {
         $hash = $this->getHash($table, $alias);
 
-        $this->assertAliasInUse($alias);
+        $this->assertAliasNotInUse($alias);
 
         $this->joins[$hash] = [
             'type' => $type,
@@ -188,7 +188,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     /**
      * @param string $alias
      */
-    private function assertAliasInUse(string $alias)
+    private function assertAliasNotInUse(string $alias)
     {
         foreach ($this->joins as $join) {
             if ($alias === $join['alias']) {

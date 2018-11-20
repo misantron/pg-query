@@ -20,10 +20,10 @@ class Update extends Query implements Filterable
     private $set = [];
 
     /**
-     * @param \PDO   $pdo
-     * @param string $table
+     * @param \PDO        $pdo
+     * @param string|null $table
      */
-    public function __construct(\PDO $pdo, string $table)
+    public function __construct(\PDO $pdo, ?string $table = null)
     {
         parent::__construct($pdo, $table);
 
@@ -53,7 +53,8 @@ class Update extends Query implements Filterable
      */
     public function __toString(): string
     {
-        $query = 'UPDATE ' . $this->table . ' SET ' . $this->buildSet();
+        $query = 'UPDATE ' . ($this->table ? $this->table . ' ' : '');
+        $query .= 'SET ' . $this->buildSet();
         $query .= $this->buildFilters();
         $query .= $this->buildReturning();
 

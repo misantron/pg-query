@@ -7,7 +7,7 @@ namespace Misantron\QueryBuilder\Query\Mixin;
  *
  *
  * @method array parseList($items)
- * @method       assertColumnsEmpty($items)
+ * @method       assertColumnsNotEmpty($items)
  */
 trait Columns
 {
@@ -23,7 +23,7 @@ trait Columns
      */
     public function columns($items)
     {
-        $this->assertColumnsEmpty($items);
+        $this->assertColumnsNotEmpty($items);
 
         $this->columns = $this->parseList($items);
 

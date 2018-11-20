@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query;
 
+use Misantron\QueryBuilder\Assert\Assert;
 use Misantron\QueryBuilder\Expression\Field;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Stringable;
@@ -11,7 +12,7 @@ use Misantron\QueryBuilder\Stringable;
  */
 abstract class Query implements Stringable
 {
-    use Escape;
+    use Escape, Assert;
 
     /**
      * @var \PDO
@@ -29,17 +30,26 @@ abstract class Query implements Stringable
     protected $table;
 
     /**
-     * @param \PDO   $pdo
-     * @param string $table
+     * @param \PDO        $pdo
+     * @param string|null $table
      */
-    public function __construct(\PDO $pdo, string $table)
+    public function __construct(\PDO $pdo, ?string $table = null)
     {
-        if (empty($table)) {
-            throw new \InvalidArgumentException('Table name is empty');
-        }
-
         $this->pdo = $pdo;
-        $this->table = $this->escapeIdentifier($table);
+
+        $table !== null && $this->table = $this->escapeIdentifier($table);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Query
+     */
+    public function table(string $name)
+    {
+        $this->table = $this->escapeIdentifier($name);
+
+        return $this;
     }
 
     /**
@@ -56,16 +66,6 @@ abstract class Query implements Stringable
     }
 
     /**
-     * @throws \RuntimeException
-     */
-    protected function assertQueryExecuted()
-    {
-        if (!$this->statement instanceof \PDOStatement) {
-            throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
-        }
-    }
-
-    /**
      * @param array|string $items
      *
      * @return array
@@ -77,19 +77,9 @@ abstract class Query implements Stringable
         }
 
         return array_filter(array_map(function ($item) {
-            return $item instanceof Field ?
-                (string)$item :
-                $this->escapeIdentifier(trim($item));
+            return $item instanceof Field
+                ? (string)$item
+                : $this->escapeIdentifier(trim($item));
         }, $items));
-    }
-
-    /**
-     * @param array|string $items
-     */
-    protected function assertColumnsEmpty($items)
-    {
-        if (empty($items)) {
-            throw new \InvalidArgumentException('Column list is empty');
-        }
     }
 }

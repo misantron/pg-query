@@ -11,11 +11,6 @@ namespace Misantron\QueryBuilder\Query\Mixin;
 trait DataFetching
 {
     /**
-     * @throws \RuntimeException
-     */
-    abstract protected function assertQueryExecuted();
-
-    /**
      * @param string $className
      *
      * @return array

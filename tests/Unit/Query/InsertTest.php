@@ -2,24 +2,15 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use Misantron\QueryBuilder\Expression\ConflictTarget;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query\Insert;
 use Misantron\QueryBuilder\Query\Select;
+use Misantron\QueryBuilder\Query\Update;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class InsertTest extends UnitTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Table name is empty
-     */
-    public function testConstructorWithEmptyTable()
-    {
-        $pdo = $this->createPDOMock();
-
-        new Insert($pdo, '');
-    }
-
     public function testConstructor()
     {
         $query = $this->createQuery();
@@ -32,12 +23,11 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeEquals(null, 'rowSet', $query);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Column list is empty
-     */
     public function testColumnsWithEmptyList()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Column list is empty');
+
         $query = $this->createQuery();
         $query->columns([]);
     }
@@ -57,12 +47,11 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeEquals($columnsList, 'columns', $query);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Value list is empty
-     */
     public function testValuesWithEmptyList()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value list is empty');
+
         $query = $this->createQuery();
         $query->values([]);
     }
@@ -92,6 +81,34 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeEquals([[1, 2], [3, 4]], 'values', $query);
     }
 
+    public function testOnConflictWithoutAction()
+    {
+        $target = ConflictTarget::fromField('foo');
+
+        $query = $this->createQuery();
+        $query->onConflict($target);
+
+        $this->assertAttributeInstanceOf(ConflictTarget::class, 'conflictTarget', $query);
+        $this->assertAttributeSame(null, 'conflictAction', $query);
+    }
+
+    public function testOnConflictWithTargetAndAction()
+    {
+        $target = ConflictTarget::fromConstraint('foo_unique');
+        $factory = Factory::create($this->createPDOMock());
+
+        $action = $factory
+            ->update()
+            ->set(['foo' => 'bar'])
+            ->andEquals('baz', 5);
+
+        $query = $this->createQuery();
+        $query->onConflict($target, $action);
+
+        $this->assertAttributeInstanceOf(ConflictTarget::class, 'conflictTarget', $query);
+        $this->assertAttributeInstanceOf(Update::class, 'conflictAction', $query);
+    }
+
     public function testFromRows()
     {
         $pdo = $this->createPDOMock();
@@ -114,12 +131,11 @@ class InsertTest extends UnitTestCase
         $query->__toString();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Value list is empty
-     */
     public function testBuildWithoutValues()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value list is empty');
+
         $query = $this->createQuery();
         $query->columns(['foo', 'bar']);
         $query->__toString();
@@ -138,6 +154,24 @@ class InsertTest extends UnitTestCase
         $query->values($values);
 
         $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])", $query->__toString());
+    }
+
+    public function testBuildWithOnConflict()
+    {
+        $target = ConflictTarget::fromConstraint('pk_unique');
+        $factory = Factory::create($this->createPDOMock());
+
+        $action = $factory
+            ->update()
+            ->set(['foo' => 'bar'])
+            ->andEquals('baz', 5);
+
+        $query = $this->createQuery();
+        $query
+            ->values(['foo' => 'bar'])
+            ->onConflict($target, $action);
+
+        $this->assertSame("INSERT INTO foo.bar (foo) VALUES ('bar') ON CONFLICT ON CONSTRAINT pk_unique DO UPDATE SET foo = 'bar' WHERE baz = 5", $query->__toString());
     }
 
     public function testBuildWithRowSet()

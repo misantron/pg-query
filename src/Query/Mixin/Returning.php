@@ -6,7 +6,7 @@ namespace Misantron\QueryBuilder\Query\Mixin;
  * Trait Returning.
  *
  *
- * @method assertColumnsEmpty($items)
+ * @method assertColumnsNotEmpty($items)
  */
 trait Returning
 {
@@ -17,7 +17,7 @@ trait Returning
 
     public function returning($items)
     {
-        $this->assertColumnsEmpty($items);
+        $this->assertColumnsNotEmpty($items);
 
         $this->returning = $this->parseList($items);
 

@@ -46,9 +46,7 @@ class Insert extends Query implements Selectable
      */
     public function values(array $items): Insert
     {
-        if (empty($items)) {
-            throw new \InvalidArgumentException('Value list is empty');
-        }
+        $this->assertValuesNotEmpty($items);
 
         if ($items === array_values($items)) {
             // extract column names from the first element of data rows
@@ -118,7 +116,7 @@ class Insert extends Query implements Selectable
      */
     public function __toString(): string
     {
-        $this->assertColumnsEmpty($this->columns);
+        $this->assertColumnsNotEmpty($this->columns);
 
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
@@ -138,9 +136,7 @@ class Insert extends Query implements Selectable
      */
     private function buildValues(): string
     {
-        if (empty($this->values)) {
-            throw new \RuntimeException('Value list is empty');
-        }
+        $this->assertValuesNotEmpty($this->values);
 
         $values = [];
         foreach ($this->values as $k => $row) {

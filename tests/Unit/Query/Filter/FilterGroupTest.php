@@ -10,6 +10,13 @@ use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class FilterGroupTest extends UnitTestCase
 {
+    public function testIsEmpty()
+    {
+        $group = new FilterGroup();
+
+        $this->assertTrue($group->isEmpty());
+    }
+
     public function testNotEmpty()
     {
         $group = new FilterGroup();
