@@ -64,13 +64,11 @@ class Factory
     }
 
     /**
-     * @param string|null $table
-     *
      * @return Query\Update
      */
-    public function update(?string $table = null): Query\Update
+    public function update(): Query\Update
     {
-        return new Query\Update($this->pdo, $table);
+        return new Query\Update($this->pdo);
     }
 
     /**

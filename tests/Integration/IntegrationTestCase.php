@@ -6,8 +6,7 @@ use Misantron\QueryBuilder\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class IntegrationTestCase
- * @package Misantron\QueryBuilder\Tests\Integration
+ * Class IntegrationTestCase.
  */
 abstract class IntegrationTestCase extends TestCase
 {
@@ -21,7 +20,7 @@ abstract class IntegrationTestCase extends TestCase
      */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pdo = new \PDO(
             'pgsql:host=localhost;port=5432;dbname=test', 'postgres', '1',

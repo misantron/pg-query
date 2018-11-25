@@ -40,6 +40,17 @@ class Insert extends Query implements Selectable
     private $rowSet;
 
     /**
+     * @param \PDO   $pdo
+     * @param string $table
+     */
+    public function __construct(\PDO $pdo, string $table)
+    {
+        parent::__construct($pdo);
+
+        $this->table($table);
+    }
+
+    /**
      * @param array $items
      *
      * @return Insert

@@ -15,13 +15,13 @@ class Delete extends Query implements Filterable
     use Filters, Returning;
 
     /**
-     * @param \PDO   $pdo
-     * @param string $table
+     * @param \PDO $pdo
      */
     public function __construct(\PDO $pdo, string $table)
     {
-        parent::__construct($pdo, $table);
+        parent::__construct($pdo);
 
+        $this->table($table);
         $this->filters = new FilterGroup();
     }
 

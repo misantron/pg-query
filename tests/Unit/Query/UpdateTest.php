@@ -14,16 +14,15 @@ class UpdateTest extends UnitTestCase
 
         $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
         $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
-        $this->assertAttributeEquals('foo.bar', 'table', $query);
+        $this->assertAttributeEquals(null, 'table', $query);
         $this->assertAttributeEquals([], 'set', $query);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Value list is empty
-     */
     public function testSetWithEmptyData()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value list is empty');
+
         $query = $this->createQuery();
         $query->set([]);
     }
@@ -49,17 +48,17 @@ class UpdateTest extends UnitTestCase
     public function testBuildWithoutConditions()
     {
         $query = $this->createQuery();
+        $query->table('foo.bar');
         $query->set(['col1' => 1]);
 
         $this->assertEquals('UPDATE foo.bar SET col1 = 1', $query->__toString());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Query set is empty
-     */
     public function testBuildWithoutSet()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Query set is empty');
+
         $query = $this->createQuery();
         $query->andEquals('col1', 1);
 
@@ -77,6 +76,7 @@ class UpdateTest extends UnitTestCase
 
         $query = $this->createQuery($pdo);
         $query
+            ->table('foo.bar')
             ->set(['foo' => 'bar'])
             ->andEquals('col1', 1)
             ->andEquals('col2', 'test');
@@ -84,11 +84,15 @@ class UpdateTest extends UnitTestCase
         $this->assertEquals("UPDATE foo.bar SET foo = 'bar' WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
     }
 
-    private function createQuery($pdo = null)
+    /**
+     * @param \PDO|null $pdo
+     *
+     * @return Update
+     */
+    private function createQuery($pdo = null): Update
     {
         $pdo = $pdo ?? $this->createPDOMock();
-        $table = 'foo.bar';
 
-        return new Update($pdo, $table);
+        return new Update($pdo);
     }
 }

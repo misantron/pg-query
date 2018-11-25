@@ -75,8 +75,9 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     public function __construct(\PDO $pdo, string $table, string $alias = self::DEFAULT_TABLE_ALIAS)
     {
-        parent::__construct($pdo, $table);
+        parent::__construct($pdo);
 
+        $this->table($table);
         $this->alias = $this->escapeIdentifier($alias);
         $this->filters = new FilterGroup();
     }

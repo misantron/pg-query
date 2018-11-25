@@ -30,14 +30,11 @@ abstract class Query implements Stringable
     protected $table;
 
     /**
-     * @param \PDO        $pdo
-     * @param string|null $table
+     * @param \PDO $pdo
      */
-    public function __construct(\PDO $pdo, ?string $table = null)
+    public function __construct(\PDO $pdo)
     {
         $this->pdo = $pdo;
-
-        $table !== null && $this->table = $this->escapeIdentifier($table);
     }
 
     /**
