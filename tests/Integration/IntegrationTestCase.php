@@ -25,7 +25,7 @@ abstract class IntegrationTestCase extends TestCase
     protected function setUp(): void
     {
         $configuration = Configuration::createFromDsn(
-            'pgsql:host=localhost;port=5432;dbname=test;user=postres;password=1',
+            'pgsql:host=localhost;port=5432;dbname=test;user=postgres;password=1',
             [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_EMULATE_PREPARES => false,

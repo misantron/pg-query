@@ -3,6 +3,7 @@ language: php
 php:
   - 7.1
   - 7.2
+  - 7.3
 
 dist: trusty
 sudo: required
@@ -11,7 +12,7 @@ services:
   - postgresql
 
 addons:
-  postgresql: "9.2"
+  postgresql: "9.5"
 
 cache:
   directories:
