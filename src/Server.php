@@ -43,9 +43,6 @@ class Server
         return $this->pdo;
     }
 
-    /**
-     * @return void
-     */
     private function initialize(): void
     {
         if ($this->pdo === null) {

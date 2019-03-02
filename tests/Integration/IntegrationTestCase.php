@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 abstract class IntegrationTestCase extends TestCase
 {
     /**
-     * @var \PDO
+     * @var Server
      */
     private $server;
 
@@ -33,9 +33,8 @@ abstract class IntegrationTestCase extends TestCase
             '9.2'
         );
 
-        $server = new Server($configuration);
-
-        $this->factory = Factory::create($server);
+        $this->server = new Server($configuration);
+        $this->factory = Factory::create($this->server);
     }
 
     /**
