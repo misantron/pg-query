@@ -2,10 +2,13 @@
 
 namespace Misantron\QueryBuilder\Assert;
 
+use Misantron\QueryBuilder\Server;
+
 /**
  * Trait Assert.
  *
  *
+ * @property Server        $server
  * @property \PDOStatement $statement
  */
 trait Assert
@@ -41,6 +44,18 @@ trait Assert
     {
         if (!$this->statement instanceof \PDOStatement) {
             throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
+        }
+    }
+
+    /**
+     * @param string $version
+     *
+     * @throws \RuntimeException
+     */
+    protected function assertFeatureAvailable(string $version)
+    {
+        if ($this->server->version() && version_compare($this->server->version(), $version, '<')) {
+            throw new \RuntimeException("Available since {$version} version");
         }
     }
 }

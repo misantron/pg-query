@@ -4,20 +4,15 @@ namespace Misantron\QueryBuilder\Tests\Unit;
 
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query;
+use Misantron\QueryBuilder\Server;
 
 class FactoryTest extends UnitTestCase
 {
-    public function testConstructor()
-    {
-        $factory = $this->createFactory();
-        $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $factory);
-    }
-
-    public function testGetPDO()
+    public function testGetServer()
     {
         $factory = $this->createFactory();
 
-        $this->assertInstanceOf(\PDO::class, $factory->getPDO());
+        $this->assertInstanceOf(Server::class, $factory->getServer());
     }
 
     public function testInsert()
@@ -40,7 +35,7 @@ class FactoryTest extends UnitTestCase
     {
         $factory = $this->createFactory();
 
-        $query = $factory->update('foo.bar');
+        $query = $factory->update();
         $this->assertInstanceOf(Query\Update::class, $query);
     }
 
@@ -57,6 +52,6 @@ class FactoryTest extends UnitTestCase
      */
     private function createFactory(): Factory
     {
-        return Factory::create($this->createPDOMock());
+        return Factory::create($this->createServerMock());
     }
 }

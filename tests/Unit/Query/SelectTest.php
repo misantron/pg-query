@@ -6,34 +6,35 @@ use Misantron\QueryBuilder\Expression\Field;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Select;
+use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class SelectTest extends UnitTestCase
 {
     public function testConstructor()
     {
-        $pdo = $this->createPDOMock();
+        $server = $this->createServerMock();
         $table = 'foo.bar';
 
-        $query = new Select($pdo, $table);
+        $query = new Select($server, $table);
 
-        $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
+        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
         $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
-        $this->assertAttributeEquals('foo.bar', 'table', $query);
-        $this->assertAttributeEquals(Select::DEFAULT_TABLE_ALIAS, 'alias', $query);
-        $this->assertAttributeEquals([], 'columns', $query);
-        $this->assertAttributeEquals([], 'joins', $query);
-        $this->assertAttributeEquals([], 'groupBy', $query);
-        $this->assertAttributeEquals([], 'orderBy', $query);
-        $this->assertAttributeEquals([], 'with', $query);
-        $this->assertAttributeEquals(null, 'distinct', $query);
-        $this->assertAttributeEquals(null, 'having', $query);
-        $this->assertAttributeEquals(null, 'limit', $query);
-        $this->assertAttributeEquals(null, 'offset', $query);
+        $this->assertAttributeSame('foo.bar', 'table', $query);
+        $this->assertAttributeSame(Select::DEFAULT_TABLE_ALIAS, 'alias', $query);
+        $this->assertAttributeSame([], 'columns', $query);
+        $this->assertAttributeSame([], 'joins', $query);
+        $this->assertAttributeSame([], 'groupBy', $query);
+        $this->assertAttributeSame([], 'orderBy', $query);
+        $this->assertAttributeSame([], 'with', $query);
+        $this->assertAttributeSame(null, 'distinct', $query);
+        $this->assertAttributeSame(null, 'having', $query);
+        $this->assertAttributeSame(null, 'limit', $query);
+        $this->assertAttributeSame(null, 'offset', $query);
 
-        $query = new Select($pdo, $table, 'test');
+        $query = new Select($server, $table, 'test');
 
-        $this->assertAttributeEquals('test', 'alias', $query);
+        $this->assertAttributeSame('test', 'alias', $query);
     }
 
     public function testAlias()
@@ -41,7 +42,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->alias('s1');
 
-        $this->assertAttributeEquals('s1', 'alias', $query);
+        $this->assertAttributeSame('s1', 'alias', $query);
     }
 
     /**
@@ -61,12 +62,12 @@ class SelectTest extends UnitTestCase
         $columnsList = ['foo', 'bar'];
         $query->columns($columnsList);
 
-        $this->assertAttributeEquals($columnsList, 'columns', $query);
+        $this->assertAttributeSame($columnsList, 'columns', $query);
 
         $columns = 'foo ,  bar ';
         $query->columns($columns);
 
-        $this->assertAttributeEquals($columnsList, 'columns', $query);
+        $this->assertAttributeSame($columnsList, 'columns', $query);
     }
 
     public function testDistinct()
@@ -74,11 +75,11 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->distinct();
 
-        $this->assertAttributeEquals(true, 'distinct', $query);
+        $this->assertAttributeSame(true, 'distinct', $query);
 
         $query->distinct(false);
 
-        $this->assertAttributeEquals(false, 'distinct', $query);
+        $this->assertAttributeSame(false, 'distinct', $query);
     }
 
     /**
@@ -110,13 +111,13 @@ class SelectTest extends UnitTestCase
 
         $hash = hash('crc32', 'test_t2');
 
-        $this->assertAttributeEquals([
+        $this->assertAttributeSame([
             $hash => [
                 'type' => 'inner',
                 'table' => 'test',
                 'alias' => 't2',
                 'condition' => 't2.id = t1.user_id',
-            ]
+            ],
         ], 'joins', $query);
     }
 
@@ -127,13 +128,13 @@ class SelectTest extends UnitTestCase
 
         $hash = hash('crc32', 'test_t2');
 
-        $this->assertAttributeEquals([
+        $this->assertAttributeSame([
             $hash => [
                 'type' => 'left',
                 'table' => 'test',
                 'alias' => 't2',
                 'condition' => 't2.id = t1.user_id',
-            ]
+            ],
         ], 'joins', $query);
     }
 
@@ -143,14 +144,14 @@ class SelectTest extends UnitTestCase
      */
     public function testWithWithInvalidQuery()
     {
-        $factory = Factory::create($this->createPDOMock());
+        $factory = Factory::create($this->createServerMock());
 
         $cte = [
             'regional_sales' => $factory
                 ->select('orders')
                 ->columns(['region', Field::create('SUM(amount)', 'total_sales')])
                 ->groupBy(['region']),
-            'top_regions' => new \stdClass()
+            'top_regions' => new \stdClass(),
         ];
 
         $query = $this->createQuery();
@@ -159,7 +160,7 @@ class SelectTest extends UnitTestCase
 
     public function testWith()
     {
-        $factory = Factory::create($this->createPDOMock());
+        $factory = Factory::create($this->createServerMock());
 
         $cte = [
             'regional_sales' => $factory
@@ -169,13 +170,13 @@ class SelectTest extends UnitTestCase
             'top_regions' => $factory
                 ->select('regional_sales')
                 ->columns(['region'])
-                ->andMore('total_sales', 1000)
+                ->andMore('total_sales', 1000),
         ];
 
         $query = $this->createQuery();
         $query->with($cte);
 
-        $this->assertAttributeEquals($cte, 'with', $query);
+        $this->assertAttributeSame($cte, 'with', $query);
     }
 
     public function testGroupBy()
@@ -183,7 +184,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->groupBy(['test']);
 
-        $this->assertAttributeEquals(['test'], 'groupBy', $query);
+        $this->assertAttributeSame(['test'], 'groupBy', $query);
     }
 
     public function testOrderBy()
@@ -191,7 +192,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->orderBy(['test', 'field desc']);
 
-        $this->assertAttributeEquals(['test', 'field desc'], 'orderBy', $query);
+        $this->assertAttributeSame(['test', 'field desc'], 'orderBy', $query);
     }
 
     public function testHaving()
@@ -199,7 +200,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->having('total_amount >= 1500');
 
-        $this->assertAttributeEquals('total_amount >= 1500', 'having', $query);
+        $this->assertAttributeSame('total_amount >= 1500', 'having', $query);
     }
 
     public function testLimit()
@@ -207,7 +208,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->limit(500);
 
-        $this->assertAttributeEquals(500, 'limit', $query);
+        $this->assertAttributeSame(500, 'limit', $query);
     }
 
     public function testOffset()
@@ -215,7 +216,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->offset(20);
 
-        $this->assertAttributeEquals(20, 'offset', $query);
+        $this->assertAttributeSame(20, 'offset', $query);
     }
 
     public function testRange()
@@ -223,8 +224,8 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->range(100, 500);
 
-        $this->assertAttributeEquals(100, 'offset', $query);
-        $this->assertAttributeEquals(500, 'limit', $query);
+        $this->assertAttributeSame(100, 'offset', $query);
+        $this->assertAttributeSame(500, 'limit', $query);
     }
 
     /**
@@ -241,7 +242,7 @@ class SelectTest extends UnitTestCase
 
     public function testBuild()
     {
-        $factory = Factory::create($this->createPDOMock());
+        $factory = Factory::create($this->createServerMock());
 
         $cte = [
             'regional_sales' => $factory
@@ -251,7 +252,7 @@ class SelectTest extends UnitTestCase
             'top_regions' => $factory
                 ->select('regional_sales')
                 ->columns(['region'])
-                ->andMore('total_sales', 1000)
+                ->andMore('total_sales', 1000),
         ];
 
         $query = $factory
@@ -371,9 +372,9 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
 
         $query
-            ->between('foo', [1,2])
-            ->andBetween('bar', [5,6])
-            ->orBetween('baz', [10,20]);
+            ->between('foo', [1, 2])
+            ->andBetween('bar', [5, 6])
+            ->orBetween('baz', [10, 20]);
 
         $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo BETWEEN 1 AND 2 AND bar BETWEEN 5 AND 6 OR baz BETWEEN 10 AND 20', (string)$query);
     }
@@ -407,9 +408,9 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
 
         $query
-            ->in('foo', [1,2])
-            ->andIn('bar', [5,6])
-            ->orIn('baz', [10,20]);
+            ->in('foo', [1, 2])
+            ->andIn('bar', [5, 6])
+            ->orIn('baz', [10, 20]);
 
         $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo IN (1,2) AND bar IN (5,6) OR baz IN (10,20)', (string)$query);
     }
@@ -419,9 +420,9 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
 
         $query
-            ->notIn('foo', [1,2])
-            ->andNotIn('bar', [5,6])
-            ->orNotIn('baz', [10,20]);
+            ->notIn('foo', [1, 2])
+            ->andNotIn('bar', [5, 6])
+            ->orNotIn('baz', [10, 20]);
 
         $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo NOT IN (1,2) AND bar NOT IN (5,6) OR baz NOT IN (10,20)', (string)$query);
     }
@@ -455,9 +456,9 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
 
         $query
-            ->arrayContains('foo', [1,2])
-            ->andArrayContains('bar', [5,6])
-            ->orArrayContains('baz', [10,20]);
+            ->arrayContains('foo', [1, 2])
+            ->andArrayContains('bar', [5, 6])
+            ->orArrayContains('baz', [10, 20]);
 
         $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo @> ARRAY[1,2]::INTEGER[] AND bar @> ARRAY[5,6]::INTEGER[] OR baz @> ARRAY[10,20]::INTEGER[]', (string)$query);
     }
@@ -474,7 +475,9 @@ class SelectTest extends UnitTestCase
             ->with($qs)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -518,7 +521,9 @@ class SelectTest extends UnitTestCase
             ->with($qs)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->limit(10)
@@ -567,7 +572,9 @@ class SelectTest extends UnitTestCase
             ->with($qs)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -609,7 +616,9 @@ class SelectTest extends UnitTestCase
             ->with($query)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -650,7 +659,9 @@ class SelectTest extends UnitTestCase
             ->with($query)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -658,7 +669,7 @@ class SelectTest extends UnitTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchAllAssoc());
+        $this->assertSame($data, $query->fetchAllAssoc());
     }
 
     public function testFetchKeyPair()
@@ -691,7 +702,9 @@ class SelectTest extends UnitTestCase
             ->with($query)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->columns(['field1', 'field2'])
@@ -730,7 +743,9 @@ class SelectTest extends UnitTestCase
             ->with($query)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->columns('field1')
@@ -779,7 +794,9 @@ class SelectTest extends UnitTestCase
             ->with($query)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -816,7 +833,9 @@ class SelectTest extends UnitTestCase
             ->with($query)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->andIn('field1', [3, 7, 9])
@@ -829,8 +848,6 @@ class SelectTest extends UnitTestCase
 
     public function testFetchColumn()
     {
-        $pdo = $this->createPDOMock();
-
         $query = 'SELECT field1 FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 1';
 
         $data = 1;
@@ -847,13 +864,17 @@ class SelectTest extends UnitTestCase
             ->method('fetchColumn')
             ->willReturn($data);
 
+        $pdo = $this->createPDOMock();
+
         $pdo
             ->expects($this->once())
             ->method('prepare')
             ->with($query)
             ->willReturn($statement);
 
-        $query = new Select($pdo, 'foo.bar');
+        $server = $this->createServerMock($pdo);
+
+        $query = new Select($server, 'foo.bar');
 
         $query
             ->columns('field1')
@@ -865,11 +886,11 @@ class SelectTest extends UnitTestCase
         $this->assertEquals($data, $query->fetchColumn());
     }
 
-    private function createQuery()
+    private function createQuery(): Select
     {
-        $pdo = $this->createPDOMock();
+        $server = $this->createServerMock();
         $table = 'foo.bar';
 
-        return new Select($pdo, $table);
+        return new Select($server, $table);
     }
 }

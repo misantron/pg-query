@@ -4,6 +4,7 @@ namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Update;
+use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class UpdateTest extends UnitTestCase
@@ -12,10 +13,10 @@ class UpdateTest extends UnitTestCase
     {
         $query = $this->createQuery();
 
-        $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
+        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
         $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
-        $this->assertAttributeEquals(null, 'table', $query);
-        $this->assertAttributeEquals([], 'set', $query);
+        $this->assertAttributeSame(null, 'table', $query);
+        $this->assertAttributeSame([], 'set', $query);
     }
 
     public function testSetWithEmptyData()
@@ -36,10 +37,18 @@ class UpdateTest extends UnitTestCase
             ->withConsecutive(['test', \PDO::PARAM_STR])
             ->willReturnOnConsecutiveCalls("'test'");
 
-        $query = $this->createQuery($pdo);
+        $server = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $server
+            ->method('pdo')
+            ->willReturn($pdo);
+
+        $query = $this->createQuery($server);
         $query->set($set = [
             'foo' => 1,
-            'bar' => 'test'
+            'bar' => 'test',
         ]);
 
         $this->assertAttributeEquals(['foo' => 1, 'bar' => "'test'"], 'set', $query);
@@ -74,7 +83,15 @@ class UpdateTest extends UnitTestCase
             ->withConsecutive(['bar', \PDO::PARAM_STR], ['test', \PDO::PARAM_STR])
             ->willReturnOnConsecutiveCalls("'bar'", "'test'");
 
-        $query = $this->createQuery($pdo);
+        $server = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $server
+            ->method('pdo')
+            ->willReturn($pdo);
+
+        $query = $this->createQuery($server);
         $query
             ->table('foo.bar')
             ->set(['foo' => 'bar'])
@@ -84,15 +101,10 @@ class UpdateTest extends UnitTestCase
         $this->assertEquals("UPDATE foo.bar SET foo = 'bar' WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
     }
 
-    /**
-     * @param \PDO|null $pdo
-     *
-     * @return Update
-     */
-    private function createQuery($pdo = null): Update
+    private function createQuery($server = null): Update
     {
-        $pdo = $pdo ?? $this->createPDOMock();
+        $server = $server ?? $this->createServerMock();
 
-        return new Update($pdo);
+        return new Update($server);
     }
 }

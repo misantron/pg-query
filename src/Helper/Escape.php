@@ -33,16 +33,22 @@ trait Escape
      */
     protected function escapeValue($value): string
     {
-        if (filter_var($value, FILTER_VALIDATE_INT)) {
-            $escaped = $value;
-        } elseif (is_null($value)) {
-            $escaped = 'null';
-        } elseif (is_bool($value)) {
-            $escaped = $value ? 'true' : 'false';
-        } elseif (is_array($value)) {
-            $escaped = $this->escapeArray($value);
-        } else {
-            $escaped = $this->quote($value);
+        switch (strtolower(gettype($value))) {
+            case 'integer':
+            case 'double':
+                $escaped = $value;
+                break;
+            case 'boolean':
+                $escaped = $value ? 'true' : 'false';
+                break;
+            case 'null':
+                $escaped = 'null';
+                break;
+            case 'array':
+                $escaped = $this->escapeArray($value);
+                break;
+            default:
+                $escaped = $this->quote($value);
         }
 
         return $escaped;

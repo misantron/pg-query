@@ -9,6 +9,7 @@ use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
 use Misantron\QueryBuilder\Query\Mixin\Retrievable;
 use Misantron\QueryBuilder\Query\Mixin\Selectable;
+use Misantron\QueryBuilder\Server;
 
 /**
  * Class Select.
@@ -69,13 +70,13 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     private $with = [];
 
     /**
-     * @param \PDO   $pdo
+     * @param Server $server
      * @param string $table
      * @param string $alias
      */
-    public function __construct(\PDO $pdo, string $table, string $alias = self::DEFAULT_TABLE_ALIAS)
+    public function __construct(Server $server, string $table, string $alias = self::DEFAULT_TABLE_ALIAS)
     {
-        parent::__construct($pdo);
+        parent::__construct($server);
 
         $this->table($table);
         $this->alias = $this->escapeIdentifier($alias);

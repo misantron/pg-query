@@ -6,6 +6,7 @@ use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
 use Misantron\QueryBuilder\Query\Mixin\Returning;
+use Misantron\QueryBuilder\Server;
 
 /**
  * Class Update.
@@ -23,11 +24,11 @@ class Update extends Query implements Filterable
     private $set = [];
 
     /**
-     * @param \PDO $pdo
+     * @param Server $server
      */
-    public function __construct(\PDO $pdo)
+    public function __construct(Server $server)
     {
-        parent::__construct($pdo);
+        parent::__construct($server);
 
         $this->filters = new FilterGroup();
     }

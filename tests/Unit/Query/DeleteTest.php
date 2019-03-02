@@ -4,6 +4,7 @@ namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
 use Misantron\QueryBuilder\Query\Delete;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class DeleteTest extends UnitTestCase
@@ -12,7 +13,7 @@ class DeleteTest extends UnitTestCase
     {
         $query = $this->createQuery();
 
-        $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
+        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
         $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
         $this->assertAttributeEquals('foo.bar', 'table', $query);
     }
@@ -33,7 +34,15 @@ class DeleteTest extends UnitTestCase
             ->withConsecutive(['test', \PDO::PARAM_STR])
             ->willReturnOnConsecutiveCalls("'test'");
 
-        $query = $this->createQuery($pdo);
+        $server = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $server
+            ->method('pdo')
+            ->willReturn($pdo);
+
+        $query = $this->createQuery($server);
         $query
             ->andEquals('col1', 1)
             ->andEquals('col2', 'test');
@@ -41,11 +50,11 @@ class DeleteTest extends UnitTestCase
         $this->assertEquals("DELETE FROM foo.bar WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
     }
 
-    private function createQuery($pdo = null)
+    private function createQuery($server = null): Delete
     {
-        $pdo = $pdo ?? $this->createPDOMock();
+        $server = $server ?? $this->createServerMock();
         $table = 'foo.bar';
 
-        return new Delete($pdo, $table);
+        return new Delete($server, $table);
     }
 }

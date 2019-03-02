@@ -9,9 +9,9 @@ class QueryTest extends UnitTestCase
 {
     public function testTable()
     {
-        $pdo = $this->createPDOMock();
+        $server = $this->createServerMock();
 
-        $query = new class($pdo) extends Query
+        $query = new class($server) extends Query
         {
             public function __toString(): string
             {

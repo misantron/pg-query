@@ -2,12 +2,12 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit;
 
+use Misantron\QueryBuilder\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class UnitTestCase
- * @package Misantron\QueryBuilder\Tests\Unit
+ * Class UnitTestCase.
  */
 abstract class UnitTestCase extends TestCase
 {
@@ -21,6 +21,28 @@ abstract class UnitTestCase extends TestCase
             ->getMock();
 
         return $pdo;
+    }
+
+    /**
+     * @param \PDO|null $pdo
+     * @return MockObject|Server
+     */
+    protected function createServerMock(?\PDO $pdo = null)
+    {
+        $server = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $pdo = $pdo ?: $this->createPDOMock();
+
+        $server
+            ->method('pdo')
+            ->willReturn($pdo);
+        $server
+            ->method('version')
+            ->willReturn('9.5');
+
+        return $server;
     }
 
     /**
