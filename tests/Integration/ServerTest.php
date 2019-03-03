@@ -6,7 +6,7 @@ class ServerTest extends IntegrationTestCase
 {
     public function testVersion()
     {
-        $this->assertSame('9.5', $this->getServer()->version());
+        $this->assertSame('9.5', $this->getServer()->getVersion());
     }
 
     public function testPdo()

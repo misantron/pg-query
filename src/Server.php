@@ -77,6 +77,7 @@ class Server
     /**
      * @param int   $key
      * @param mixed $value
+     *
      * @return Server
      */
     public function setOption(int $key, $value): Server
