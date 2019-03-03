@@ -38,9 +38,6 @@ abstract class UnitTestCase extends TestCase
         $server
             ->method('pdo')
             ->willReturn($pdo);
-        $server
-            ->method('version')
-            ->willReturn('9.5');
 
         return $server;
     }

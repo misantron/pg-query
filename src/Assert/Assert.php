@@ -54,7 +54,7 @@ trait Assert
      */
     protected function assertFeatureAvailable(string $version)
     {
-        if ($this->server->version() && version_compare($this->server->version(), $version, '<')) {
+        if ($this->server->getVersion() && version_compare($this->server->getVersion(), $version, '<')) {
             throw new \RuntimeException("Available since {$version} version");
         }
     }

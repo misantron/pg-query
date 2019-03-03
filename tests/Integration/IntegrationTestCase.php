@@ -2,7 +2,6 @@
 
 namespace Misantron\QueryBuilder\Tests\Integration;
 
-use Misantron\QueryBuilder\Configuration;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Server;
 use PHPUnit\Framework\TestCase;
@@ -24,8 +23,14 @@ abstract class IntegrationTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $configuration = Configuration::createFromDsn(
-            'pgsql:host=localhost;port=5432;dbname=test;user=postgres;password=1',
+        $this->server = new Server(
+            [
+                'host' => 'localhost',
+                'port' => '5432',
+                'dbname' => 'test',
+                'user' => 'postgres',
+                'password' => '1',
+            ],
             [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_EMULATE_PREPARES => false,
@@ -33,7 +38,6 @@ abstract class IntegrationTestCase extends TestCase
             '9.5'
         );
 
-        $this->server = new Server($configuration);
         $this->factory = Factory::create($this->server);
     }
 
