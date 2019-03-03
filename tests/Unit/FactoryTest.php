@@ -15,6 +15,17 @@ class FactoryTest extends UnitTestCase
         $this->assertInstanceOf(Server::class, $factory->getServer());
     }
 
+    public function testSetServer()
+    {
+        $factory = $this->createFactory();
+        $currentServer = $factory->getServer();
+
+        $server = $this->createServerMock();
+        $factory->setServer($server);
+
+        $this->assertNotSame($currentServer, $factory->getServer());
+    }
+
     public function testInsert()
     {
         $factory = $this->createFactory();

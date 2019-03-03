@@ -268,7 +268,7 @@ class SelectTest extends UnitTestCase
             ->limit(1000)
             ->offset(150);
 
-        $this->assertEquals('WITH regional_sales AS (SELECT region,SUM(amount) AS total_sales FROM orders t1 GROUP BY region), top_regions AS (SELECT region FROM regional_sales t1 WHERE total_sales > 1000) SELECT field1,field2 FROM foo.bar t1 INNER JOIN test t2 ON t2.id = t1.user_id WHERE field1 IN (3,7,9) OR field2 IS NULL GROUP BY region HAVING total_amount >= 1500 ORDER BY region desc LIMIT 1000 OFFSET 150', (string)$query);
+        $this->assertSame('WITH regional_sales AS (SELECT region,SUM(amount) AS total_sales FROM orders t1 GROUP BY region), top_regions AS (SELECT region FROM regional_sales t1 WHERE total_sales > 1000) SELECT field1,field2 FROM foo.bar t1 INNER JOIN test t2 ON t2.id = t1.user_id WHERE field1 IN (3,7,9) OR field2 IS NULL GROUP BY region HAVING total_amount >= 1500 ORDER BY region desc LIMIT 1000 OFFSET 150', (string)$query);
     }
 
     public function testBuildConditionGroups()
@@ -281,7 +281,7 @@ class SelectTest extends UnitTestCase
             ->orIsNull('bar')
             ->endGroup();
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE ( foo = 1 OR bar IS NULL )', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE ( foo = 1 OR bar IS NULL )', (string)$query);
 
         $query = $this->createQuery();
 
@@ -292,7 +292,7 @@ class SelectTest extends UnitTestCase
             ->orIsNull('bar')
             ->endGroup();
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE test = 5 OR ( foo = 1 OR bar IS NULL )', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE test = 5 OR ( foo = 1 OR bar IS NULL )', (string)$query);
     }
 
     public function testBuildConditionsWithEqualFilters()
@@ -304,7 +304,7 @@ class SelectTest extends UnitTestCase
             ->andEquals('bar', false)
             ->orEquals('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo = 1 AND bar = false OR baz = 10', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo = 1 AND bar = false OR baz = 10', (string)$query);
     }
 
     public function testBuildConditionsWithNotEqualFilters()
@@ -316,7 +316,7 @@ class SelectTest extends UnitTestCase
             ->andNotEquals('bar', false)
             ->orNotEquals('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo != 1 AND bar != false OR baz != 10', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo != 1 AND bar != false OR baz != 10', (string)$query);
     }
 
     public function testBuildConditionsWithMoreFilters()
@@ -328,7 +328,7 @@ class SelectTest extends UnitTestCase
             ->andMore('bar', 5)
             ->orMore('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo > 1 AND bar > 5 OR baz > 10', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo > 1 AND bar > 5 OR baz > 10', (string)$query);
     }
 
     public function testBuildConditionsWithMoreOrEqualsFilters()
@@ -340,7 +340,7 @@ class SelectTest extends UnitTestCase
             ->andMoreOrEquals('bar', 5)
             ->orMoreOrEquals('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo >= 1 AND bar >= 5 OR baz >= 10', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo >= 1 AND bar >= 5 OR baz >= 10', (string)$query);
     }
 
     public function testBuildConditionsWithLessFilters()
@@ -352,7 +352,7 @@ class SelectTest extends UnitTestCase
             ->andLess('bar', 5)
             ->orLess('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo < 1 AND bar < 5 OR baz < 10', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo < 1 AND bar < 5 OR baz < 10', (string)$query);
     }
 
     public function testBuildConditionsWithLessOrEqualsFilters()
@@ -364,7 +364,7 @@ class SelectTest extends UnitTestCase
             ->andLessOrEquals('bar', 5)
             ->orLessOrEquals('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo <= 1 AND bar <= 5 OR baz <= 10', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo <= 1 AND bar <= 5 OR baz <= 10', (string)$query);
     }
 
     public function testBuildConditionsWithRangeFilters()
@@ -376,7 +376,7 @@ class SelectTest extends UnitTestCase
             ->andBetween('bar', [5, 6])
             ->orBetween('baz', [10, 20]);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo BETWEEN 1 AND 2 AND bar BETWEEN 5 AND 6 OR baz BETWEEN 10 AND 20', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo BETWEEN 1 AND 2 AND bar BETWEEN 5 AND 6 OR baz BETWEEN 10 AND 20', (string)$query);
     }
 
     public function testBuildConditionsWithNullFilters()
@@ -388,7 +388,7 @@ class SelectTest extends UnitTestCase
             ->andIsNull('bar')
             ->orIsNull('baz');
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo IS NULL AND bar IS NULL OR baz IS NULL', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo IS NULL AND bar IS NULL OR baz IS NULL', (string)$query);
     }
 
     public function testBuildConditionsWithNotNullFilters()
@@ -400,7 +400,7 @@ class SelectTest extends UnitTestCase
             ->andIsNotNull('bar')
             ->orIsNotNull('baz');
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo IS NOT NULL AND bar IS NOT NULL OR baz IS NOT NULL', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo IS NOT NULL AND bar IS NOT NULL OR baz IS NOT NULL', (string)$query);
     }
 
     public function testBuildConditionsWithInFilters()
@@ -412,7 +412,7 @@ class SelectTest extends UnitTestCase
             ->andIn('bar', [5, 6])
             ->orIn('baz', [10, 20]);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo IN (1,2) AND bar IN (5,6) OR baz IN (10,20)', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo IN (1,2) AND bar IN (5,6) OR baz IN (10,20)', (string)$query);
     }
 
     public function testBuildConditionsWithNotInFilters()
@@ -424,7 +424,7 @@ class SelectTest extends UnitTestCase
             ->andNotIn('bar', [5, 6])
             ->orNotIn('baz', [10, 20]);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo NOT IN (1,2) AND bar NOT IN (5,6) OR baz NOT IN (10,20)', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo NOT IN (1,2) AND bar NOT IN (5,6) OR baz NOT IN (10,20)', (string)$query);
     }
 
     public function testBuildConditionsWithInArrayFilters()
@@ -436,7 +436,7 @@ class SelectTest extends UnitTestCase
             ->andInArray('bar', 5)
             ->orInArray('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE 1 = ANY(foo) AND 5 = ANY(bar) OR 10 = ANY(baz)', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE 1 = ANY(foo) AND 5 = ANY(bar) OR 10 = ANY(baz)', (string)$query);
     }
 
     public function testBuildConditionsWithNotInArrayFilters()
@@ -448,7 +448,7 @@ class SelectTest extends UnitTestCase
             ->andNotInArray('bar', 5)
             ->orNotInArray('baz', 10);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE 1 != ANY(foo) AND 5 != ANY(bar) OR 10 != ANY(baz)', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE 1 != ANY(foo) AND 5 != ANY(bar) OR 10 != ANY(baz)', (string)$query);
     }
 
     public function testBuildConditionsWithArrayContainsFilters()
@@ -460,7 +460,7 @@ class SelectTest extends UnitTestCase
             ->andArrayContains('bar', [5, 6])
             ->orArrayContains('baz', [10, 20]);
 
-        $this->assertEquals('SELECT * FROM foo.bar t1 WHERE foo @> ARRAY[1,2]::INTEGER[] AND bar @> ARRAY[5,6]::INTEGER[] OR baz @> ARRAY[10,20]::INTEGER[]', (string)$query);
+        $this->assertSame('SELECT * FROM foo.bar t1 WHERE foo @> ARRAY[1,2]::INTEGER[] AND bar @> ARRAY[5,6]::INTEGER[] OR baz @> ARRAY[10,20]::INTEGER[]', (string)$query);
     }
 
     public function testExecute()
@@ -529,7 +529,7 @@ class SelectTest extends UnitTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals(5, $query->rowsCount());
+        $this->assertSame(5, $query->rowsCount());
     }
 
     /**
@@ -582,7 +582,7 @@ class SelectTest extends UnitTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchAllObject(\stdClass::class));
+        $this->assertSame($data, $query->fetchAllObject(\stdClass::class));
     }
 
     public function testFetchCallback()
@@ -626,7 +626,7 @@ class SelectTest extends UnitTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchCallback($callback));
+        $this->assertSame($data, $query->fetchCallback($callback));
     }
 
     public function testFetchAllAssoc()
@@ -713,7 +713,7 @@ class SelectTest extends UnitTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchKeyValue());
+        $this->assertSame($data, $query->fetchKeyValue());
     }
 
     public function testFetchAllColumn()
@@ -754,7 +754,7 @@ class SelectTest extends UnitTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchAllColumn());
+        $this->assertSame($data, $query->fetchAllColumn());
     }
 
     /**
@@ -804,7 +804,7 @@ class SelectTest extends UnitTestCase
             ->limit(1)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchOneObject(\stdClass::class));
+        $this->assertSame($data, $query->fetchOneObject(\stdClass::class));
     }
 
     public function testFetchOneAssoc()
@@ -843,7 +843,7 @@ class SelectTest extends UnitTestCase
             ->limit(1)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchOneAssoc());
+        $this->assertSame($data, $query->fetchOneAssoc());
     }
 
     public function testFetchColumn()
@@ -883,7 +883,7 @@ class SelectTest extends UnitTestCase
             ->limit(1)
             ->execute();
 
-        $this->assertEquals($data, $query->fetchColumn());
+        $this->assertSame($data, $query->fetchColumn());
     }
 
     private function createQuery(): Select

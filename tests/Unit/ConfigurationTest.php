@@ -15,7 +15,6 @@ class ConfigurationTest extends UnitTestCase
         $this->assertAttributeSame($dsn, 'dsn', $config);
         $this->assertAttributeSame([], 'options', $config);
         $this->assertAttributeSame('9.3', 'version', $config);
-
     }
 
     public function testCreateFromCredentialsWithDefaultHostAndPort()

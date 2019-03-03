@@ -156,7 +156,7 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])", $query->__toString());
+        $this->assertSame("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])", $query->__toString());
     }
 
     public function testBuildWithOnConflict()
@@ -196,7 +196,7 @@ class InsertTest extends UnitTestCase
             ->columns($columns)
             ->fromRows($rowSetQuery);
 
-        $this->assertEquals('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->__toString());
+        $this->assertSame('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->__toString());
     }
 
     public function testToString()
@@ -204,7 +204,7 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values(['foo' => 1]);
 
-        $this->assertEquals((string)$query, $query->__toString());
+        $this->assertSame((string)$query, $query->__toString());
     }
 
     public function testGetInsertedRowWithoutReturningSet()
@@ -277,7 +277,7 @@ class InsertTest extends UnitTestCase
             ->execute()
             ->getInsertedRow();
 
-        $this->assertEquals([
+        $this->assertSame([
             'id' => 1,
             'foo' => 'bar',
         ], $inserted);
@@ -366,7 +366,7 @@ class InsertTest extends UnitTestCase
             ->execute()
             ->getInsertedRows();
 
-        $this->assertEquals([
+        $this->assertSame([
             [
                 'id' => 1,
                 'foo' => 'bar',

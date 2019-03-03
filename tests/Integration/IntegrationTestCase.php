@@ -30,7 +30,7 @@ abstract class IntegrationTestCase extends TestCase
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_EMULATE_PREPARES => false,
             ],
-            '9.2'
+            '9.5'
         );
 
         $this->server = new Server($configuration);

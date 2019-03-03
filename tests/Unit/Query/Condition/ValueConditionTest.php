@@ -37,12 +37,12 @@ class ValueConditionTest extends UnitTestCase
     {
         $condition = new ValueCondition('foo', 'bar', '=');
 
-        $this->assertEquals("foo = 'bar'", $condition->__toString());
-        $this->assertEquals("foo = 'bar'", (string)$condition);
+        $this->assertSame("foo = 'bar'", $condition->__toString());
+        $this->assertSame("foo = 'bar'", (string)$condition);
 
         $condition = new ValueCondition('foo', 5, '>=');
 
-        $this->assertEquals('foo >= 5', $condition->__toString());
-        $this->assertEquals('foo >= 5', (string)$condition);
+        $this->assertSame('foo >= 5', $condition->__toString());
+        $this->assertSame('foo >= 5', (string)$condition);
     }
 }

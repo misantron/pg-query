@@ -47,12 +47,12 @@ class ArrayContainsConditionTest extends UnitTestCase
     {
         $condition = new ArrayContainsCondition('foo', [3, 5, 8]);
 
-        $this->assertEquals('foo @> ARRAY[3,5,8]::INTEGER[]', $condition->__toString());
-        $this->assertEquals('foo @> ARRAY[3,5,8]::INTEGER[]', (string)$condition);
+        $this->assertSame('foo @> ARRAY[3,5,8]::INTEGER[]', $condition->__toString());
+        $this->assertSame('foo @> ARRAY[3,5,8]::INTEGER[]', (string)$condition);
 
         $condition = new ArrayContainsCondition('foo', ['bar', 'baz']);
 
-        $this->assertEquals("foo @> ARRAY['bar','baz']::VARCHAR[]", $condition->__toString());
-        $this->assertEquals("foo @> ARRAY['bar','baz']::VARCHAR[]", (string)$condition);
+        $this->assertSame("foo @> ARRAY['bar','baz']::VARCHAR[]", $condition->__toString());
+        $this->assertSame("foo @> ARRAY['bar','baz']::VARCHAR[]", (string)$condition);
     }
 }

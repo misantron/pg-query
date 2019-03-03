@@ -60,7 +60,7 @@ class UpdateTest extends UnitTestCase
         $query->table('foo.bar');
         $query->set(['col1' => 1]);
 
-        $this->assertEquals('UPDATE foo.bar SET col1 = 1', $query->__toString());
+        $this->assertSame('UPDATE foo.bar SET col1 = 1', $query->__toString());
     }
 
     public function testBuildWithoutSet()
@@ -98,7 +98,7 @@ class UpdateTest extends UnitTestCase
             ->andEquals('col1', 1)
             ->andEquals('col2', 'test');
 
-        $this->assertEquals("UPDATE foo.bar SET foo = 'bar' WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
+        $this->assertSame("UPDATE foo.bar SET foo = 'bar' WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
     }
 
     private function createQuery($server = null): Update

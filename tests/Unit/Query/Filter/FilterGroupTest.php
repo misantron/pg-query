@@ -44,7 +44,7 @@ class FilterGroupTest extends UnitTestCase
         $group->append(Filter::create(new ValueCondition('foo', 5, '<')));
         $group->append(Filter::create(new NullCondition('bar', 'IS NOT'), 'OR'));
 
-        $this->assertEquals('foo < 5 OR bar IS NOT NULL', $group->__toString());
-        $this->assertEquals('foo < 5 OR bar IS NOT NULL', (string)$group);
+        $this->assertSame('foo < 5 OR bar IS NOT NULL', $group->__toString());
+        $this->assertSame('foo < 5 OR bar IS NOT NULL', (string)$group);
     }
 }
