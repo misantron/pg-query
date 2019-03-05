@@ -2,13 +2,13 @@
 
 namespace Misantron\QueryBuilder\Query\Mixin;
 
+use Misantron\QueryBuilder\Assert\Assert;
+
 /**
  * Trait DataFetch.
  *
  *
  * @property \PDOStatement $statement
- *
- * @method assertQueryExecuted()
  */
 trait DataFetching
 {
@@ -19,7 +19,7 @@ trait DataFetching
      */
     public function fetchAllObject(string $className): array
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         return $this->statement->fetchAll(\PDO::FETCH_CLASS, $className);
     }
@@ -31,7 +31,7 @@ trait DataFetching
      */
     public function fetchOneObject(string $className)
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         $response = $this->statement->fetchObject($className);
 
@@ -45,7 +45,7 @@ trait DataFetching
      */
     public function fetchCallback(callable $callback): array
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         return $this->statement->fetchAll(\PDO::FETCH_FUNC, $callback);
     }
@@ -55,7 +55,7 @@ trait DataFetching
      */
     public function fetchAllAssoc(): array
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -65,7 +65,7 @@ trait DataFetching
      */
     public function fetchOneAssoc(): ?array
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         $response = $this->statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -77,7 +77,7 @@ trait DataFetching
      */
     public function fetchKeyValue(): array
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         return $this->statement->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
@@ -87,7 +87,7 @@ trait DataFetching
      */
     public function fetchAllColumn(): array
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         return $this->statement->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -97,7 +97,7 @@ trait DataFetching
      */
     public function fetchColumn()
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         $response = $this->statement->fetchColumn();
 

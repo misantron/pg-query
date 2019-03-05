@@ -19,7 +19,7 @@ use Misantron\QueryBuilder\Server;
  */
 class Insert extends Query implements Selectable
 {
-    use Columns, Returning, Assert;
+    use Columns, Returning;
 
     /**
      * @var array
@@ -59,7 +59,7 @@ class Insert extends Query implements Selectable
      */
     public function values(array $items): Insert
     {
-        $this->assertValuesNotEmpty($items);
+        Assert::valuesNotEmpty($items);
 
         if ($items === array_values($items)) {
             // extract column names from the first element of data rows
@@ -83,7 +83,7 @@ class Insert extends Query implements Selectable
      */
     public function onConflict(ConflictTarget $target, ?Update $action = null): Insert
     {
-        $this->assertFeatureAvailable('9.5');
+        Assert::featureAvailable($this->server, '9.5');
 
         $this->conflictTarget = $target;
         $this->conflictAction = $action;
@@ -109,8 +109,8 @@ class Insert extends Query implements Selectable
      */
     public function getInsertedRow(): array
     {
-        $this->assertReturningSet();
-        $this->assertQueryExecuted();
+        Assert::returningConditionSet($this->returning);
+        Assert::queryExecuted($this->statement);
 
         return $this->statement->fetch(\PDO::FETCH_ASSOC);
     }
@@ -120,8 +120,8 @@ class Insert extends Query implements Selectable
      */
     public function getInsertedRows(): array
     {
-        $this->assertReturningSet();
-        $this->assertQueryExecuted();
+        Assert::returningConditionSet($this->returning);
+        Assert::queryExecuted($this->statement);
 
         return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -131,7 +131,7 @@ class Insert extends Query implements Selectable
      */
     public function __toString(): string
     {
-        $this->assertColumnsNotEmpty($this->columns);
+        Assert::columnsNotEmpty($this->columns);
 
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
@@ -151,7 +151,7 @@ class Insert extends Query implements Selectable
      */
     private function buildValues(): string
     {
-        $this->assertValuesNotEmpty($this->values);
+        Assert::valuesNotEmpty($this->values);
 
         $values = [];
         foreach ($this->values as $row) {

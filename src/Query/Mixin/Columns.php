@@ -2,12 +2,13 @@
 
 namespace Misantron\QueryBuilder\Query\Mixin;
 
+use Misantron\QueryBuilder\Assert\Assert;
+
 /**
  * Trait Columns.
  *
  *
  * @method array parseList($items)
- * @method       assertColumnsNotEmpty($items)
  */
 trait Columns
 {
@@ -23,7 +24,7 @@ trait Columns
      */
     public function columns($items)
     {
-        $this->assertColumnsNotEmpty($items);
+        Assert::columnsNotEmpty($items);
 
         $this->columns = $this->parseList($items);
 

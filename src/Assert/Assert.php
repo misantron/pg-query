@@ -5,20 +5,20 @@ namespace Misantron\QueryBuilder\Assert;
 use Misantron\QueryBuilder\Server;
 
 /**
- * Trait Assert.
+ * Class Assert.
  *
  *
  * @property Server        $server
  * @property \PDOStatement $statement
  */
-trait Assert
+class Assert
 {
     /**
      * @param array $items
      *
      * @throws \InvalidArgumentException
      */
-    protected function assertValuesNotEmpty($items)
+    public static function valuesNotEmpty($items)
     {
         if (empty($items)) {
             throw new \InvalidArgumentException('Value list is empty');
@@ -30,7 +30,7 @@ trait Assert
      *
      * @throws \InvalidArgumentException
      */
-    protected function assertColumnsNotEmpty($items)
+    public static function columnsNotEmpty($items)
     {
         if (empty($items)) {
             throw new \InvalidArgumentException('Column list is empty');
@@ -38,23 +38,36 @@ trait Assert
     }
 
     /**
+     * @param \PDOStatement $statement
+     *
      * @throws \RuntimeException
      */
-    protected function assertQueryExecuted()
+    public static function queryExecuted($statement)
     {
-        if (!$this->statement instanceof \PDOStatement) {
+        if (!$statement instanceof \PDOStatement) {
             throw new \RuntimeException('Data fetch error: query must be executed before fetch data');
         }
     }
 
     /**
+     * @param array $returning
+     */
+    public static function returningConditionSet(array $returning)
+    {
+        if (empty($returning)) {
+            throw new \RuntimeException('Data fetch error: returning fields must be set');
+        }
+    }
+
+    /**
+     * @param Server $server
      * @param string $version
      *
      * @throws \RuntimeException
      */
-    protected function assertFeatureAvailable(string $version)
+    public static function featureAvailable(Server $server, string $version)
     {
-        if ($this->server->getVersion() && version_compare($this->server->getVersion(), $version, '<')) {
+        if ($server->getVersion() && version_compare($server->getVersion(), $version, '<')) {
             throw new \RuntimeException("Available since {$version} version");
         }
     }

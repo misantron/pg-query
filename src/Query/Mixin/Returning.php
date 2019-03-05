@@ -2,12 +2,13 @@
 
 namespace Misantron\QueryBuilder\Query\Mixin;
 
+use Misantron\QueryBuilder\Assert\Assert;
+
 /**
  * Trait Returning.
  *
  *
  * @method array parseList($items)
- * @method       assertColumnsNotEmpty($items)
  */
 trait Returning
 {
@@ -18,21 +19,11 @@ trait Returning
 
     public function returning($items)
     {
-        $this->assertColumnsNotEmpty($items);
+        Assert::columnsNotEmpty($items);
 
         $this->returning = $this->parseList($items);
 
         return $this;
-    }
-
-    /**
-     * @throws \RuntimeException
-     */
-    private function assertReturningSet()
-    {
-        if (empty($this->returning)) {
-            throw new \RuntimeException('Data fetch error: returning fields must be set');
-        }
     }
 
     /**

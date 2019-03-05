@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query;
 
+use Misantron\QueryBuilder\Assert\Assert;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Columns;
 use Misantron\QueryBuilder\Query\Mixin\DataFetching;
@@ -297,7 +298,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     public function rowsCount(): int
     {
-        $this->assertQueryExecuted();
+        Assert::queryExecuted($this->statement);
 
         return $this->statement->rowCount();
     }

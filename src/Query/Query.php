@@ -2,7 +2,6 @@
 
 namespace Misantron\QueryBuilder\Query;
 
-use Misantron\QueryBuilder\Assert\Assert;
 use Misantron\QueryBuilder\Expression\Field;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Server;
@@ -13,7 +12,7 @@ use Misantron\QueryBuilder\Stringable;
  */
 abstract class Query implements Stringable
 {
-    use Escape, Assert;
+    use Escape;
 
     /**
      * @var Server
