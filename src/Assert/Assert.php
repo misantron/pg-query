@@ -6,10 +6,6 @@ use Misantron\QueryBuilder\Server;
 
 /**
  * Class Assert.
- *
- *
- * @property Server        $server
- * @property \PDOStatement $statement
  */
 class Assert
 {
@@ -38,7 +34,7 @@ class Assert
     }
 
     /**
-     * @param \PDOStatement $statement
+     * @param \PDOStatement|bool $statement
      *
      * @throws \RuntimeException
      */
