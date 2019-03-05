@@ -27,17 +27,17 @@ class Insert extends Query implements Selectable
     private $values;
 
     /**
-     * @var ConflictTarget
+     * @var ConflictTarget|null
      */
     private $conflictTarget;
 
     /**
-     * @var Update
+     * @var Update|null
      */
     private $conflictAction;
 
     /**
-     * @var Select
+     * @var Select|null
      */
     private $rowSet;
 

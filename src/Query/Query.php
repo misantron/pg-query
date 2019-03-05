@@ -58,7 +58,9 @@ abstract class Query implements Stringable
         $query = $this->__toString();
 
         $this->statement = $this->server->pdo()->prepare($query);
-        $this->statement->execute();
+        if ($this->statement instanceof \PDOStatement) {
+            $this->statement->execute();
+        }
 
         return $this;
     }

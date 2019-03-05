@@ -8,14 +8,14 @@ namespace Misantron\QueryBuilder\Query\Condition;
 class InArrayCondition extends Condition
 {
     /**
-     * @var string|int|float|bool
+     * @var mixed
      */
     private $value;
 
     /**
-     * @param string                $column
-     * @param string|int|float|bool $value
-     * @param string                $operator
+     * @param string $column
+     * @param mixed  $value
+     * @param string $operator
      */
     public function __construct(string $column, $value, string $operator)
     {
@@ -29,9 +29,9 @@ class InArrayCondition extends Condition
     }
 
     /**
-     * @param string                $column
-     * @param string|int|float|bool $value
-     * @param string                $operator
+     * @param string $column
+     * @param mixed  $value
+     * @param string $operator
      *
      * @return InArrayCondition
      */

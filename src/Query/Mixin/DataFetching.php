@@ -63,7 +63,7 @@ trait DataFetching
     /**
      * @return array|null
      */
-    public function fetchOneAssoc()
+    public function fetchOneAssoc(): ?array
     {
         $this->assertQueryExecuted();
 
