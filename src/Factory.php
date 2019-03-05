@@ -8,49 +8,46 @@ namespace Misantron\QueryBuilder;
 class Factory
 {
     /**
-     * @var \PDO
+     * @var Server
      */
-    private $pdo;
+    private $server;
 
     /**
-     * @param \PDO $pdo
+     * @param Server $server
      */
-    private function __construct(\PDO $pdo)
+    private function __construct(Server $server)
     {
-        $this->setPDO($pdo);
+        $this->server = $server;
     }
 
     /**
-     * @param \PDO $pdo
+     * @param Server $server
      *
      * @return Factory
      */
-    public static function create(\PDO $pdo): Factory
+    public static function create(Server $server): Factory
     {
-        return new static($pdo);
+        return new static($server);
     }
 
     /**
-     * @param \PDO $pdo
+     * @param Server $server
      *
      * @return Factory
      */
-    public function setPDO(\PDO $pdo): Factory
+    public function setServer(Server $server): Factory
     {
-        $this->pdo = $pdo;
-
-        $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->server = $server;
 
         return $this;
     }
 
     /**
-     * @return \PDO
+     * @return Server
      */
-    public function getPDO(): \PDO
+    public function getServer(): Server
     {
-        return $this->pdo;
+        return $this->server;
     }
 
     /**
@@ -60,17 +57,15 @@ class Factory
      */
     public function select(string $table): Query\Select
     {
-        return new Query\Select($this->pdo, $table);
+        return new Query\Select($this->server, $table);
     }
 
     /**
-     * @param string|null $table
-     *
      * @return Query\Update
      */
-    public function update(?string $table = null): Query\Update
+    public function update(): Query\Update
     {
-        return new Query\Update($this->pdo, $table);
+        return new Query\Update($this->server);
     }
 
     /**
@@ -80,7 +75,7 @@ class Factory
      */
     public function delete(string $table): Query\Delete
     {
-        return new Query\Delete($this->pdo, $table);
+        return new Query\Delete($this->server, $table);
     }
 
     /**
@@ -90,6 +85,6 @@ class Factory
      */
     public function insert(string $table): Query\Insert
     {
-        return new Query\Insert($this->pdo, $table);
+        return new Query\Insert($this->server, $table);
     }
 }

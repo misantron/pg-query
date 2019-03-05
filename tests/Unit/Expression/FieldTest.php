@@ -7,21 +7,19 @@ use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class FieldTest extends UnitTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid identifier: invalid characters supplied
-     */
     public function testConstructorWithAliasWithInvalidChars()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid identifier: invalid characters supplied');
+
         Field::create('SUM(field)', '$f');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid identifier: must begin with a letter or underscore
-     */
     public function testConstructorWithAliasBeginsFromInvalidChar()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid identifier: must begin with a letter or underscore');
+
         Field::create('SUM(field)', '5f');
     }
 
@@ -41,9 +39,9 @@ class FieldTest extends UnitTestCase
     public function testBuild()
     {
         $field = Field::create('SUM(field)');
-        $this->assertEquals('SUM(field)', $field->__toString());
+        $this->assertSame('SUM(field)', $field->__toString());
 
         $field = Field::create('SUM(field)', 'total');
-        $this->assertEquals('SUM(field) AS total', $field->__toString());
+        $this->assertSame('SUM(field) AS total', $field->__toString());
     }
 }

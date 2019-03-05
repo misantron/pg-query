@@ -3,42 +3,50 @@
 namespace Misantron\QueryBuilder\Tests\Integration;
 
 use Misantron\QueryBuilder\Factory;
+use Misantron\QueryBuilder\Server;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class IntegrationTestCase
- * @package Misantron\QueryBuilder\Tests\Integration
+ * Class IntegrationTestCase.
  */
 abstract class IntegrationTestCase extends TestCase
 {
     /**
-     * @var \PDO
+     * @var Server
      */
-    private $pdo;
+    private $server;
 
     /**
      * @var Factory
      */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->pdo = new \PDO(
-            'pgsql:host=localhost;port=5432;dbname=test', 'postgres', '1',
+        $this->server = new Server(
+            [
+                'host' => 'localhost',
+                'port' => '5432',
+                'dbname' => 'test',
+                'user' => 'postgres',
+                'password' => '1',
+            ],
             [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_EMULATE_PREPARES => false,
-            ]
+            ],
+            '9.5'
         );
-        $this->factory = Factory::create($this->pdo);
+
+        $this->factory = Factory::create($this->server);
     }
 
     /**
-     * @return \PDO
+     * @return Server
      */
-    protected function getConnection(): \PDO
+    protected function getServer(): Server
     {
-        return $this->pdo;
+        return $this->server;
     }
 
     /**

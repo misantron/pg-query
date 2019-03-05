@@ -19,7 +19,7 @@ class InsertTest extends IntegrationTestCase
                 'category_id' => 12,
                 'quantity' => 145,
                 'taxable' => false,
-                'tag_ids' => [5,8],
+                'tag_ids' => [5, 8],
                 'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
             ])
             ->returning([
@@ -49,7 +49,7 @@ class InsertTest extends IntegrationTestCase
                     'category_id' => 12,
                     'quantity' => 145,
                     'taxable' => false,
-                    'tag_ids' => [5,8],
+                    'tag_ids' => [5, 8],
                     'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
                 ],
                 [
@@ -60,9 +60,9 @@ class InsertTest extends IntegrationTestCase
                     'category_id' => 12,
                     'quantity' => 180,
                     'taxable' => false,
-                    'tag_ids' => [5,6],
+                    'tag_ids' => [5, 6],
                     'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
-                ]
+                ],
             ])
             ->returning([
                 'sku',
@@ -84,12 +84,12 @@ class InsertTest extends IntegrationTestCase
             ->values([
                 [
                     'name' => 'Green',
-                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s')
+                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
                 ],
                 [
                     'name' => 'Red',
-                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s')
-                ]
+                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+                ],
             ])
             ->execute();
 
@@ -101,7 +101,7 @@ class InsertTest extends IntegrationTestCase
             ->insert('foo.tags')
             ->fromRows($select)
             ->returning([
-                'name', 'inserted_at'
+                'name', 'inserted_at',
             ])
             ->execute()
             ->getInsertedRows();

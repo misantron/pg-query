@@ -4,6 +4,7 @@ namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Update;
+use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class UpdateTest extends UnitTestCase
@@ -12,18 +13,17 @@ class UpdateTest extends UnitTestCase
     {
         $query = $this->createQuery();
 
-        $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
+        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
         $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
-        $this->assertAttributeEquals('foo.bar', 'table', $query);
-        $this->assertAttributeEquals([], 'set', $query);
+        $this->assertAttributeSame(null, 'table', $query);
+        $this->assertAttributeSame([], 'set', $query);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Value list is empty
-     */
     public function testSetWithEmptyData()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value list is empty');
+
         $query = $this->createQuery();
         $query->set([]);
     }
@@ -37,10 +37,18 @@ class UpdateTest extends UnitTestCase
             ->withConsecutive(['test', \PDO::PARAM_STR])
             ->willReturnOnConsecutiveCalls("'test'");
 
-        $query = $this->createQuery($pdo);
+        $server = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $server
+            ->method('pdo')
+            ->willReturn($pdo);
+
+        $query = $this->createQuery($server);
         $query->set($set = [
             'foo' => 1,
-            'bar' => 'test'
+            'bar' => 'test',
         ]);
 
         $this->assertAttributeEquals(['foo' => 1, 'bar' => "'test'"], 'set', $query);
@@ -49,17 +57,17 @@ class UpdateTest extends UnitTestCase
     public function testBuildWithoutConditions()
     {
         $query = $this->createQuery();
+        $query->table('foo.bar');
         $query->set(['col1' => 1]);
 
-        $this->assertEquals('UPDATE foo.bar SET col1 = 1', $query->__toString());
+        $this->assertSame('UPDATE foo.bar SET col1 = 1', $query->__toString());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Query set is empty
-     */
     public function testBuildWithoutSet()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Query set is empty');
+
         $query = $this->createQuery();
         $query->andEquals('col1', 1);
 
@@ -75,20 +83,28 @@ class UpdateTest extends UnitTestCase
             ->withConsecutive(['bar', \PDO::PARAM_STR], ['test', \PDO::PARAM_STR])
             ->willReturnOnConsecutiveCalls("'bar'", "'test'");
 
-        $query = $this->createQuery($pdo);
+        $server = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $server
+            ->method('pdo')
+            ->willReturn($pdo);
+
+        $query = $this->createQuery($server);
         $query
+            ->table('foo.bar')
             ->set(['foo' => 'bar'])
             ->andEquals('col1', 1)
             ->andEquals('col2', 'test');
 
-        $this->assertEquals("UPDATE foo.bar SET foo = 'bar' WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
+        $this->assertSame("UPDATE foo.bar SET foo = 'bar' WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
     }
 
-    private function createQuery($pdo = null)
+    private function createQuery($server = null): Update
     {
-        $pdo = $pdo ?? $this->createPDOMock();
-        $table = 'foo.bar';
+        $server = $server ?? $this->createServerMock();
 
-        return new Update($pdo, $table);
+        return new Update($server);
     }
 }

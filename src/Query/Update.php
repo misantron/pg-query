@@ -6,9 +6,13 @@ use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
 use Misantron\QueryBuilder\Query\Mixin\Returning;
+use Misantron\QueryBuilder\Server;
 
 /**
  * Class Update.
+ *
+ *
+ * @method Update table(string $name)
  */
 class Update extends Query implements Filterable
 {
@@ -20,12 +24,11 @@ class Update extends Query implements Filterable
     private $set = [];
 
     /**
-     * @param \PDO        $pdo
-     * @param string|null $table
+     * @param Server $server
      */
-    public function __construct(\PDO $pdo, ?string $table = null)
+    public function __construct(Server $server)
     {
-        parent::__construct($pdo, $table);
+        parent::__construct($server);
 
         $this->filters = new FilterGroup();
     }
@@ -37,9 +40,7 @@ class Update extends Query implements Filterable
      */
     public function set(array $data): Update
     {
-        if (empty($data)) {
-            throw new \InvalidArgumentException('Value list is empty');
-        }
+        $this->assertValuesNotEmpty($data);
 
         foreach ($data as $field => $value) {
             $this->set[$this->escapeIdentifier($field)] = $this->escapeValue($value);

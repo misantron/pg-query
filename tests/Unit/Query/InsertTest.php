@@ -7,7 +7,9 @@ use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query\Insert;
 use Misantron\QueryBuilder\Query\Select;
 use Misantron\QueryBuilder\Query\Update;
+use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class InsertTest extends UnitTestCase
 {
@@ -15,12 +17,12 @@ class InsertTest extends UnitTestCase
     {
         $query = $this->createQuery();
 
-        $this->assertAttributeInstanceOf(\PDO::class, 'pdo', $query);
-        $this->assertAttributeEquals('foo.bar', 'table', $query);
+        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
+        $this->assertAttributeSame('foo.bar', 'table', $query);
 
-        $this->assertAttributeEquals([], 'columns', $query);
-        $this->assertAttributeEquals(null, 'values', $query);
-        $this->assertAttributeEquals(null, 'rowSet', $query);
+        $this->assertAttributeSame([], 'columns', $query);
+        $this->assertAttributeSame(null, 'values', $query);
+        $this->assertAttributeSame(null, 'rowSet', $query);
     }
 
     public function testColumnsWithEmptyList()
@@ -39,12 +41,12 @@ class InsertTest extends UnitTestCase
         $columnsList = ['foo', 'bar'];
         $query->columns($columnsList);
 
-        $this->assertAttributeEquals($columnsList, 'columns', $query);
+        $this->assertAttributeSame($columnsList, 'columns', $query);
 
         $columns = 'foo ,  bar ';
         $query->columns($columns);
 
-        $this->assertAttributeEquals($columnsList, 'columns', $query);
+        $this->assertAttributeSame($columnsList, 'columns', $query);
     }
 
     public function testValuesWithEmptyList()
@@ -63,8 +65,8 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertAttributeEquals(['foo', 'bar'], 'columns', $query);
-        $this->assertAttributeEquals([[1, 2]], 'values', $query);
+        $this->assertAttributeSame(['foo', 'bar'], 'columns', $query);
+        $this->assertAttributeSame([[1, 2]], 'values', $query);
     }
 
     public function testValuesWithMultipleRows()
@@ -77,8 +79,8 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertAttributeEquals(['foo', 'bar'], 'columns', $query);
-        $this->assertAttributeEquals([[1, 2], [3, 4]], 'values', $query);
+        $this->assertAttributeSame(['foo', 'bar'], 'columns', $query);
+        $this->assertAttributeSame([[1, 2], [3, 4]], 'values', $query);
     }
 
     public function testOnConflictWithoutAction()
@@ -95,8 +97,9 @@ class InsertTest extends UnitTestCase
     public function testOnConflictWithTargetAndAction()
     {
         $target = ConflictTarget::fromConstraint('foo_unique');
-        $factory = Factory::create($this->createPDOMock());
+        $factory = Factory::create($this->createServerMock());
 
+        /** @var Update $action */
         $action = $factory
             ->update()
             ->set(['foo' => 'bar'])
@@ -111,10 +114,10 @@ class InsertTest extends UnitTestCase
 
     public function testFromRows()
     {
-        $pdo = $this->createPDOMock();
+        $server = $this->createServerMock();
         $table = 'foo.test';
 
-        $selectQuery = new Select($pdo, $table);
+        $selectQuery = new Select($server, $table);
 
         $query = $this->createQuery();
         $query->fromRows($selectQuery);
@@ -147,20 +150,21 @@ class InsertTest extends UnitTestCase
             ['foo' => 1, 'bar' => 'test1'],
             ['foo' => 3, 'bar' => false],
             ['foo' => 4, 'bar' => null],
-            ['foo' => 5, 'bar' => [5,8]],
+            ['foo' => 5, 'bar' => [5, 8]],
         ];
 
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertEquals("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])", $query->__toString());
+        $this->assertSame("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])", $query->__toString());
     }
 
     public function testBuildWithOnConflict()
     {
         $target = ConflictTarget::fromConstraint('pk_unique');
-        $factory = Factory::create($this->createPDOMock());
+        $factory = Factory::create($this->createServerMock());
 
+        /** @var Update $action */
         $action = $factory
             ->update()
             ->set(['foo' => 'bar'])
@@ -176,22 +180,23 @@ class InsertTest extends UnitTestCase
 
     public function testBuildWithRowSet()
     {
-        $pdo = $this->createPDOMock();
+        $server = $this->createServerMock();
         $columns = ['foo', 'bar'];
 
-        $rowSetQuery = Factory::create($pdo)->select('foo.bar');
+        $rowSetQuery = Factory::create($server)
+            ->select('foo.bar');
 
         $rowSetQuery
             ->columns($columns)
             ->range(0, 50)
             ->andEquals('test', 1);
 
-        $query = new Insert($pdo, 'bar.foo');
+        $query = new Insert($server, 'bar.foo');
         $query
             ->columns($columns)
             ->fromRows($rowSetQuery);
 
-        $this->assertEquals('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->__toString());
+        $this->assertSame('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->__toString());
     }
 
     public function testToString()
@@ -199,7 +204,7 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values(['foo' => 1]);
 
-        $this->assertEquals((string)$query, $query->__toString());
+        $this->assertSame((string)$query, $query->__toString());
     }
 
     public function testGetInsertedRowWithoutReturningSet()
@@ -244,7 +249,7 @@ class InsertTest extends UnitTestCase
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn([
                 'id' => 1,
-                'foo' => 'bar'
+                'foo' => 'bar',
             ]);
 
         $pdo
@@ -253,19 +258,28 @@ class InsertTest extends UnitTestCase
             ->with("INSERT INTO foo.bar (foo) VALUES ('bar') RETURNING foo")
             ->willReturn($statement);
 
-        $query = new Insert($pdo, 'foo.bar');
+        /** @var MockObject|Server $server */
+        $server = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $server
+            ->method('pdo')
+            ->willReturn($pdo);
+
+        $query = new Insert($server, 'foo.bar');
 
         $inserted = $query
             ->values([
-                'foo' => 'bar'
+                'foo' => 'bar',
             ])
             ->returning('foo')
             ->execute()
             ->getInsertedRow();
 
-        $this->assertEquals([
+        $this->assertSame([
             'id' => 1,
-            'foo' => 'bar'
+            'foo' => 'bar',
         ], $inserted);
     }
 
@@ -318,12 +332,12 @@ class InsertTest extends UnitTestCase
             ->willReturn([
                 [
                     'id' => 1,
-                    'foo' => 'bar'
+                    'foo' => 'bar',
                 ],
                 [
                     'id' => 2,
-                    'foo' => 'baz'
-                ]
+                    'foo' => 'baz',
+                ],
             ]);
 
         $pdo
@@ -332,7 +346,16 @@ class InsertTest extends UnitTestCase
             ->with("INSERT INTO foo.bar (foo) VALUES ('bar'),('baz') RETURNING id")
             ->willReturn($statement);
 
-        $query = new Insert($pdo, 'foo.bar');
+        /** @var MockObject|Server $server */
+        $server = $this->getMockBuilder(Server::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $server
+            ->method('pdo')
+            ->willReturn($pdo);
+
+        $query = new Insert($server, 'foo.bar');
 
         $inserted = $query
             ->values([
@@ -343,23 +366,23 @@ class InsertTest extends UnitTestCase
             ->execute()
             ->getInsertedRows();
 
-        $this->assertEquals([
+        $this->assertSame([
             [
                 'id' => 1,
-                'foo' => 'bar'
+                'foo' => 'bar',
             ],
             [
                 'id' => 2,
-                'foo' => 'baz'
-            ]
+                'foo' => 'baz',
+            ],
         ], $inserted);
     }
 
-    private function createQuery()
+    private function createQuery(): Insert
     {
-        $pdo = $this->createPDOMock();
+        $server = $this->createServerMock();
         $table = 'foo.bar';
 
-        return new Insert($pdo, $table);
+        return new Insert($server, $table);
     }
 }

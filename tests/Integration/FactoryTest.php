@@ -27,7 +27,7 @@ class FactoryTest extends IntegrationTestCase
     {
         $factory = $this->createFactory();
 
-        $query = $factory->update('foo.bar');
+        $query = $factory->update();
         $this->assertInstanceOf(Query\Update::class, $query);
     }
 
@@ -44,6 +44,6 @@ class FactoryTest extends IntegrationTestCase
      */
     private function createFactory(): Factory
     {
-        return Factory::create($this->getConnection());
+        return Factory::create($this->getServer());
     }
 }

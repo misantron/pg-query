@@ -2,10 +2,12 @@
 
 namespace Misantron\QueryBuilder\Query;
 
+use Misantron\QueryBuilder\Assert\Assert;
 use Misantron\QueryBuilder\Expression\ConflictTarget;
 use Misantron\QueryBuilder\Query\Mixin\Columns;
 use Misantron\QueryBuilder\Query\Mixin\Returning;
 use Misantron\QueryBuilder\Query\Mixin\Selectable;
+use Misantron\QueryBuilder\Server;
 
 /**
  * Class Insert.
@@ -17,7 +19,7 @@ use Misantron\QueryBuilder\Query\Mixin\Selectable;
  */
 class Insert extends Query implements Selectable
 {
-    use Columns, Returning;
+    use Columns, Returning, Assert;
 
     /**
      * @var array
@@ -38,6 +40,17 @@ class Insert extends Query implements Selectable
      * @var Select
      */
     private $rowSet;
+
+    /**
+     * @param Server $server
+     * @param string $table
+     */
+    public function __construct(Server $server, string $table)
+    {
+        parent::__construct($server);
+
+        $this->table($table);
+    }
 
     /**
      * @param array $items
@@ -70,6 +83,8 @@ class Insert extends Query implements Selectable
      */
     public function onConflict(ConflictTarget $target, ?Update $action = null): Insert
     {
+        $this->assertFeatureAvailable('9.5');
+
         $this->conflictTarget = $target;
         $this->conflictAction = $action;
 
@@ -139,15 +154,13 @@ class Insert extends Query implements Selectable
         $this->assertValuesNotEmpty($this->values);
 
         $values = [];
-        foreach ($this->values as $k => $row) {
-            foreach ($row as $i => $value) {
-                $values[$k][$i] = $this->escapeValue($value);
-            }
-        }
+        foreach ($this->values as $row) {
+            $escaped = array_map(function ($value) {
+                return $this->escapeValue($value);
+            }, $row);
 
-        $values = array_map(function (array $row) {
-            return '(' . implode(',', $row) . ')';
-        }, $values);
+            $values[] = '(' . implode(',', $escaped) . ')';
+        }
 
         return ' VALUES ' . implode(',', $values);
     }

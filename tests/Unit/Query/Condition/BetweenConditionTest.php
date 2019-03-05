@@ -10,12 +10,11 @@ class BetweenConditionTest extends UnitTestCase
 {
     use Escape;
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid value: array must contains two elements - begin and end of period
-     */
     public function testConstructorWithInvalidPeriod()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid value: array must contains two elements - begin and end of period');
+
         new BetweenCondition('foo', [(new \DateTime())->format('Y-m-d H:i:s')]);
     }
 
@@ -64,7 +63,7 @@ class BetweenConditionTest extends UnitTestCase
 
         list($begin, $end) = $values;
 
-        $this->assertEquals(sprintf("foo BETWEEN '%s' AND '%s'", $begin, $end), $condition->__toString());
-        $this->assertEquals(sprintf("foo BETWEEN '%s' AND '%s'", $begin, $end), (string)$condition);
+        $this->assertSame(sprintf("foo BETWEEN '%s' AND '%s'", $begin, $end), $condition->__toString());
+        $this->assertSame(sprintf("foo BETWEEN '%s' AND '%s'", $begin, $end), (string)$condition);
     }
 }

@@ -54,12 +54,12 @@ class InArrayConditionTest extends UnitTestCase
     {
         $condition = new InArrayCondition('foo', 5, '=');
 
-        $this->assertEquals("5 = ANY(foo)", $condition->__toString());
-        $this->assertEquals("5 = ANY(foo)", (string)$condition);
+        $this->assertSame('5 = ANY(foo)', $condition->__toString());
+        $this->assertSame('5 = ANY(foo)', (string)$condition);
 
         $condition = new InArrayCondition('foo', 'bar', '!=');
 
-        $this->assertEquals("'bar' != ANY(foo)", $condition->__toString());
-        $this->assertEquals("'bar' != ANY(foo)", (string)$condition);
+        $this->assertSame("'bar' != ANY(foo)", $condition->__toString());
+        $this->assertSame("'bar' != ANY(foo)", (string)$condition);
     }
 }

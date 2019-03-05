@@ -5,6 +5,7 @@ namespace Misantron\QueryBuilder\Query;
 use Misantron\QueryBuilder\Assert\Assert;
 use Misantron\QueryBuilder\Expression\Field;
 use Misantron\QueryBuilder\Helper\Escape;
+use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Stringable;
 
 /**
@@ -15,9 +16,9 @@ abstract class Query implements Stringable
     use Escape, Assert;
 
     /**
-     * @var \PDO
+     * @var Server
      */
-    private $pdo;
+    protected $server;
 
     /**
      * @var \PDOStatement
@@ -30,14 +31,11 @@ abstract class Query implements Stringable
     protected $table;
 
     /**
-     * @param \PDO        $pdo
-     * @param string|null $table
+     * @param Server $server
      */
-    public function __construct(\PDO $pdo, ?string $table = null)
+    public function __construct(Server $server)
     {
-        $this->pdo = $pdo;
-
-        $table !== null && $this->table = $this->escapeIdentifier($table);
+        $this->server = $server;
     }
 
     /**
@@ -59,7 +57,7 @@ abstract class Query implements Stringable
     {
         $query = $this->__toString();
 
-        $this->statement = $this->pdo->prepare($query);
+        $this->statement = $this->server->pdo()->prepare($query);
         $this->statement->execute();
 
         return $this;
