@@ -62,7 +62,7 @@ class Server
      */
     public function __construct(array $credentials, array $options = [], ?string $version = null)
     {
-        $default = static::$defaultCredentials;
+        $default = self::$defaultCredentials;
 
         $this->credentials = array_filter(array_replace($default, array_intersect_key($credentials, $default)));
 
