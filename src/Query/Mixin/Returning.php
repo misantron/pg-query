@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query\Mixin;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 
 /**
  * Trait Returning.
@@ -17,9 +17,14 @@ trait Returning
      */
     private $returning = [];
 
+    /**
+     * @param $items
+     *
+     * @return $this
+     */
     public function returning($items)
     {
-        Assert::columnsNotEmpty($items);
+        QueryAssert::columnsNotEmpty($items);
 
         $this->returning = $this->parseList($items);
 

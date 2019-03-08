@@ -2,6 +2,8 @@
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
+use Misantron\QueryBuilder\Assert\QueryAssert;
+
 /**
  * Class ArrayContainsCondition.
  */
@@ -20,9 +22,7 @@ class ArrayContainsCondition extends Condition
     {
         parent::__construct($column);
 
-        if (empty($values)) {
-            throw new \InvalidArgumentException('Invalid condition value: value list is empty');
-        }
+        QueryAssert::valuesNotEmpty($values);
 
         $this->values = $this->escapeArray($values);
     }

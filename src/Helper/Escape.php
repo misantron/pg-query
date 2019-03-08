@@ -2,6 +2,9 @@
 
 namespace Misantron\QueryBuilder\Helper;
 
+use Misantron\QueryBuilder\Assert\QueryAssert;
+use Misantron\QueryBuilder\Exception\IdentifierException;
+
 /**
  * Trait Escape.
  */
@@ -11,16 +14,18 @@ trait Escape
      * @param string $value
      *
      * @return string
+     *
+     * @throws IdentifierException
      */
     protected function escapeIdentifier(string $value): string
     {
         $str = preg_replace('/[^\.0-9a-z_]/i', '', $value);
         if ($str !== trim($value)) {
-            throw new \InvalidArgumentException('Invalid identifier: invalid characters supplied');
+            throw IdentifierException::supplyInvalidChar();
         }
 
         if (preg_match('/^[0-9]/', $str)) {
-            throw new \InvalidArgumentException('Invalid identifier: must begin with a letter or underscore');
+            throw IdentifierException::beginFromInvalidChar();
         }
 
         return $str;
@@ -82,9 +87,9 @@ trait Escape
     {
         $type = $this->isIntegerArray($items) ? 'integer' : 'string';
         $filtered = array_unique(array_filter($items));
-        if (empty($filtered)) {
-            throw new \InvalidArgumentException('Invalid values: value list is empty');
-        }
+
+        QueryAssert::valuesNotEmpty($filtered);
+
         if ($type === 'string') {
             $filtered = array_map(function (string $item) {
                 return $this->quote($item);

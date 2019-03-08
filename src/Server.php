@@ -2,28 +2,13 @@
 
 namespace Misantron\QueryBuilder;
 
+use Misantron\QueryBuilder\Assert\ServerAssert;
+
 /**
  * Class Server.
  */
 class Server
 {
-    private const AVAILABLE_OPTIONS = [
-        \PDO::ATTR_AUTOCOMMIT,
-        \PDO::ATTR_TIMEOUT,
-        \PDO::ATTR_ERRMODE,
-        \PDO::ATTR_CASE,
-        \PDO::ATTR_CURSOR_NAME,
-        \PDO::ATTR_CURSOR,
-        \PDO::ATTR_PERSISTENT,
-        \PDO::ATTR_STATEMENT_CLASS,
-        \PDO::ATTR_FETCH_TABLE_NAMES,
-        \PDO::ATTR_FETCH_CATALOG_NAMES,
-        \PDO::ATTR_STRINGIFY_FETCHES,
-        \PDO::ATTR_MAX_COLUMN_LEN,
-        \PDO::ATTR_EMULATE_PREPARES,
-        \PDO::ATTR_DEFAULT_FETCH_MODE,
-    ];
-
     /**
      * @var \PDO
      */
@@ -82,9 +67,8 @@ class Server
      */
     public function setOption(int $key, $value): Server
     {
-        if (!in_array($key, self::AVAILABLE_OPTIONS)) {
-            throw new \InvalidArgumentException('Unknown connection option provided');
-        }
+        ServerAssert::validConnectionOption($key);
+
         $this->options[$key] = $value;
 
         return $this;

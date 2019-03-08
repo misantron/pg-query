@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query\Filter;
 
+use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Stringable;
 
 /**
@@ -9,8 +10,6 @@ use Misantron\QueryBuilder\Stringable;
  */
 class Filter
 {
-    const CONJUNCTIONS = ['AND', 'OR', ''];
-
     /**
      * @var string
      */
@@ -33,9 +32,7 @@ class Filter
      */
     private function __construct(string $condition, string $conjunction, bool $group)
     {
-        if (!in_array($conjunction, self::CONJUNCTIONS)) {
-            throw new \InvalidArgumentException('Invalid condition conjunction: unexpected value');
-        }
+        QueryAssert::validConjunctionOperator($conjunction);
 
         $this->condition = $condition;
         $this->conjunction = $conjunction;

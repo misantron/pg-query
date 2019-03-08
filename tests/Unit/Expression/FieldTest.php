@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Expression;
 
+use Misantron\QueryBuilder\Exception\IdentifierException;
 use Misantron\QueryBuilder\Expression\Field;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
@@ -9,16 +10,16 @@ class FieldTest extends UnitTestCase
 {
     public function testConstructorWithAliasWithInvalidChars()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid identifier: invalid characters supplied');
+        $this->expectException(IdentifierException::class);
+        $this->expectExceptionMessage('Identifier supplied invalid characters');
 
         Field::create('SUM(field)', '$f');
     }
 
     public function testConstructorWithAliasBeginsFromInvalidChar()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid identifier: must begin with a letter or underscore');
+        $this->expectException(IdentifierException::class);
+        $this->expectExceptionMessage('Identifier must begin with a letter or underscore');
 
         Field::create('SUM(field)', '5f');
     }

@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Filter;
 
+use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Query\Condition\InCondition;
 use Misantron\QueryBuilder\Query\Condition\NullCondition;
 use Misantron\QueryBuilder\Query\Condition\ValueCondition;
@@ -12,8 +13,8 @@ class FilterTest extends UnitTestCase
 {
     public function testCreateWithInvalidConjunction()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid condition conjunction: unexpected value');
+        $this->expectException(QueryParameterException::class);
+        $this->expectExceptionMessage('Invalid conjunction - unexpected value: foo');
 
         $condition = new ValueCondition('bar', 5, '>');
 

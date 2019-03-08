@@ -2,9 +2,13 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use Misantron\QueryBuilder\Exception\QueryLogicException;
+use Misantron\QueryBuilder\Exception\QueryParameterException;
+use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Expression\Field;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
+use Misantron\QueryBuilder\Query\Insert;
 use Misantron\QueryBuilder\Query\Select;
 use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
@@ -82,26 +86,24 @@ class SelectTest extends UnitTestCase
         $this->assertAttributeSame(false, 'distinct', $query);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Table has already joined
-     */
     public function testJoinWithAlreadyJoinedTable()
     {
+        $this->expectException(QueryLogicException::class);
+        $this->expectExceptionMessage('Table has already joined with same alias');
+
         $query = $this->createQuery();
-        $query->join('test', 't2', 't2.id = t1.user_id');
-        $query->join('test', 't2', 't2.id = t1.user_type');
+        $query->innerJoin('test', 't2', 't2.id = t1.user_id');
+        $query->innerJoin('test', 't2', 't2.id = t1.user_type');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Alias is already in use
-     */
     public function testJoinWithDuplicatedAlias()
     {
+        $this->expectException(QueryLogicException::class);
+        $this->expectExceptionMessage('Table alias is already in use');
+
         $query = $this->createQuery();
-        $query->join('test', 't2', 't2.id = t1.user_id');
-        $query->join('any', 't2', 't2.id = t1.user_type');
+        $query->innerJoin('test', 't2', 't2.id = t1.user_id');
+        $query->innerJoin('any', 't2', 't2.id = t1.user_type');
     }
 
     public function testInnerJoin()
@@ -109,7 +111,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->innerJoin('test', 't2', 't2.id = t1.user_id');
 
-        $hash = hash('crc32', 'test_t2');
+        $hash = sha1('inner_test_t2');
 
         $this->assertAttributeSame([
             $hash => [
@@ -126,7 +128,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->leftJoin('test', 't2', 't2.id = t1.user_id');
 
-        $hash = hash('crc32', 'test_t2');
+        $hash = sha1('left_test_t2');
 
         $this->assertAttributeSame([
             $hash => [
@@ -138,20 +140,23 @@ class SelectTest extends UnitTestCase
         ], 'joins', $query);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Only select query can be used
-     */
     public function testWithWithInvalidQuery()
     {
+        $this->expectException(QueryParameterException::class);
+        $this->expectExceptionMessage('Value must be a select query instance');
+
         $factory = Factory::create($this->createServerMock());
+
+        $insertQuery = $this->getMockBuilder(Insert::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $cte = [
             'regional_sales' => $factory
                 ->select('orders')
                 ->columns(['region', Field::create('SUM(amount)', 'total_sales')])
                 ->groupBy(['region']),
-            'top_regions' => new \stdClass(),
+            'top_regions' => $insertQuery,
         ];
 
         $query = $this->createQuery();
@@ -228,12 +233,11 @@ class SelectTest extends UnitTestCase
         $this->assertAttributeSame(500, 'limit', $query);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Query build error: using having without group by
-     */
     public function testBuildQueryWithHavingWithoutGroupBy()
     {
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Using having without group by');
+
         $query = $this->createQuery();
         $query
             ->having('total_amount >= 1500')
@@ -259,7 +263,7 @@ class SelectTest extends UnitTestCase
             ->select('foo.bar')
             ->with($cte)
             ->columns(['field1', 'field2'])
-            ->join('test', 't2', 't2.id = t1.user_id')
+            ->innerJoin('test', 't2', 't2.id = t1.user_id')
             ->andIn('field1', [3, 7, 9])
             ->orIsNull('field2')
             ->having('total_amount >= 1500')
@@ -488,12 +492,11 @@ class SelectTest extends UnitTestCase
         $this->assertAttributeInstanceOf(\PDOStatement::class, 'statement', $query);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
-     */
     public function testRowCountBeforeQueryExecute()
     {
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Query must be executed before data fetching');
+
         $query = $this->createQuery();
         $query->rowsCount();
     }
@@ -532,12 +535,11 @@ class SelectTest extends UnitTestCase
         $this->assertSame(5, $query->rowsCount());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
-     */
     public function testFetchAllObjectBeforeExecute()
     {
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Query must be executed before data fetching');
+
         $query = $this->createQuery();
         $query->fetchAllObject(\stdClass::class);
     }
@@ -595,7 +597,9 @@ class SelectTest extends UnitTestCase
             new \stdClass(),
             new \stdClass(),
         ];
-        $callback = function () {};
+        $callback = function () {
+            return null;
+        };
 
         $statement = $this->createStatementMock();
 
@@ -757,12 +761,11 @@ class SelectTest extends UnitTestCase
         $this->assertSame($data, $query->fetchAllColumn());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Data fetch error: query must be executed before fetch data
-     */
     public function testFetchOneObjectBeforeExecute()
     {
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Query must be executed before data fetching');
+
         $query = $this->createQuery();
         $query->fetchOneObject(\stdClass::class);
     }

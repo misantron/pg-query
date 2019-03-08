@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Expression;
 
+use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Stringable;
 
@@ -52,17 +53,15 @@ class ConflictTarget implements Stringable
     /**
      * Create target from where clause with a predicate.
      *
-     * @param FilterGroup $filterGroup
+     * @param FilterGroup $group
      *
      * @return ConflictTarget
      */
-    public static function fromCondition(FilterGroup $filterGroup): ConflictTarget
+    public static function fromCondition(FilterGroup $group): ConflictTarget
     {
-        if ($filterGroup->isEmpty()) {
-            throw new \InvalidArgumentException('Condition is empty');
-        }
+        QueryAssert::filterGroupNotEmpty($group);
 
-        return new static('WHERE ' . (string)$filterGroup);
+        return new static('WHERE ' . (string)$group);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Condition;
 
+use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Query\Condition\InArrayCondition;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
@@ -10,21 +11,19 @@ class InArrayConditionTest extends UnitTestCase
 {
     use Escape;
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid condition operator: unexpected value
-     */
     public function testConstructorWithInvalidOperator()
     {
+        $this->expectException(QueryParameterException::class);
+        $this->expectExceptionMessage('Invalid condition - unexpected value: >');
+
         new InArrayCondition('foo', 3, '>');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid value: value must be a scalar
-     */
     public function testConstructorWithNotScalarValue()
     {
+        $this->expectException(QueryParameterException::class);
+        $this->expectExceptionMessage('Value must be a scalar');
+
         new InArrayCondition('foo', [], '=');
     }
 

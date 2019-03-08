@@ -2,7 +2,8 @@
 
 namespace Misantron\QueryBuilder\Query;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
+use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Columns;
 use Misantron\QueryBuilder\Query\Mixin\DataFetching;
@@ -115,18 +116,6 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      *
      * @return Select
      */
-    public function join(string $table, string $alias, string $condition): Select
-    {
-        return $this->innerJoin($table, $alias, $condition);
-    }
-
-    /**
-     * @param string $table
-     * @param string $alias
-     * @param string $condition
-     *
-     * @return Select
-     */
     public function innerJoin(string $table, string $alias, string $condition): Select
     {
         $this->appendJoin('inner', $table, $alias, $condition);
@@ -154,11 +143,11 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      * @param string $alias
      * @param string $condition
      */
-    private function appendJoin(string $type, string $table, string $alias, string $condition)
+    private function appendJoin(string $type, string $table, string $alias, string $condition): void
     {
-        $hash = $this->getHash($table, $alias);
+        $hash = $this->makeHash($type, $table, $alias);
 
-        $this->assertAliasNotInUse($alias);
+        QueryAssert::tableJoinPossible($this->joins, $alias, $hash);
 
         $this->joins[$hash] = [
             'type' => $type,
@@ -169,35 +158,18 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
+     * @param string $type
      * @param string $table
      * @param string $alias
      *
      * @return string
      */
-    private function getHash(string &$table, string &$alias): string
+    private function makeHash(string $type, string $table, string $alias): string
     {
         $table = $this->escapeIdentifier($table);
         $alias = $this->escapeIdentifier($alias);
 
-        $hash = hash('crc32', $table . '_' . $alias);
-
-        if (isset($this->joins[$hash])) {
-            throw new \InvalidArgumentException('Table has already joined');
-        }
-
-        return $hash;
-    }
-
-    /**
-     * @param string $alias
-     */
-    private function assertAliasNotInUse(string $alias)
-    {
-        foreach ($this->joins as $join) {
-            if ($alias === $join['alias']) {
-                throw new \InvalidArgumentException('Alias is already in use');
-            }
-        }
+        return sha1($type . '_' . $table . '_' . $alias);
     }
 
     /**
@@ -208,12 +180,9 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     public function with(array $values): Select
     {
         foreach ($values as $alias => $value) {
-            $alias = $this->escapeIdentifier($alias);
-            if (!$value instanceof Select) {
-                throw new \InvalidArgumentException('Only select query can be used');
-            }
-            // alias name cannot be duplicated
-            $this->with[$alias] = $value;
+            QueryAssert::valueIsSelectQuery($value);
+
+            $this->with[$this->escapeIdentifier($alias)] = $value;
         }
 
         return $this;
@@ -298,7 +267,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     public function rowsCount(): int
     {
-        Assert::queryExecuted($this->statement);
+        QueryAssert::queryExecuted($this->statement);
 
         return $this->statement->rowCount();
     }
@@ -308,7 +277,9 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     public function __toString(): string
     {
-        $this->validateQuery();
+        if (!empty($this->having) && empty($this->groupBy)) {
+            throw QueryRuntimeException::havingWithoutGroup();
+        }
 
         $query = '';
         $query .= $this->buildWith();
@@ -324,16 +295,6 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @throws \RuntimeException
-     */
-    private function validateQuery()
-    {
-        if (!empty($this->having) && empty($this->groupBy)) {
-            throw new \RuntimeException('Query build error: using having without group by');
-        }
-    }
-
-    /**
      * @return string
      */
     private function buildWith(): string
@@ -346,16 +307,22 @@ class Select extends Query implements Selectable, Filterable, Retrievable
         return !empty($queries) ? 'WITH ' . implode(', ', $queries) . ' ' : '';
     }
 
+    /**
+     * @return string
+     */
     private function buildSelect(): string
     {
+        $columns = empty($this->columns) ? '*' : implode(',', $this->columns);
+
         $str = 'SELECT ' . ($this->distinct ? 'DISTINCT ' : '');
-        $str .= (empty($this->columns)
-                ? '*'
-                : implode(',', $this->columns)) . ' FROM ' . $this->table . ' ' . $this->alias;
+        $str .= $columns . ' FROM ' . $this->table . ' ' . $this->alias;
 
         return $str;
     }
 
+    /**
+     * @return string
+     */
     private function buildJoins(): string
     {
         $joins = [];
@@ -372,29 +339,41 @@ class Select extends Query implements Selectable, Filterable, Retrievable
         return !empty($joins) ? ' ' . implode(' ', $joins) : '';
     }
 
+    /**
+     * @return string
+     */
     private function buildGroupBy(): string
     {
         return !empty($this->groupBy) ? ' GROUP BY ' . implode(',', $this->groupBy) : '';
     }
 
+    /**
+     * @return string
+     */
     private function buildHaving(): string
     {
         return !empty($this->having) ? ' HAVING ' . $this->having : '';
     }
 
+    /**
+     * @return string
+     */
     private function buildOrderBy(): string
     {
         return !empty($this->orderBy) ? ' ORDER BY ' . implode(',', $this->orderBy) : '';
     }
 
+    /**
+     * @return string
+     */
     private function buildLimitOffset(): string
     {
         $str = '';
 
-        if (is_int($this->limit)) {
+        if ($this->limit !== null) {
             $str .= ' LIMIT ' . $this->limit;
         }
-        if (is_int($this->offset)) {
+        if ($this->offset !== null) {
             $str .= ' OFFSET ' . $this->offset;
         }
 

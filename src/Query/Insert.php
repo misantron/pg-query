@@ -2,7 +2,8 @@
 
 namespace Misantron\QueryBuilder\Query;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
+use Misantron\QueryBuilder\Assert\ServerAssert;
 use Misantron\QueryBuilder\Expression\ConflictTarget;
 use Misantron\QueryBuilder\Query\Mixin\Columns;
 use Misantron\QueryBuilder\Query\Mixin\Returning;
@@ -59,7 +60,7 @@ class Insert extends Query implements Selectable
      */
     public function values(array $items): Insert
     {
-        Assert::valuesNotEmpty($items);
+        QueryAssert::valuesNotEmpty($items);
 
         if ($items === array_values($items)) {
             // extract column names from the first element of data rows
@@ -83,7 +84,7 @@ class Insert extends Query implements Selectable
      */
     public function onConflict(ConflictTarget $target, ?Update $action = null): Insert
     {
-        Assert::featureAvailable($this->server, '9.5');
+        ServerAssert::engineFeatureAvailable($this->server, '9.5');
 
         $this->conflictTarget = $target;
         $this->conflictAction = $action;
@@ -109,8 +110,8 @@ class Insert extends Query implements Selectable
      */
     public function getInsertedRow(): array
     {
-        Assert::returningConditionSet($this->returning);
-        Assert::queryExecuted($this->statement);
+        QueryAssert::returningConditionSet($this->returning);
+        QueryAssert::queryExecuted($this->statement);
 
         return $this->statement->fetch(\PDO::FETCH_ASSOC);
     }
@@ -120,8 +121,8 @@ class Insert extends Query implements Selectable
      */
     public function getInsertedRows(): array
     {
-        Assert::returningConditionSet($this->returning);
-        Assert::queryExecuted($this->statement);
+        QueryAssert::returningConditionSet($this->returning);
+        QueryAssert::queryExecuted($this->statement);
 
         return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -131,7 +132,7 @@ class Insert extends Query implements Selectable
      */
     public function __toString(): string
     {
-        Assert::columnsNotEmpty($this->columns);
+        QueryAssert::columnsNotEmpty($this->columns);
 
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
@@ -151,18 +152,18 @@ class Insert extends Query implements Selectable
      */
     private function buildValues(): string
     {
-        Assert::valuesNotEmpty($this->values);
+        QueryAssert::valuesNotEmpty($this->values);
 
-        $values = [];
+        $values = '';
         foreach ($this->values as $row) {
             $escaped = array_map(function ($value) {
                 return $this->escapeValue($value);
             }, $row);
 
-            $values[] = '(' . implode(',', $escaped) . ')';
+            $values .= '(' . implode(',', $escaped) . '),';
         }
 
-        return ' VALUES ' . implode(',', $values);
+        return ' VALUES ' . rtrim($values, ',');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Condition;
 
+use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Query\Condition\BetweenCondition;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
@@ -12,8 +13,8 @@ class BetweenConditionTest extends UnitTestCase
 
     public function testConstructorWithInvalidPeriod()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid value: array must contains two elements - begin and end of period');
+        $this->expectException(QueryParameterException::class);
+        $this->expectExceptionMessage('Array must contains 2 elements');
 
         new BetweenCondition('foo', [(new \DateTime())->format('Y-m-d H:i:s')]);
     }

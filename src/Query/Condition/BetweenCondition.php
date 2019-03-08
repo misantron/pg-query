@@ -2,6 +2,8 @@
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
+use Misantron\QueryBuilder\Assert\QueryAssert;
+
 /**
  * Class BetweenCondition.
  */
@@ -24,9 +26,7 @@ class BetweenCondition extends Condition
             return $this->escapeValue($value);
         }, $values);
 
-        if (sizeof($this->values) !== 2) {
-            throw new \InvalidArgumentException('Invalid value: array must contains two elements - begin and end of period');
-        }
+        QueryAssert::numberOfElements($this->values, 2);
     }
 
     /**
