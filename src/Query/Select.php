@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Columns;
@@ -147,7 +147,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     {
         $hash = $this->makeHash($type, $table, $alias);
 
-        Assert::tableJoinPossible($this->joins, $alias, $hash);
+        QueryAssert::tableJoinPossible($this->joins, $alias, $hash);
 
         $this->joins[$hash] = [
             'type' => $type,
@@ -180,7 +180,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     public function with(array $values): Select
     {
         foreach ($values as $alias => $value) {
-            Assert::valueIsSelectQuery($value);
+            QueryAssert::valueIsSelectQuery($value);
 
             $this->with[$this->escapeIdentifier($alias)] = $value;
         }
@@ -267,7 +267,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
      */
     public function rowsCount(): int
     {
-        Assert::queryExecuted($this->statement);
+        QueryAssert::queryExecuted($this->statement);
 
         return $this->statement->rowCount();
     }

@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 
 /**
  * Class InArrayCondition.
@@ -23,7 +23,7 @@ class InArrayCondition extends Condition
     {
         parent::__construct($column, $operator);
 
-        Assert::valueIsScalar($value);
+        QueryAssert::valueIsScalar($value);
 
         $this->value = $this->escapeValue($value);
     }

@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 
 /**
  * Class ArrayContainsCondition.
@@ -22,7 +22,7 @@ class ArrayContainsCondition extends Condition
     {
         parent::__construct($column);
 
-        Assert::valuesNotEmpty($values);
+        QueryAssert::valuesNotEmpty($values);
 
         $this->values = $this->escapeArray($values);
     }

@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Expression;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Stringable;
 
@@ -59,7 +59,7 @@ class ConflictTarget implements Stringable
      */
     public static function fromCondition(FilterGroup $group): ConflictTarget
     {
-        Assert::filterGroupNotEmpty($group);
+        QueryAssert::filterGroupNotEmpty($group);
 
         return new static('WHERE ' . (string)$group);
     }

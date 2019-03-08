@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query\Filter;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Stringable;
 
 /**
@@ -32,7 +32,7 @@ class Filter
      */
     private function __construct(string $condition, string $conjunction, bool $group)
     {
-        Assert::validConjunctionOperator($conjunction);
+        QueryAssert::validConjunctionOperator($conjunction);
 
         $this->condition = $condition;
         $this->conjunction = $conjunction;

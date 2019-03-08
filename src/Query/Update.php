@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
@@ -41,7 +41,7 @@ class Update extends Query implements Filterable
      */
     public function set(array $data): Update
     {
-        Assert::valuesNotEmpty($data);
+        QueryAssert::valuesNotEmpty($data);
 
         foreach ($data as $field => $value) {
             $this->set[$this->escapeIdentifier($field)] = $this->escapeValue($value);
@@ -70,7 +70,7 @@ class Update extends Query implements Filterable
     {
         $set = $this->set;
 
-        Assert::querySetPartNotEmpty($set);
+        QueryAssert::querySetPartNotEmpty($set);
 
         $values = array_map(function (string $field, string $value) {
             return $field . ' = ' . $value;

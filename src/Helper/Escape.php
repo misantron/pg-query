@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Helper;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Exception\IdentifierException;
 
 /**
@@ -88,7 +88,7 @@ trait Escape
         $type = $this->isIntegerArray($items) ? 'integer' : 'string';
         $filtered = array_unique(array_filter($items));
 
-        Assert::valuesNotEmpty($filtered);
+        QueryAssert::valuesNotEmpty($filtered);
 
         if ($type === 'string') {
             $filtered = array_map(function (string $item) {

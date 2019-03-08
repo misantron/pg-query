@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\ServerAssert;
 
 /**
  * Class Server.
@@ -67,7 +67,7 @@ class Server
      */
     public function setOption(int $key, $value): Server
     {
-        Assert::validConnectionOption($key);
+        ServerAssert::validConnectionOption($key);
 
         $this->options[$key] = $value;
 

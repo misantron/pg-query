@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Stringable;
 
@@ -29,7 +29,7 @@ abstract class Condition implements Stringable
      */
     public function __construct(string $column, string $operator = '')
     {
-        Assert::validConditionOperator($operator, $this->getAcceptableOperators());
+        QueryAssert::validConditionOperator($operator, $this->getAcceptableOperators());
 
         $this->column = $this->escapeIdentifier($column);
         $this->operator = $operator;

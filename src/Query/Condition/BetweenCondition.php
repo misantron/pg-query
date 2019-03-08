@@ -2,7 +2,7 @@
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
-use Misantron\QueryBuilder\Assert\Assert;
+use Misantron\QueryBuilder\Assert\QueryAssert;
 
 /**
  * Class BetweenCondition.
@@ -26,7 +26,7 @@ class BetweenCondition extends Condition
             return $this->escapeValue($value);
         }, $values);
 
-        Assert::numberOfElements($this->values, 2);
+        QueryAssert::numberOfElements($this->values, 2);
     }
 
     /**
