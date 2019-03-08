@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Condition;
 
+use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Query\Condition\InCondition;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
@@ -12,8 +13,8 @@ class InConditionTest extends UnitTestCase
 
     public function testConstructorWithEmptyValueList()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid values: value list is empty');
+        $this->expectException(QueryParameterException::class);
+        $this->expectExceptionMessage('Value list is empty');
 
         new InCondition('foo', [''], 'IN');
     }

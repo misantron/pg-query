@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Condition;
 
+use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Query\Condition\ArrayContainsCondition;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
@@ -10,12 +11,11 @@ class ArrayContainsConditionTest extends UnitTestCase
 {
     use Escape;
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid condition value: value list is empty
-     */
     public function testConstructorWithEmptyValue()
     {
+        $this->expectException(QueryParameterException::class);
+        $this->expectExceptionMessage('Value list is empty');
+
         new ArrayContainsCondition('foo', []);
     }
 

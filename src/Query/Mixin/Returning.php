@@ -19,6 +19,7 @@ trait Returning
 
     /**
      * @param $items
+     *
      * @return $this
      */
     public function returning($items)

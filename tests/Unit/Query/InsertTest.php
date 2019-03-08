@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Expression\ConflictTarget;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query\Insert;
@@ -209,8 +210,8 @@ class InsertTest extends UnitTestCase
 
     public function testGetInsertedRowWithoutReturningSet()
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Data fetch error: returning fields must be set');
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Returning fields must be set previously');
 
         $query = $this->createQuery();
         $query
@@ -220,8 +221,8 @@ class InsertTest extends UnitTestCase
 
     public function testGetInsertedRowBeforeQueryExecute()
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Data fetch error: query must be executed before fetch data');
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Query must be executed before data fetching');
 
         $query = $this->createQuery();
         $query
@@ -285,8 +286,8 @@ class InsertTest extends UnitTestCase
 
     public function testGetInsertedRowsWithoutReturningSet()
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Data fetch error: returning fields must be set');
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Returning fields must be set previously');
 
         $query = $this->createQuery();
         $query
@@ -299,8 +300,8 @@ class InsertTest extends UnitTestCase
 
     public function testGetInsertedRowsBeforeQueryExecute()
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Data fetch error: query must be executed before fetch data');
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Query must be executed before data fetching');
 
         $query = $this->createQuery();
         $query

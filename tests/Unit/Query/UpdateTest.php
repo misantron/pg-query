@@ -2,6 +2,7 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Update;
 use Misantron\QueryBuilder\Server;
@@ -65,8 +66,8 @@ class UpdateTest extends UnitTestCase
 
     public function testBuildWithoutSet()
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Query set is empty');
+        $this->expectException(QueryRuntimeException::class);
+        $this->expectExceptionMessage('Query set must be filled');
 
         $query = $this->createQuery();
         $query->andEquals('col1', 1);
