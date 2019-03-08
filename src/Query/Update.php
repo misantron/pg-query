@@ -70,9 +70,7 @@ class Update extends Query implements Filterable
     {
         $set = $this->set;
 
-        if (empty($set)) {
-            throw new \RuntimeException('Query set is empty');
-        }
+        Assert::querySetPartNotEmpty($set);
 
         $values = array_map(function (string $field, string $value) {
             return $field . ' = ' . $value;

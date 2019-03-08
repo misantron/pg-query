@@ -17,6 +17,10 @@ trait Returning
      */
     private $returning = [];
 
+    /**
+     * @param $items
+     * @return $this
+     */
     public function returning($items)
     {
         Assert::columnsNotEmpty($items);

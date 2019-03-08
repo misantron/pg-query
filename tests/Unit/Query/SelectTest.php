@@ -89,8 +89,8 @@ class SelectTest extends UnitTestCase
     public function testJoinWithAlreadyJoinedTable()
     {
         $query = $this->createQuery();
-        $query->join('test', 't2', 't2.id = t1.user_id');
-        $query->join('test', 't2', 't2.id = t1.user_type');
+        $query->innerJoin('test', 't2', 't2.id = t1.user_id');
+        $query->innerJoin('test', 't2', 't2.id = t1.user_type');
     }
 
     /**
@@ -100,8 +100,8 @@ class SelectTest extends UnitTestCase
     public function testJoinWithDuplicatedAlias()
     {
         $query = $this->createQuery();
-        $query->join('test', 't2', 't2.id = t1.user_id');
-        $query->join('any', 't2', 't2.id = t1.user_type');
+        $query->innerJoin('test', 't2', 't2.id = t1.user_id');
+        $query->innerJoin('any', 't2', 't2.id = t1.user_type');
     }
 
     public function testInnerJoin()
@@ -109,7 +109,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->innerJoin('test', 't2', 't2.id = t1.user_id');
 
-        $hash = hash('crc32', 'test_t2');
+        $hash = sha1('inner_test_t2');
 
         $this->assertAttributeSame([
             $hash => [
@@ -126,7 +126,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->leftJoin('test', 't2', 't2.id = t1.user_id');
 
-        $hash = hash('crc32', 'test_t2');
+        $hash = sha1('left_test_t2');
 
         $this->assertAttributeSame([
             $hash => [
@@ -259,7 +259,7 @@ class SelectTest extends UnitTestCase
             ->select('foo.bar')
             ->with($cte)
             ->columns(['field1', 'field2'])
-            ->join('test', 't2', 't2.id = t1.user_id')
+            ->innerJoin('test', 't2', 't2.id = t1.user_id')
             ->andIn('field1', [3, 7, 9])
             ->orIsNull('field2')
             ->having('total_amount >= 1500')
@@ -595,7 +595,9 @@ class SelectTest extends UnitTestCase
             new \stdClass(),
             new \stdClass(),
         ];
-        $callback = function () {};
+        $callback = function () {
+            return null;
+        };
 
         $statement = $this->createStatementMock();
 

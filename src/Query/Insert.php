@@ -83,7 +83,7 @@ class Insert extends Query implements Selectable
      */
     public function onConflict(ConflictTarget $target, ?Update $action = null): Insert
     {
-        Assert::featureAvailable($this->server, '9.5');
+        Assert::engineFeatureAvailable($this->server, '9.5');
 
         $this->conflictTarget = $target;
         $this->conflictAction = $action;
@@ -153,16 +153,16 @@ class Insert extends Query implements Selectable
     {
         Assert::valuesNotEmpty($this->values);
 
-        $values = [];
+        $values = '';
         foreach ($this->values as $row) {
             $escaped = array_map(function ($value) {
                 return $this->escapeValue($value);
             }, $row);
 
-            $values[] = '(' . implode(',', $escaped) . ')';
+            $values .= '(' . implode(',', $escaped) . '),';
         }
 
-        return ' VALUES ' . implode(',', $values);
+        return ' VALUES ' . rtrim($values, ',');
     }
 
     /**
