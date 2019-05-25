@@ -22,7 +22,10 @@
   "autoload": {
     "psr-4": {
       "Misantron\\QueryBuilder\\": "src/"
-    }
+    },
+    "files": [
+      "functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
