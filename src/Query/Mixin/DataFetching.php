@@ -3,12 +3,14 @@
 namespace Misantron\QueryBuilder\Query\Mixin;
 
 use Misantron\QueryBuilder\Assert\QueryAssert;
+use PDO;
+use PDOStatement;
 
 /**
  * Trait DataFetch.
  *
  *
- * @property \PDOStatement $statement
+ * @property PDOStatement $statement
  */
 trait DataFetching
 {
@@ -21,7 +23,7 @@ trait DataFetching
     {
         QueryAssert::queryExecuted($this->statement);
 
-        return $this->statement->fetchAll(\PDO::FETCH_CLASS, $className);
+        return $this->statement->fetchAll(PDO::FETCH_CLASS, $className);
     }
 
     /**
@@ -47,7 +49,7 @@ trait DataFetching
     {
         QueryAssert::queryExecuted($this->statement);
 
-        return $this->statement->fetchAll(\PDO::FETCH_FUNC, $callback);
+        return $this->statement->fetchAll(PDO::FETCH_FUNC, $callback);
     }
 
     /**
@@ -57,7 +59,7 @@ trait DataFetching
     {
         QueryAssert::queryExecuted($this->statement);
 
-        return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -67,7 +69,7 @@ trait DataFetching
     {
         QueryAssert::queryExecuted($this->statement);
 
-        $response = $this->statement->fetch(\PDO::FETCH_ASSOC);
+        $response = $this->statement->fetch(PDO::FETCH_ASSOC);
 
         return is_array($response) ? $response : null;
     }
@@ -79,7 +81,7 @@ trait DataFetching
     {
         QueryAssert::queryExecuted($this->statement);
 
-        return $this->statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $this->statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     /**
@@ -89,7 +91,7 @@ trait DataFetching
     {
         QueryAssert::queryExecuted($this->statement);
 
-        return $this->statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $this->statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**

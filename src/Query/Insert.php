@@ -5,10 +5,12 @@ namespace Misantron\QueryBuilder\Query;
 use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Assert\ServerAssert;
 use Misantron\QueryBuilder\Expression\ConflictTarget;
+use Misantron\QueryBuilder\Expression\OnConflict;
 use Misantron\QueryBuilder\Query\Mixin\Columns;
 use Misantron\QueryBuilder\Query\Mixin\Returning;
 use Misantron\QueryBuilder\Query\Mixin\Selectable;
 use Misantron\QueryBuilder\Server;
+use PDO;
 
 /**
  * Class Insert.
@@ -28,14 +30,9 @@ class Insert extends Query implements Selectable
     private $values;
 
     /**
-     * @var ConflictTarget|null
+     * @var OnConflict
      */
-    private $conflictTarget;
-
-    /**
-     * @var Update|null
-     */
-    private $conflictAction;
+    private $onConflict;
 
     /**
      * @var Select|null
@@ -86,8 +83,7 @@ class Insert extends Query implements Selectable
     {
         ServerAssert::engineFeatureAvailable($this->server, '9.5');
 
-        $this->conflictTarget = $target;
-        $this->conflictAction = $action;
+        $this->onConflict = new OnConflict($target, $action);
 
         return $this;
     }
@@ -113,7 +109,7 @@ class Insert extends Query implements Selectable
         QueryAssert::returningConditionSet($this->returning);
         QueryAssert::queryExecuted($this->statement);
 
-        return $this->statement->fetch(\PDO::FETCH_ASSOC);
+        return $this->statement->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -124,7 +120,7 @@ class Insert extends Query implements Selectable
         QueryAssert::returningConditionSet($this->returning);
         QueryAssert::queryExecuted($this->statement);
 
-        return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -137,7 +133,7 @@ class Insert extends Query implements Selectable
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
         if ($this->rowSet instanceof Select) {
-            $query .= ' ' . (string)$this->rowSet;
+            $query .= ' ' . $this->rowSet;
         } else {
             $query .= $this->buildValues();
             $query .= $this->buildOnConflict();
@@ -171,12 +167,6 @@ class Insert extends Query implements Selectable
      */
     private function buildOnConflict(): string
     {
-        $expression = '';
-        if ($this->conflictTarget instanceof ConflictTarget) {
-            $action = $this->conflictAction instanceof Update ? (string)$this->conflictAction : 'NOTHING';
-            $expression .= ' ON CONFLICT ' . (string)$this->conflictTarget . ' DO ' . $action;
-        }
-
-        return $expression;
+        return $this->onConflict instanceof OnConflict ? $this->onConflict->compile() : '';
     }
 }

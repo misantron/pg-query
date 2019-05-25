@@ -2,19 +2,23 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Expression\ConflictTarget;
+use Misantron\QueryBuilder\Expression\OnConflict;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query\Insert;
 use Misantron\QueryBuilder\Query\Select;
 use Misantron\QueryBuilder\Query\Update;
 use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
+use PDO;
+use PDOStatement;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class InsertTest extends UnitTestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $query = $this->createQuery();
 
@@ -26,9 +30,9 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame(null, 'rowSet', $query);
     }
 
-    public function testColumnsWithEmptyList()
+    public function testColumnsWithEmptyList(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Column list is empty');
 
         $query = $this->createQuery();
@@ -52,7 +56,7 @@ class InsertTest extends UnitTestCase
 
     public function testValuesWithEmptyList()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value list is empty');
 
         $query = $this->createQuery();
@@ -84,18 +88,7 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame([[1, 2], [3, 4]], 'values', $query);
     }
 
-    public function testOnConflictWithoutAction()
-    {
-        $target = ConflictTarget::fromField('foo');
-
-        $query = $this->createQuery();
-        $query->onConflict($target);
-
-        $this->assertAttributeInstanceOf(ConflictTarget::class, 'conflictTarget', $query);
-        $this->assertAttributeSame(null, 'conflictAction', $query);
-    }
-
-    public function testOnConflictWithTargetAndAction()
+    public function testOnConflict(): void
     {
         $target = ConflictTarget::fromConstraint('foo_unique');
         $factory = Factory::create($this->createServerMock());
@@ -109,8 +102,7 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->onConflict($target, $action);
 
-        $this->assertAttributeInstanceOf(ConflictTarget::class, 'conflictTarget', $query);
-        $this->assertAttributeInstanceOf(Update::class, 'conflictAction', $query);
+        $this->assertAttributeInstanceOf(OnConflict::class, 'onConflict', $query);
     }
 
     public function testFromRows()
@@ -128,7 +120,7 @@ class InsertTest extends UnitTestCase
 
     public function testBuildWithoutColumns()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Column list is empty');
 
         $query = $this->createQuery();
@@ -137,7 +129,7 @@ class InsertTest extends UnitTestCase
 
     public function testBuildWithoutValues()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value list is empty');
 
         $query = $this->createQuery();
@@ -219,7 +211,7 @@ class InsertTest extends UnitTestCase
             ->getInsertedRow();
     }
 
-    public function testGetInsertedRowBeforeQueryExecute()
+    public function testGetInsertedRowBeforeQueryExecute(): void
     {
         $this->expectException(QueryRuntimeException::class);
         $this->expectExceptionMessage('Query must be executed before data fetching');
@@ -231,11 +223,11 @@ class InsertTest extends UnitTestCase
             ->getInsertedRow();
     }
 
-    public function testGetInsertedRow()
+    public function testGetInsertedRow(): void
     {
         $pdo = $this->createPDOMock();
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
+        $statement = $this->getMockBuilder(PDOStatement::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -247,7 +239,7 @@ class InsertTest extends UnitTestCase
         $statement
             ->expects($this->once())
             ->method('fetch')
-            ->with(\PDO::FETCH_ASSOC)
+            ->with(PDO::FETCH_ASSOC)
             ->willReturn([
                 'id' => 1,
                 'foo' => 'bar',
@@ -284,7 +276,7 @@ class InsertTest extends UnitTestCase
         ], $inserted);
     }
 
-    public function testGetInsertedRowsWithoutReturningSet()
+    public function testGetInsertedRowsWithoutReturningSet(): void
     {
         $this->expectException(QueryRuntimeException::class);
         $this->expectExceptionMessage('Returning fields must be set previously');
@@ -298,7 +290,7 @@ class InsertTest extends UnitTestCase
             ->getInsertedRows();
     }
 
-    public function testGetInsertedRowsBeforeQueryExecute()
+    public function testGetInsertedRowsBeforeQueryExecute(): void
     {
         $this->expectException(QueryRuntimeException::class);
         $this->expectExceptionMessage('Query must be executed before data fetching');
@@ -313,11 +305,11 @@ class InsertTest extends UnitTestCase
             ->getInsertedRows();
     }
 
-    public function testGetInsertedRows()
+    public function testGetInsertedRows(): void
     {
         $pdo = $this->createPDOMock();
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
+        $statement = $this->getMockBuilder(PDOStatement::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -329,7 +321,7 @@ class InsertTest extends UnitTestCase
         $statement
             ->expects($this->once())
             ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
+            ->with(PDO::FETCH_ASSOC)
             ->willReturn([
                 [
                     'id' => 1,

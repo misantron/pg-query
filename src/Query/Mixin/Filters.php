@@ -64,6 +64,6 @@ trait Filters
      */
     private function buildFilters(): string
     {
-        return $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
+        return $this->filters->notEmpty() ? ' WHERE ' . $this->filters : '';
     }
 }

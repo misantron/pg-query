@@ -24,7 +24,7 @@ trait Escape
             throw IdentifierException::supplyInvalidChar();
         }
 
-        if (preg_match('/^[0-9]/', $str)) {
+        if (preg_match('/^[\d]/', $str)) {
             throw IdentifierException::beginFromInvalidChar();
         }
 
@@ -106,7 +106,7 @@ trait Escape
      */
     protected function isIntegerArray(array $array): bool
     {
-        $filtered = array_filter($array, function ($value) {
+        $filtered = array_filter($array, static function ($value) {
             return filter_var($value, FILTER_VALIDATE_INT) === false;
         });
 

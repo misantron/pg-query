@@ -3,6 +3,7 @@
 namespace Misantron\QueryBuilder\Query;
 
 use Misantron\QueryBuilder\Assert\QueryAssert;
+use Misantron\QueryBuilder\Compilable;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
@@ -15,7 +16,7 @@ use Misantron\QueryBuilder\Server;
  *
  * @method Update table(string $name)
  */
-class Update extends Query implements Filterable
+class Update extends Query implements Filterable, Compilable
 {
     use Filters, Returning;
 
@@ -66,13 +67,21 @@ class Update extends Query implements Filterable
     /**
      * @return string
      */
+    public function compile(): string
+    {
+        return $this->__toString();
+    }
+
+    /**
+     * @return string
+     */
     private function buildSet(): string
     {
         $set = $this->set;
 
         QueryAssert::querySetPartNotEmpty($set);
 
-        $values = array_map(function (string $field, string $value) {
+        $values = array_map(static function (string $field, string $value) {
             return $field . ' = ' . $value;
         }, array_keys($set), array_values($set));
 
