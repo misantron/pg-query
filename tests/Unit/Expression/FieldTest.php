@@ -8,7 +8,7 @@ use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class FieldTest extends UnitTestCase
 {
-    public function testConstructorWithAliasWithInvalidChars()
+    public function testConstructorWithAliasWithInvalidChars(): void
     {
         $this->expectException(IdentifierException::class);
         $this->expectExceptionMessage('Identifier supplied invalid characters');
@@ -16,7 +16,7 @@ class FieldTest extends UnitTestCase
         Field::create('SUM(field)', '$f');
     }
 
-    public function testConstructorWithAliasBeginsFromInvalidChar()
+    public function testConstructorWithAliasBeginsFromInvalidChar(): void
     {
         $this->expectException(IdentifierException::class);
         $this->expectExceptionMessage('Identifier must begin with a letter or underscore');
@@ -24,7 +24,7 @@ class FieldTest extends UnitTestCase
         Field::create('SUM(field)', '5f');
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $field = Field::create('SUM(field)');
 
@@ -37,12 +37,12 @@ class FieldTest extends UnitTestCase
         $this->assertAttributeEquals('total', 'alias', $field);
     }
 
-    public function testBuild()
+    public function testCompile(): void
     {
         $field = Field::create('SUM(field)');
-        $this->assertSame('SUM(field)', $field->__toString());
+        $this->assertSame('SUM(field)', $field->compile());
 
         $field = Field::create('SUM(field)', 'total');
-        $this->assertSame('SUM(field) AS total', $field->__toString());
+        $this->assertSame('SUM(field) AS total', $field->compile());
     }
 }

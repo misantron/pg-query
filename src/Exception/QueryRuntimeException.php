@@ -2,10 +2,12 @@
 
 namespace Misantron\QueryBuilder\Exception;
 
+use RuntimeException;
+
 /**
  * Class QueryRuntimeException.
  */
-class QueryRuntimeException extends \RuntimeException
+class QueryRuntimeException extends RuntimeException
 {
     /**
      * @return QueryRuntimeException

@@ -51,10 +51,9 @@ class BetweenCondition extends Condition
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
-        $values = $this->values;
-        list($rangeBegin, $rangeEnd) = $values;
+        [$rangeBegin, $rangeEnd] = $this->values;
 
         return sprintf('%s BETWEEN %s AND %s', $this->column, $rangeBegin, $rangeEnd);
     }

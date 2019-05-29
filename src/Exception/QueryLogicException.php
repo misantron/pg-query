@@ -2,10 +2,12 @@
 
 namespace Misantron\QueryBuilder\Exception;
 
+use LogicException;
+
 /**
  * Class QueryLogicException.
  */
-class QueryLogicException extends \LogicException
+class QueryLogicException extends LogicException
 {
     /**
      * @return QueryLogicException

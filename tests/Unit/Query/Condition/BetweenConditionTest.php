@@ -2,6 +2,8 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Condition;
 
+use DateInterval;
+use DateTime;
 use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Query\Condition\BetweenCondition;
@@ -11,19 +13,19 @@ class BetweenConditionTest extends UnitTestCase
 {
     use Escape;
 
-    public function testConstructorWithInvalidPeriod()
+    public function testConstructorWithInvalidPeriod(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Array must contains 2 elements');
 
-        new BetweenCondition('foo', [(new \DateTime())->format('Y-m-d H:i:s')]);
+        new BetweenCondition('foo', [(new DateTime())->format('Y-m-d H:i:s')]);
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $values = [
-            (new \DateTime())->format('Y-m-d H:i:s'),
-            (new \DateTime())->sub(new \DateInterval('P1D'))->format('Y-m-d H:i:s'),
+            (new DateTime())->format('Y-m-d H:i:s'),
+            (new DateTime())->sub(new DateInterval('P1D'))->format('Y-m-d H:i:s'),
         ];
 
         $condition = new BetweenCondition('foo', $values);
@@ -36,11 +38,11 @@ class BetweenConditionTest extends UnitTestCase
         $this->assertAttributeEquals($expected, 'values', $condition);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $values = [
-            (new \DateTime())->format('Y-m-d H:i:s'),
-            (new \DateTime())->sub(new \DateInterval('P1D'))->format('Y-m-d H:i:s'),
+            (new DateTime())->format('Y-m-d H:i:s'),
+            (new DateTime())->sub(new DateInterval('P1D'))->format('Y-m-d H:i:s'),
         ];
 
         $condition = BetweenCondition::create('foo', $values);
@@ -53,18 +55,17 @@ class BetweenConditionTest extends UnitTestCase
         $this->assertAttributeEquals($expected, 'values', $condition);
     }
 
-    public function testToString()
+    public function testCompile(): void
     {
         $values = [
-            (new \DateTime())->format('Y-m-d H:i:s'),
-            (new \DateTime())->sub(new \DateInterval('P1D'))->format('Y-m-d H:i:s'),
+            (new DateTime())->format('Y-m-d H:i:s'),
+            (new DateTime())->sub(new DateInterval('P1D'))->format('Y-m-d H:i:s'),
         ];
 
         $condition = BetweenCondition::create('foo', $values);
 
-        list($begin, $end) = $values;
+        [$begin, $end] = $values;
 
-        $this->assertSame(sprintf("foo BETWEEN '%s' AND '%s'", $begin, $end), $condition->__toString());
-        $this->assertSame(sprintf("foo BETWEEN '%s' AND '%s'", $begin, $end), (string)$condition);
+        $this->assertSame(sprintf("foo BETWEEN '%s' AND '%s'", $begin, $end), $condition->compile());
     }
 }

@@ -47,7 +47,7 @@ class ValueCondition extends Condition
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         return sprintf('%s %s %s', $this->column, $this->operator, $this->value);
     }

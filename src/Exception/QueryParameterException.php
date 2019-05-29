@@ -2,10 +2,12 @@
 
 namespace Misantron\QueryBuilder\Exception;
 
+use InvalidArgumentException;
+
 /**
  * Class QueryParameterException.
  */
-class QueryParameterException extends \InvalidArgumentException
+class QueryParameterException extends InvalidArgumentException
 {
     /**
      * @param string $name

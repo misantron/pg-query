@@ -8,6 +8,7 @@ use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Query;
 use Misantron\QueryBuilder\Query\Select;
+use PDOStatement;
 
 /**
  * Class QueryAssert.
@@ -95,7 +96,7 @@ class QueryAssert
      */
     public static function validConditionOperator(string $operator, array $operators): void
     {
-        if (!empty($operators) && !in_array($operator, $operators)) {
+        if (!empty($operators) && !in_array($operator, $operators, true)) {
             throw QueryParameterException::unexpectedValue('condition', $operator);
         }
     }
@@ -107,7 +108,7 @@ class QueryAssert
      */
     public static function validConjunctionOperator(string $operator): void
     {
-        if (!in_array(strtolower($operator), ['and', 'or', ''])) {
+        if (!in_array(strtolower($operator), ['and', 'or', ''], true)) {
             throw QueryParameterException::unexpectedValue('conjunction', $operator);
         }
     }
@@ -157,13 +158,13 @@ class QueryAssert
     }
 
     /**
-     * @param \PDOStatement|bool $statement
+     * @param PDOStatement|bool $statement
      *
      * @throws QueryRuntimeException
      */
     public static function queryExecuted($statement): void
     {
-        if (!$statement instanceof \PDOStatement) {
+        if (!$statement instanceof PDOStatement) {
             throw QueryRuntimeException::fetchBeforeExecute();
         }
     }

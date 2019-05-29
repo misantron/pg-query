@@ -51,7 +51,7 @@ class InArrayCondition extends Condition
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         return sprintf('%s %s ANY(%s)', $this->value, $this->operator, $this->column);
     }

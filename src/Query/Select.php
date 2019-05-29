@@ -19,12 +19,14 @@ use Misantron\QueryBuilder\Server;
  *
  * @method Select execute()
  * @method Select columns($items)
+ *
+ * @method Select andIn(string $column, array $values)
  */
 class Select extends Query implements Selectable, Filterable, Retrievable
 {
     use Columns, Filters, DataFetching;
 
-    const DEFAULT_TABLE_ALIAS = 't1';
+    private const DEFAULT_TABLE_ALIAS = 't1';
 
     /**
      * @var string
@@ -275,7 +277,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         if (!empty($this->having) && empty($this->groupBy)) {
             throw QueryRuntimeException::havingWithoutGroup();
@@ -301,7 +303,7 @@ class Select extends Query implements Selectable, Filterable, Retrievable
     {
         $queries = [];
         foreach ($this->with as $alias => $query) {
-            $queries[] = $alias . ' AS (' . (string)$query . ')';
+            $queries[] = $alias . ' AS (' . $query->compile() . ')';
         }
 
         return !empty($queries) ? 'WITH ' . implode(', ', $queries) . ' ' : '';

@@ -2,20 +2,20 @@
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use BadMethodCallException;
 use Misantron\QueryBuilder\Query\Query;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class QueryTest extends UnitTestCase
 {
-    public function testTable()
+    public function testTable(): void
     {
         $server = $this->createServerMock();
 
-        $query = new class($server) extends Query
-        {
-            public function __toString(): string
+        $query = new class($server) extends Query {
+            public function compile(): string
             {
-                throw new \BadMethodCallException('Not implemented');
+                throw new BadMethodCallException('Not implemented');
             }
         };
         $this->assertAttributeSame(null, 'table', $query);

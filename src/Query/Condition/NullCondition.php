@@ -13,7 +13,7 @@ class NullCondition extends Condition
      *
      * @return NullCondition
      */
-    public static function create(string $column, string $operator): NullCondition
+    public static function create(string $column, string $operator = 'IS'): NullCondition
     {
         return new static($column, $operator);
     }
@@ -29,7 +29,7 @@ class NullCondition extends Condition
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         return sprintf('%s %s NULL', $this->column, $this->operator);
     }

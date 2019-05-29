@@ -33,7 +33,7 @@ class ArrayContainsCondition extends Condition
      *
      * @return ArrayContainsCondition
      */
-    public static function create(string $column, array $values)
+    public static function create(string $column, array $values): ArrayContainsCondition
     {
         return new static($column, $values);
     }
@@ -49,7 +49,7 @@ class ArrayContainsCondition extends Condition
     /**
      * @return string
      */
-    public function __toString(): string
+    public function compile(): string
     {
         return sprintf('%s @> %s', $this->column, $this->values);
     }

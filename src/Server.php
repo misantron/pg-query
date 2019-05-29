@@ -3,6 +3,7 @@
 namespace Misantron\QueryBuilder;
 
 use Misantron\QueryBuilder\Assert\ServerAssert;
+use PDO;
 
 /**
  * Class Server.
@@ -10,7 +11,7 @@ use Misantron\QueryBuilder\Assert\ServerAssert;
 class Server
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     private $pdo;
 
@@ -83,9 +84,9 @@ class Server
     }
 
     /**
-     * @return \PDO
+     * @return PDO
      */
-    public function pdo(): \PDO
+    public function pdo(): PDO
     {
         $this->initialize();
 
@@ -95,7 +96,7 @@ class Server
     private function initialize(): void
     {
         if ($this->pdo === null) {
-            $this->pdo = new \PDO($this->createDsnFromCredentials());
+            $this->pdo = new PDO($this->createDsnFromCredentials());
             foreach ($this->options as $attribute => $value) {
                 $this->pdo->setAttribute($attribute, $value);
             }
@@ -111,7 +112,7 @@ class Server
 
         $dsn = array_reduce(
             array_keys($credentials),
-            function (string $carry, string $key) use ($credentials) {
+            static function (string $carry, string $key) use ($credentials) {
                 return $carry . $key . '=' . $credentials[$key] . ';';
             },
             'pgsql:'

@@ -4,6 +4,7 @@ namespace Misantron\QueryBuilder\Tests\Integration;
 
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Server;
+use PDO;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,8 +33,8 @@ abstract class IntegrationTestCase extends TestCase
                 'password' => '1',
             ],
             [
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                \PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_EMULATE_PREPARES => false,
             ],
             '9.5'
         );

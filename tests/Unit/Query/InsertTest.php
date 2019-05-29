@@ -39,7 +39,7 @@ class InsertTest extends UnitTestCase
         $query->columns([]);
     }
 
-    public function testColumns()
+    public function testColumns(): void
     {
         $query = $this->createQuery();
 
@@ -54,7 +54,7 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame($columnsList, 'columns', $query);
     }
 
-    public function testValuesWithEmptyList()
+    public function testValuesWithEmptyList(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value list is empty');
@@ -63,7 +63,7 @@ class InsertTest extends UnitTestCase
         $query->values([]);
     }
 
-    public function testValuesWithSingleRow()
+    public function testValuesWithSingleRow(): void
     {
         $values = ['foo' => 1, 'bar' => 2];
 
@@ -74,7 +74,7 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame([[1, 2]], 'values', $query);
     }
 
-    public function testValuesWithMultipleRows()
+    public function testValuesWithMultipleRows(): void
     {
         $values = [
             ['foo' => 1, 'bar' => 2],
@@ -105,7 +105,7 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeInstanceOf(OnConflict::class, 'onConflict', $query);
     }
 
-    public function testFromRows()
+    public function testFromRows(): void
     {
         $server = $this->createServerMock();
         $table = 'foo.test';
@@ -118,26 +118,26 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeInstanceOf(Select::class, 'rowSet', $query);
     }
 
-    public function testBuildWithoutColumns()
+    public function testCompileWithoutColumns(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Column list is empty');
 
         $query = $this->createQuery();
-        $query->__toString();
+        $query->compile();
     }
 
-    public function testBuildWithoutValues()
+    public function testCompileWithoutValues(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value list is empty');
 
         $query = $this->createQuery();
         $query->columns(['foo', 'bar']);
-        $query->__toString();
+        $query->compile();
     }
 
-    public function testBuildWithValues()
+    public function testCompileWithValues(): void
     {
         $values = [
             ['foo' => 1, 'bar' => 'test1'],
@@ -149,10 +149,13 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertSame("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])", $query->__toString());
+        $this->assertSame(
+            "INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])",
+            $query->compile()
+        );
     }
 
-    public function testBuildWithOnConflict()
+    public function testCompileWithOnConflict(): void
     {
         $target = ConflictTarget::fromConstraint('pk_unique');
         $factory = Factory::create($this->createServerMock());
@@ -168,10 +171,14 @@ class InsertTest extends UnitTestCase
             ->values(['foo' => 'bar'])
             ->onConflict($target, $action);
 
-        $this->assertSame("INSERT INTO foo.bar (foo) VALUES ('bar') ON CONFLICT ON CONSTRAINT pk_unique DO UPDATE SET foo = 'bar' WHERE baz = 5", $query->__toString());
+        $this->assertSame(
+            "INSERT INTO foo.bar (foo) VALUES ('bar') " .
+            "ON CONFLICT ON CONSTRAINT pk_unique DO UPDATE SET foo = 'bar' WHERE baz = 5",
+            $query->compile()
+        );
     }
 
-    public function testBuildWithRowSet()
+    public function testCompileWithRowSet(): void
     {
         $server = $this->createServerMock();
         $columns = ['foo', 'bar'];
@@ -189,18 +196,13 @@ class InsertTest extends UnitTestCase
             ->columns($columns)
             ->fromRows($rowSetQuery);
 
-        $this->assertSame('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->__toString());
+        $this->assertSame(
+            'INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0',
+            $query->compile()
+        );
     }
 
-    public function testToString()
-    {
-        $query = $this->createQuery();
-        $query->values(['foo' => 1]);
-
-        $this->assertSame((string)$query, $query->__toString());
-    }
-
-    public function testGetInsertedRowWithoutReturningSet()
+    public function testGetInsertedRowWithoutReturningSet(): void
     {
         $this->expectException(QueryRuntimeException::class);
         $this->expectExceptionMessage('Returning fields must be set previously');

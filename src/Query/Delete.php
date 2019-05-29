@@ -10,6 +10,10 @@ use Misantron\QueryBuilder\Server;
 
 /**
  * Class Delete.
+ *
+ *
+ * @method Delete table(string $name)
+ * @method Delete execute()
  */
 class Delete extends Query implements Filterable
 {
@@ -30,7 +34,7 @@ class Delete extends Query implements Filterable
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         $query = 'DELETE FROM ' . $this->table;
         $query .= $this->buildFilters();

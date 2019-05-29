@@ -2,10 +2,12 @@
 
 namespace Misantron\QueryBuilder\Exception;
 
+use InvalidArgumentException;
+
 /**
  * Class IdentifierException.
  */
-class IdentifierException extends \InvalidArgumentException
+class IdentifierException extends InvalidArgumentException
 {
     /**
      * @return IdentifierException

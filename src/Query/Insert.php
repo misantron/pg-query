@@ -16,6 +16,7 @@ use PDO;
  * Class Insert.
  *
  *
+ * @method Insert table(string $name)
  * @method Insert columns($items)
  * @method Insert returning($items)
  * @method Insert execute()
@@ -30,7 +31,7 @@ class Insert extends Query implements Selectable
     private $values;
 
     /**
-     * @var OnConflict
+     * @var OnConflict|null
      */
     private $onConflict;
 
@@ -126,14 +127,14 @@ class Insert extends Query implements Selectable
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         QueryAssert::columnsNotEmpty($this->columns);
 
         $query = sprintf('INSERT INTO %s (%s)', $this->table, implode(',', $this->columns));
 
         if ($this->rowSet instanceof Select) {
-            $query .= ' ' . $this->rowSet;
+            $query .= ' ' . $this->rowSet->compile();
         } else {
             $query .= $this->buildValues();
             $query .= $this->buildOnConflict();

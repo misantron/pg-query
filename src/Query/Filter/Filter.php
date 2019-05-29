@@ -3,7 +3,7 @@
 namespace Misantron\QueryBuilder\Query\Filter;
 
 use Misantron\QueryBuilder\Assert\QueryAssert;
-use Misantron\QueryBuilder\Stringable;
+use Misantron\QueryBuilder\Query\Condition\Condition;
 
 /**
  * Class Filter.
@@ -40,15 +40,19 @@ class Filter
     }
 
     /**
-     * @param Stringable|string $condition
-     * @param string            $conjunction
-     * @param bool              $group
+     * @param Condition|string $condition
+     * @param string           $conjunction
+     * @param bool             $group
      *
      * @return Filter
      */
-    public static function create($condition, string $conjunction = '', bool $group = false)
+    public static function create($condition, string $conjunction = '', bool $group = false): Filter
     {
-        return new static((string)$condition, $conjunction, $group);
+        if ($condition instanceof Condition) {
+            $condition = $condition->compile();
+        }
+
+        return new static($condition, $conjunction, $group);
     }
 
     /**

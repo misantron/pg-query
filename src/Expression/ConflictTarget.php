@@ -61,7 +61,7 @@ class ConflictTarget implements Compilable
     {
         QueryAssert::filterGroupNotEmpty($group);
 
-        return new static('WHERE ' . $group);
+        return new static('WHERE ' . $group->compile());
     }
 
     /**

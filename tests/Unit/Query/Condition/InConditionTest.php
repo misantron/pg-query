@@ -11,7 +11,7 @@ class InConditionTest extends UnitTestCase
 {
     use Escape;
 
-    public function testConstructorWithEmptyValueList()
+    public function testConstructorWithEmptyValueList(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value list is empty');
@@ -19,38 +19,36 @@ class InConditionTest extends UnitTestCase
         new InCondition('foo', [''], 'IN');
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $condition = new InCondition('foo', [1, 2, 3], 'IN');
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals([1, 2, 3], 'values', $condition);
-        $this->assertAttributeEquals('IN', 'operator', $condition);
+        $this->assertAttributeSame('foo', 'column', $condition);
+        $this->assertAttributeSame([1, 2, 3], 'values', $condition);
+        $this->assertAttributeSame('IN', 'operator', $condition);
 
         $condition = new InCondition('foo', ['bar', 'baz'], 'NOT IN');
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals($this->escapeList(['bar', 'baz']), 'values', $condition);
-        $this->assertAttributeEquals('NOT IN', 'operator', $condition);
+        $this->assertAttributeSame('foo', 'column', $condition);
+        $this->assertAttributeSame($this->escapeList(['bar', 'baz']), 'values', $condition);
+        $this->assertAttributeSame('NOT IN', 'operator', $condition);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $condition = InCondition::create('foo', [1, 2, 3], 'NOT IN');
 
         $this->assertEquals(new InCondition('foo', [1, 2, 3], 'NOT IN'), $condition);
     }
 
-    public function testToString()
+    public function testCompile(): void
     {
         $condition = new InCondition('foo', [1, 2, 3], 'IN');
 
-        $this->assertSame('foo IN (1,2,3)', $condition->__toString());
-        $this->assertSame('foo IN (1,2,3)', (string)$condition);
+        $this->assertSame('foo IN (1,2,3)', $condition->compile());
 
         $condition = new InCondition('foo', ['bar', 'baz'], 'NOT IN');
 
-        $this->assertSame("foo NOT IN ('bar','baz')", $condition->__toString());
-        $this->assertSame("foo NOT IN ('bar','baz')", (string)$condition);
+        $this->assertSame("foo NOT IN ('bar','baz')", $condition->compile());
     }
 }

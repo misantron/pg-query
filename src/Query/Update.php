@@ -3,7 +3,6 @@
 namespace Misantron\QueryBuilder\Query;
 
 use Misantron\QueryBuilder\Assert\QueryAssert;
-use Misantron\QueryBuilder\Compilable;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Query\Mixin\Filterable;
 use Misantron\QueryBuilder\Query\Mixin\Filters;
@@ -15,8 +14,9 @@ use Misantron\QueryBuilder\Server;
  *
  *
  * @method Update table(string $name)
+ * @method Update execute()
  */
-class Update extends Query implements Filterable, Compilable
+class Update extends Query implements Filterable
 {
     use Filters, Returning;
 
@@ -54,7 +54,7 @@ class Update extends Query implements Filterable, Compilable
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         $query = 'UPDATE ' . ($this->table ? $this->table . ' ' : '');
         $query .= 'SET ' . $this->buildSet();
@@ -62,14 +62,6 @@ class Update extends Query implements Filterable, Compilable
         $query .= $this->buildReturning();
 
         return $query;
-    }
-
-    /**
-     * @return string
-     */
-    public function compile(): string
-    {
-        return $this->__toString();
     }
 
     /**

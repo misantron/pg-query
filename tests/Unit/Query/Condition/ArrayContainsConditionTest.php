@@ -11,7 +11,7 @@ class ArrayContainsConditionTest extends UnitTestCase
 {
     use Escape;
 
-    public function testConstructorWithEmptyValue()
+    public function testConstructorWithEmptyValue(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value list is empty');
@@ -19,7 +19,7 @@ class ArrayContainsConditionTest extends UnitTestCase
         new ArrayContainsCondition('foo', []);
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $condition = new ArrayContainsCondition('foo', [3, 5, 8]);
 
@@ -32,7 +32,7 @@ class ArrayContainsConditionTest extends UnitTestCase
         $this->assertAttributeEquals($this->escapeArray(['bar', 'baz']), 'values', $condition);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $condition = ArrayContainsCondition::create('foo', [3, 5, 8]);
 
@@ -43,16 +43,14 @@ class ArrayContainsConditionTest extends UnitTestCase
         $this->assertEquals(new ArrayContainsCondition('foo', ['bar', 'baz']), $condition);
     }
 
-    public function testToString()
+    public function testCompile(): void
     {
         $condition = new ArrayContainsCondition('foo', [3, 5, 8]);
 
-        $this->assertSame('foo @> ARRAY[3,5,8]::INTEGER[]', $condition->__toString());
-        $this->assertSame('foo @> ARRAY[3,5,8]::INTEGER[]', (string)$condition);
+        $this->assertSame('foo @> ARRAY[3,5,8]::INTEGER[]', $condition->compile());
 
         $condition = new ArrayContainsCondition('foo', ['bar', 'baz']);
 
-        $this->assertSame("foo @> ARRAY['bar','baz']::VARCHAR[]", $condition->__toString());
-        $this->assertSame("foo @> ARRAY['bar','baz']::VARCHAR[]", (string)$condition);
+        $this->assertSame("foo @> ARRAY['bar','baz']::VARCHAR[]", $condition->compile());
     }
 }

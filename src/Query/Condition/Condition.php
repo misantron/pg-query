@@ -3,13 +3,13 @@
 namespace Misantron\QueryBuilder\Query\Condition;
 
 use Misantron\QueryBuilder\Assert\QueryAssert;
+use Misantron\QueryBuilder\Compilable;
 use Misantron\QueryBuilder\Helper\Escape;
-use Misantron\QueryBuilder\Stringable;
 
 /**
  * Class Condition.
  */
-abstract class Condition implements Stringable
+abstract class Condition implements Compilable
 {
     use Escape;
 
