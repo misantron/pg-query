@@ -19,8 +19,6 @@ use Misantron\QueryBuilder\Server;
  *
  * @method Select execute()
  * @method Select columns($items)
- *
- * @method Select andIn(string $column, array $values)
  */
 class Select extends Query implements Selectable, Filterable, Retrievable
 {
