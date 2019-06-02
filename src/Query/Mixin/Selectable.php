@@ -12,5 +12,5 @@ interface Selectable
      *
      * @return Selectable
      */
-    public function columns($items);
+    public function columns($items): Selectable;
 }

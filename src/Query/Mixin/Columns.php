@@ -22,7 +22,7 @@ trait Columns
      *
      * @return Selectable
      */
-    public function columns($items)
+    public function columns($items): Selectable
     {
         QueryAssert::columnsNotEmpty($items);
 

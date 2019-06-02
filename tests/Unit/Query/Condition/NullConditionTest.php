@@ -22,7 +22,7 @@ class NullConditionTest extends UnitTestCase
 
     public function testCreate(): void
     {
-        $condition = NullCondition::create('foo');
+        $condition = NullCondition::create('foo', 'IS');
 
         $this->assertEquals(new NullCondition('foo', 'IS'), $condition);
 

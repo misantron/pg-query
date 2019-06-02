@@ -10,30 +10,22 @@ interface Filterable
     /**
      * @return Filterable
      */
-    public function beginGroup();
+    public function beginGroup(): Filterable;
 
     /**
      * @return Filterable
      */
-    public function andGroup();
+    public function andGroup(): Filterable;
 
     /**
      * @return Filterable
      */
-    public function orGroup();
+    public function orGroup(): Filterable;
 
     /**
      * @return Filterable
      */
-    public function endGroup();
-
-    /**
-     * @param string $column
-     * @param mixed  $value
-     *
-     * @return Filterable
-     */
-    public function equals(string $column, $value);
+    public function endGroup(): Filterable;
 
     /**
      * @param string $column
@@ -41,7 +33,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function andEquals(string $column, $value);
+    public function equals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -49,7 +41,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function orEquals(string $column, $value);
+    public function andEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -57,7 +49,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function notEquals(string $column, $value);
+    public function orEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -65,7 +57,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function andNotEquals(string $column, $value);
+    public function notEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -73,7 +65,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function orNotEquals(string $column, $value);
+    public function andNotEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -81,7 +73,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function more(string $column, $value);
+    public function orNotEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -89,7 +81,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function andMore(string $column, $value);
+    public function more(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -97,7 +89,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function orMore(string $column, $value);
+    public function andMore(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -105,7 +97,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function moreOrEquals(string $column, $value);
+    public function orMore(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -113,7 +105,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function andMoreOrEquals(string $column, $value);
+    public function moreOrEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -121,7 +113,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function orMoreOrEquals(string $column, $value);
+    public function andMoreOrEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -129,7 +121,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function less(string $column, $value);
+    public function orMoreOrEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -137,7 +129,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function andLess(string $column, $value);
+    public function less(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -145,7 +137,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function orLess(string $column, $value);
+    public function andLess(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -153,7 +145,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function lessOrEquals(string $column, $value);
+    public function orLess(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -161,7 +153,7 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function andLessOrEquals(string $column, $value);
+    public function lessOrEquals(string $column, $value): Filterable;
 
     /**
      * @param string $column
@@ -169,5 +161,13 @@ interface Filterable
      *
      * @return Filterable
      */
-    public function orLessOrEquals(string $column, $value);
+    public function andLessOrEquals(string $column, $value): Filterable;
+
+    /**
+     * @param string $column
+     * @param mixed  $value
+     *
+     * @return Filterable
+     */
+    public function orLessOrEquals(string $column, $value): Filterable;
 }

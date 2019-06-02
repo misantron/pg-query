@@ -20,7 +20,7 @@ trait RangeCompare
      *
      * @return Filterable
      */
-    public function between(string $column, array $values)
+    public function between(string $column, array $values): Filterable
     {
         return $this->andBetween($column, $values);
     }
@@ -31,7 +31,7 @@ trait RangeCompare
      *
      * @return Filterable
      */
-    public function andBetween(string $column, array $values)
+    public function andBetween(string $column, array $values): Filterable
     {
         $this->filters->append(
             Filter::create(BetweenCondition::create($column, $values), 'AND')
@@ -46,7 +46,7 @@ trait RangeCompare
      *
      * @return Filterable
      */
-    public function orBetween(string $column, array $values)
+    public function orBetween(string $column, array $values): Filterable
     {
         $this->filters->append(
             Filter::create(BetweenCondition::create($column, $values), 'OR')

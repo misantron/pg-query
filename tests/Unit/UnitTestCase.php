@@ -16,26 +16,26 @@ abstract class UnitTestCase extends TestCase
     /**
      * @return MockObject|PDO
      */
-    protected function createPDOMock()
+    protected function createPDOMock(): MockObject
     {
-        $pdo = $this->getMockBuilder(PDO::class)
+        return $this->getMockBuilder(PDO::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        return $pdo;
     }
 
     /**
      * @param PDO|null $pdo
      * @return MockObject|Server
      */
-    protected function createServerMock(?PDO $pdo = null)
+    protected function createServerMock(?PDO $pdo = null): MockObject
     {
         $server = $this->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $pdo = $pdo ?: $this->createPDOMock();
+        if ($pdo === null) {
+            $pdo = $this->createPDOMock();
+        }
 
         $server
             ->method('pdo')
@@ -49,10 +49,8 @@ abstract class UnitTestCase extends TestCase
      */
     protected function createStatementMock()
     {
-        $statement = $this->getMockBuilder(PDOStatement::class)
+        return $this->getMockBuilder(PDOStatement::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        return $statement;
     }
 }

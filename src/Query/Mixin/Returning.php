@@ -22,7 +22,7 @@ trait Returning
      *
      * @return $this
      */
-    public function returning($items)
+    public function returning($items): self
     {
         QueryAssert::columnsNotEmpty($items);
 

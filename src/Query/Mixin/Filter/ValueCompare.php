@@ -20,7 +20,7 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function equals(string $column, $value)
+    public function equals(string $column, $value): Filterable
     {
         return $this->andEquals($column, $value);
     }
@@ -31,12 +31,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function andEquals(string $column, $value)
+    public function andEquals(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '='), 'AND'
-            )
+            Filter::create(ValueCondition::create($column, $value, '='), 'AND')
         );
 
         return $this;
@@ -48,12 +46,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function orEquals(string $column, $value)
+    public function orEquals(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '='), 'OR'
-            )
+            Filter::create(ValueCondition::create($column, $value, '='), 'OR')
         );
 
         return $this;
@@ -65,7 +61,7 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function notEquals(string $column, $value)
+    public function notEquals(string $column, $value): Filterable
     {
         return $this->andNotEquals($column, $value);
     }
@@ -76,12 +72,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function andNotEquals(string $column, $value)
+    public function andNotEquals(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '!='), 'AND'
-            )
+            Filter::create(ValueCondition::create($column, $value, '!='), 'AND')
         );
 
         return $this;
@@ -93,12 +87,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function orNotEquals(string $column, $value)
+    public function orNotEquals(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '!='), 'OR'
-            )
+            Filter::create(ValueCondition::create($column, $value, '!='), 'OR')
         );
 
         return $this;
@@ -110,7 +102,7 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function more(string $column, $value)
+    public function more(string $column, $value): Filterable
     {
         return $this->andMore($column, $value);
     }
@@ -121,12 +113,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function andMore(string $column, $value)
+    public function andMore(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '>'), 'AND'
-            )
+            Filter::create(ValueCondition::create($column, $value, '>'), 'AND')
         );
 
         return $this;
@@ -138,12 +128,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function orMore(string $column, $value)
+    public function orMore(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '>'), 'OR'
-            )
+            Filter::create(ValueCondition::create($column, $value, '>'), 'OR')
         );
 
         return $this;
@@ -155,7 +143,7 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function moreOrEquals(string $column, $value)
+    public function moreOrEquals(string $column, $value): Filterable
     {
         return $this->andMoreOrEquals($column, $value);
     }
@@ -166,12 +154,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function andMoreOrEquals(string $column, $value)
+    public function andMoreOrEquals(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '>='), 'AND'
-            )
+            Filter::create(ValueCondition::create($column, $value, '>='), 'AND')
         );
 
         return $this;
@@ -183,12 +169,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function orMoreOrEquals(string $column, $value)
+    public function orMoreOrEquals(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '>='), 'OR'
-            )
+            Filter::create(ValueCondition::create($column, $value, '>='), 'OR')
         );
 
         return $this;
@@ -200,7 +184,7 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function less(string $column, $value)
+    public function less(string $column, $value): Filterable
     {
         return $this->andLess($column, $value);
     }
@@ -211,12 +195,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function andLess(string $column, $value)
+    public function andLess(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '<'), 'AND'
-            )
+            Filter::create(ValueCondition::create($column, $value, '<'), 'AND')
         );
 
         return $this;
@@ -228,12 +210,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function orLess(string $column, $value)
+    public function orLess(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '<'), 'OR'
-            )
+            Filter::create(ValueCondition::create($column, $value, '<'), 'OR')
         );
 
         return $this;
@@ -245,7 +225,7 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function lessOrEquals(string $column, $value)
+    public function lessOrEquals(string $column, $value): Filterable
     {
         return $this->andLessOrEquals($column, $value);
     }
@@ -256,12 +236,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function andLessOrEquals(string $column, $value)
+    public function andLessOrEquals(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '<='), 'AND'
-            )
+            Filter::create(ValueCondition::create($column, $value, '<='), 'AND')
         );
 
         return $this;
@@ -273,12 +251,10 @@ trait ValueCompare
      *
      * @return Filterable
      */
-    public function orLessOrEquals(string $column, $value)
+    public function orLessOrEquals(string $column, $value): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                ValueCondition::create($column, $value, '<='), 'OR'
-            )
+            Filter::create(ValueCondition::create($column, $value, '<='), 'OR')
         );
 
         return $this;

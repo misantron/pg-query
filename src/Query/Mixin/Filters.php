@@ -24,7 +24,7 @@ trait Filters
     /**
      * @return Filterable
      */
-    public function beginGroup()
+    public function beginGroup(): Filterable
     {
         return $this->andGroup();
     }
@@ -32,7 +32,7 @@ trait Filters
     /**
      * @return Filterable
      */
-    public function andGroup()
+    public function andGroup(): Filterable
     {
         $this->filters->append(Filter::create('(', 'AND', true));
 
@@ -42,7 +42,7 @@ trait Filters
     /**
      * @return Filterable
      */
-    public function orGroup()
+    public function orGroup(): Filterable
     {
         $this->filters->append(Filter::create('(', 'OR', true));
 
@@ -52,7 +52,7 @@ trait Filters
     /**
      * @return Filterable
      */
-    public function endGroup()
+    public function endGroup(): Filterable
     {
         $this->filters->append(Filter::create(')'));
 

@@ -36,7 +36,7 @@ interface Retrievable
     /**
      * @return array|null
      */
-    public function fetchOneAssoc();
+    public function fetchOneAssoc(): ?array;
 
     /**
      * @return array

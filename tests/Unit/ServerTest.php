@@ -6,7 +6,7 @@ use Misantron\QueryBuilder\Server;
 
 class ServerTest extends UnitTestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $server = new Server([], [], '9.5');
 
