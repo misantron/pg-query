@@ -4,6 +4,7 @@ namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
 use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Exception\QueryRuntimeException;
+use Misantron\QueryBuilder\Exception\ServerException;
 use Misantron\QueryBuilder\Expression\ConflictTarget;
 use Misantron\QueryBuilder\Expression\OnConflict;
 use Misantron\QueryBuilder\Factory;
@@ -88,12 +89,31 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame([[1, 2], [3, 4]], 'values', $query);
     }
 
+    public function testOnConflictWithNotAcceptableServerVersion(): void
+    {
+        $this->expectException(ServerException::class);
+        $this->expectExceptionMessage('Feature available since 9.5 version');
+
+        $server = new Server([], [], '9.2');
+
+        $target = ConflictTarget::fromField('foo');
+        $factory = Factory::create($this->createServerMock());
+        $factory->setServer($server);
+
+        $action = $factory
+            ->update()
+            ->set(['foo' => 'bar'])
+            ->andEquals('baz', 5);
+
+        $query = $this->createQuery($server);
+        $query->onConflict($target, $action);
+    }
+
     public function testOnConflict(): void
     {
         $target = ConflictTarget::fromConstraint('foo_unique');
         $factory = Factory::create($this->createServerMock());
 
-        /** @var Update $action */
         $action = $factory
             ->update()
             ->set(['foo' => 'bar'])
@@ -373,9 +393,12 @@ class InsertTest extends UnitTestCase
         ], $inserted);
     }
 
-    private function createQuery(): Insert
+    private function createQuery(?Server $server = null): Insert
     {
-        $server = $this->createServerMock();
+        if ($server === null) {
+            $server = $this->createServerMock();
+        }
+
         $table = 'foo.bar';
 
         return new Insert($server, $table);
