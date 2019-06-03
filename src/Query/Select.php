@@ -20,12 +20,10 @@ use Misantron\QueryBuilder\Server;
  * @method Select table(string $name)
  * @method Select columns($items)
  * @method Select execute()
- *
  * @method Select beginGroup()
  * @method Select andGroup()
  * @method Select orGroup()
  * @method Select endGroup()
- *
  * @method Select equals(string $column, $value)
  * @method Select andEquals(string $column, $value)
  * @method Select orEquals(string $column, $value)
@@ -44,11 +42,9 @@ use Misantron\QueryBuilder\Server;
  * @method Select lessOrEquals(string $column, $value)
  * @method Select andLessOrEquals(string $column, $value)
  * @method Select orLessOrEquals(string $column, $value)
- *
  * @method Select between(string $column, array $values)
  * @method Select andBetween(string $column, array $values)
  * @method Select orBetween(string $column, array $values)
- *
  * @method Select in(string $column, array $values)
  * @method Select andIn(string $column, array $values)
  * @method Select orIn(string $column, array $values)
@@ -64,7 +60,6 @@ use Misantron\QueryBuilder\Server;
  * @method Select arrayContains(string $column, array $values)
  * @method Select andArrayContains(string $column, array $values)
  * @method Select orArrayContains(string $column, array $values)
- *
  * @method Select isNull(string $column)
  * @method Select andIsNull(string $column)
  * @method Select orIsNull(string $column)

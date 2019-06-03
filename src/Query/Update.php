@@ -16,12 +16,10 @@ use Misantron\QueryBuilder\Server;
  * @method Update table(string $name)
  * @method Update execute()
  * @method Update returning($items)
- *
  * @method Update beginGroup()
  * @method Update andGroup()
  * @method Update orGroup()
  * @method Update endGroup()
- *
  * @method Update equals(string $column, $value)
  * @method Update andEquals(string $column, $value)
  * @method Update orEquals(string $column, $value)
@@ -40,11 +38,9 @@ use Misantron\QueryBuilder\Server;
  * @method Update lessOrEquals(string $column, $value)
  * @method Update andLessOrEquals(string $column, $value)
  * @method Update orLessOrEquals(string $column, $value)
- *
  * @method Update between(string $column, array $values)
  * @method Update andBetween(string $column, array $values)
  * @method Update orBetween(string $column, array $values)
- *
  * @method Update in(string $column, array $values)
  * @method Update andIn(string $column, array $values)
  * @method Update orIn(string $column, array $values)
@@ -60,7 +56,6 @@ use Misantron\QueryBuilder\Server;
  * @method Update arrayContains(string $column, array $values)
  * @method Update andArrayContains(string $column, array $values)
  * @method Update orArrayContains(string $column, array $values)
- *
  * @method Update isNull(string $column)
  * @method Update andIsNull(string $column)
  * @method Update orIsNull(string $column)
