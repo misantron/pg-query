@@ -18,8 +18,8 @@ use PDO;
  *
  * @method Insert table(string $name)
  * @method Insert columns($items)
- * @method Insert returning($items)
  * @method Insert execute()
+ * @method Insert returning($items)
  */
 class Insert extends Query implements Selectable
 {

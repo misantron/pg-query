@@ -17,8 +17,60 @@ use Misantron\QueryBuilder\Server;
  * Class Select.
  *
  *
- * @method Select execute()
+ * @method Select table(string $name)
  * @method Select columns($items)
+ * @method Select execute()
+ *
+ * @method Select beginGroup()
+ * @method Select andGroup()
+ * @method Select orGroup()
+ * @method Select endGroup()
+ *
+ * @method Select equals(string $column, $value)
+ * @method Select andEquals(string $column, $value)
+ * @method Select orEquals(string $column, $value)
+ * @method Select notEquals(string $column, $value)
+ * @method Select andNotEquals(string $column, $value)
+ * @method Select orNotEquals(string $column, $value)
+ * @method Select more(string $column, $value)
+ * @method Select andMore(string $column, $value)
+ * @method Select orMore(string $column, $value)
+ * @method Select moreOrEquals(string $column, $value)
+ * @method Select andMoreOrEquals(string $column, $value)
+ * @method Select orMoreOrEquals(string $column, $value)
+ * @method Select less(string $column, $value)
+ * @method Select andLess(string $column, $value)
+ * @method Select orLess(string $column, $value)
+ * @method Select lessOrEquals(string $column, $value)
+ * @method Select andLessOrEquals(string $column, $value)
+ * @method Select orLessOrEquals(string $column, $value)
+ *
+ * @method Select between(string $column, array $values)
+ * @method Select andBetween(string $column, array $values)
+ * @method Select orBetween(string $column, array $values)
+ *
+ * @method Select in(string $column, array $values)
+ * @method Select andIn(string $column, array $values)
+ * @method Select orIn(string $column, array $values)
+ * @method Select notIn(string $column, array $values)
+ * @method Select andNotIn(string $column, array $values)
+ * @method Select orNotIn(string $column, array $values)
+ * @method Select inArray(string $column, $value)
+ * @method Select andInArray(string $column, $value)
+ * @method Select orInArray(string $column, $value)
+ * @method Select notInArray(string $column, $value)
+ * @method Select andNotInArray(string $column, $value)
+ * @method Select orNotInArray(string $column, $value)
+ * @method Select arrayContains(string $column, array $values)
+ * @method Select andArrayContains(string $column, array $values)
+ * @method Select orArrayContains(string $column, array $values)
+ *
+ * @method Select isNull(string $column)
+ * @method Select andIsNull(string $column)
+ * @method Select orIsNull(string $column)
+ * @method Select isNotNull(string $column)
+ * @method Select andIsNotNull(string $column)
+ * @method Select orIsNotNull(string $column)
  */
 class Select extends Query implements Selectable, Filterable, Retrievable
 {

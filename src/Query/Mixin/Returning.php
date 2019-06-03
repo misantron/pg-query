@@ -18,7 +18,7 @@ trait Returning
     private $returning = [];
 
     /**
-     * @param $items
+     * @param string|array $items
      *
      * @return $this
      */

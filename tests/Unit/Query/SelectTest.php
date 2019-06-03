@@ -275,7 +275,11 @@ class SelectTest extends UnitTestCase
             ->offset(150);
 
         $this->assertSame(
-            'WITH regional_sales AS (SELECT region,SUM(amount) AS total_sales FROM orders t1 GROUP BY region), top_regions AS (SELECT region FROM regional_sales t1 WHERE total_sales > 1000) SELECT field1,field2 FROM foo.bar t1 INNER JOIN test t2 ON t2.id = t1.user_id WHERE field1 IN (3,7,9) OR field2 IS NULL GROUP BY region HAVING total_amount >= 1500 ORDER BY region desc LIMIT 1000 OFFSET 150',
+            'WITH regional_sales AS (SELECT region,SUM(amount) AS total_sales ' .
+            'FROM orders t1 GROUP BY region), top_regions AS (SELECT region FROM regional_sales t1 ' .
+            'WHERE total_sales > 1000) SELECT field1,field2 FROM foo.bar t1 ' .
+            'INNER JOIN test t2 ON t2.id = t1.user_id WHERE field1 IN (3,7,9) OR field2 IS NULL ' .
+            'GROUP BY region HAVING total_amount >= 1500 ORDER BY region desc LIMIT 1000 OFFSET 150',
             $query->compile()
         );
     }
@@ -460,7 +464,10 @@ class SelectTest extends UnitTestCase
             ->andInArray('bar', 5)
             ->orInArray('baz', 10);
 
-        $this->assertSame('SELECT * FROM foo.bar t1 WHERE 1 = ANY(foo) AND 5 = ANY(bar) OR 10 = ANY(baz)', $query->compile());
+        $this->assertSame(
+            'SELECT * FROM foo.bar t1 WHERE 1 = ANY(foo) AND 5 = ANY(bar) OR 10 = ANY(baz)',
+            $query->compile()
+        );
     }
 
     public function testBuildConditionsWithNotInArrayFilters(): void
@@ -472,7 +479,10 @@ class SelectTest extends UnitTestCase
             ->andNotInArray('bar', 5)
             ->orNotInArray('baz', 10);
 
-        $this->assertSame('SELECT * FROM foo.bar t1 WHERE 1 != ANY(foo) AND 5 != ANY(bar) OR 10 != ANY(baz)', $query->compile());
+        $this->assertSame(
+            'SELECT * FROM foo.bar t1 WHERE 1 != ANY(foo) AND 5 != ANY(bar) OR 10 != ANY(baz)',
+            $query->compile()
+        );
     }
 
     public function testBuildConditionsWithArrayContainsFilters(): void
@@ -485,7 +495,8 @@ class SelectTest extends UnitTestCase
             ->orArrayContains('baz', [10, 20]);
 
         $this->assertSame(
-            'SELECT * FROM foo.bar t1 WHERE foo @> ARRAY[1,2]::INTEGER[] AND bar @> ARRAY[5,6]::INTEGER[] OR baz @> ARRAY[10,20]::INTEGER[]',
+            'SELECT * FROM foo.bar t1 ' .
+            'WHERE foo @> ARRAY[1,2]::INTEGER[] AND bar @> ARRAY[5,6]::INTEGER[] OR baz @> ARRAY[10,20]::INTEGER[]',
             $query->compile()
         );
     }
