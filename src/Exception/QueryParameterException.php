@@ -1,11 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Exception;
+
+use InvalidArgumentException;
 
 /**
  * Class QueryParameterException.
  */
-class QueryParameterException extends \InvalidArgumentException
+final class QueryParameterException extends InvalidArgumentException
 {
     /**
      * @param string $name

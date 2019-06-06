@@ -1,11 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Exception;
+
+use RuntimeException;
 
 /**
  * Class ServerException.
  */
-class ServerException extends \RuntimeException
+final class ServerException extends RuntimeException
 {
     /**
      * @return ServerException

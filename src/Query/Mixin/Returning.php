@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Mixin;
 
@@ -18,11 +19,11 @@ trait Returning
     private $returning = [];
 
     /**
-     * @param $items
+     * @param string|array $items
      *
      * @return $this
      */
-    public function returning($items)
+    public function returning($items): self
     {
         QueryAssert::columnsNotEmpty($items);
 

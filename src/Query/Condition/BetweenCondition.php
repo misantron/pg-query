@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
@@ -7,7 +8,7 @@ use Misantron\QueryBuilder\Assert\QueryAssert;
 /**
  * Class BetweenCondition.
  */
-class BetweenCondition extends Condition
+final class BetweenCondition extends Condition
 {
     /**
      * @var array
@@ -51,10 +52,9 @@ class BetweenCondition extends Condition
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
-        $values = $this->values;
-        list($rangeBegin, $rangeEnd) = $values;
+        [$rangeBegin, $rangeEnd] = $this->values;
 
         return sprintf('%s BETWEEN %s AND %s', $this->column, $rangeBegin, $rangeEnd);
     }

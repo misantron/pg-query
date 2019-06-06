@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Integration\Query;
 
+use DateTime;
 use Misantron\QueryBuilder\Tests\Integration\IntegrationTestCase;
 
 class InsertTest extends IntegrationTestCase
 {
-    public function testInsertSingleRow()
+    public function testInsertSingleRow(): void
     {
         $query = $this->getFactory()->insert('foo.products');
 
@@ -20,7 +22,7 @@ class InsertTest extends IntegrationTestCase
                 'quantity' => 145,
                 'taxable' => false,
                 'tag_ids' => [5, 8],
-                'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+                'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
             ])
             ->returning([
                 'sku',
@@ -35,7 +37,7 @@ class InsertTest extends IntegrationTestCase
         $this->assertEquals(1, $response['status_id']);
     }
 
-    public function testInsertMultipleRows()
+    public function testInsertMultipleRows(): void
     {
         $query = $this->getFactory()->insert('foo.products');
 
@@ -50,7 +52,7 @@ class InsertTest extends IntegrationTestCase
                     'quantity' => 145,
                     'taxable' => false,
                     'tag_ids' => [5, 8],
-                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+                    'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
                 ],
                 [
                     'sku' => 'S12T-Gec-GS',
@@ -61,7 +63,7 @@ class InsertTest extends IntegrationTestCase
                     'quantity' => 180,
                     'taxable' => false,
                     'tag_ids' => [5, 6],
-                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+                    'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
                 ],
             ])
             ->returning([
@@ -72,11 +74,10 @@ class InsertTest extends IntegrationTestCase
             ->execute()
             ->getInsertedRows();
 
-        $this->assertInternalType('array', $response);
         $this->assertCount(2, $response);
     }
 
-    public function testInsertFromRows()
+    public function testInsertFromRows(): void
     {
         $query = $this->getFactory()->insert('foo.tags');
 
@@ -84,11 +85,11 @@ class InsertTest extends IntegrationTestCase
             ->values([
                 [
                     'name' => 'Green',
-                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+                    'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
                 ],
                 [
                     'name' => 'Red',
-                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+                    'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
                 ],
             ])
             ->execute();
@@ -106,7 +107,6 @@ class InsertTest extends IntegrationTestCase
             ->execute()
             ->getInsertedRows();
 
-        $this->assertInternalType('array', $response);
         $this->assertCount(2, $response);
 
         $select = $this->getFactory()
@@ -116,7 +116,7 @@ class InsertTest extends IntegrationTestCase
         $this->assertEquals(4, $select->rowsCount());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->getFactory()
             ->delete('foo.products')

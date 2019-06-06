@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Mixin\Filter;
 
@@ -19,7 +20,7 @@ trait NullCompare
      *
      * @return Filterable
      */
-    public function isNull(string $column)
+    public function isNull(string $column): Filterable
     {
         return $this->andIsNull($column);
     }
@@ -29,12 +30,10 @@ trait NullCompare
      *
      * @return Filterable
      */
-    public function andIsNull(string $column)
+    public function andIsNull(string $column): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                NullCondition::create($column, 'IS'), 'AND'
-            )
+            Filter::create(NullCondition::create($column, 'IS'), 'AND')
         );
 
         return $this;
@@ -45,12 +44,10 @@ trait NullCompare
      *
      * @return Filterable
      */
-    public function orIsNull(string $column)
+    public function orIsNull(string $column): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                NullCondition::create($column, 'IS'), 'OR'
-            )
+            Filter::create(NullCondition::create($column, 'IS'), 'OR')
         );
 
         return $this;
@@ -61,7 +58,7 @@ trait NullCompare
      *
      * @return Filterable
      */
-    public function isNotNull(string $column)
+    public function isNotNull(string $column): Filterable
     {
         return $this->andIsNotNull($column);
     }
@@ -71,12 +68,10 @@ trait NullCompare
      *
      * @return Filterable
      */
-    public function andIsNotNull(string $column)
+    public function andIsNotNull(string $column): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                NullCondition::create($column, 'IS NOT'), 'AND'
-            )
+            Filter::create(NullCondition::create($column, 'IS NOT'), 'AND')
         );
 
         return $this;
@@ -87,12 +82,10 @@ trait NullCompare
      *
      * @return Filterable
      */
-    public function orIsNotNull(string $column)
+    public function orIsNotNull(string $column): Filterable
     {
         $this->filters->append(
-            Filter::create(
-                NullCondition::create($column, 'IS NOT'), 'OR'
-            )
+            Filter::create(NullCondition::create($column, 'IS NOT'), 'OR')
         );
 
         return $this;

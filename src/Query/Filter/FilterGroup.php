@@ -1,13 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Filter;
 
-use Misantron\QueryBuilder\Stringable;
+use Misantron\QueryBuilder\Compilable;
 
 /**
  * Class FilterGroup.
  */
-class FilterGroup implements Stringable
+final class FilterGroup implements Compilable
 {
     /**
      * @var Filter[]
@@ -33,7 +34,7 @@ class FilterGroup implements Stringable
     /**
      * @param Filter $filter
      */
-    public function append(Filter $filter)
+    public function append(Filter $filter): void
     {
         $this->list[] = $filter;
     }
@@ -41,14 +42,14 @@ class FilterGroup implements Stringable
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         $trimSign = true;
         $filters = $this->list;
 
         return (string)array_reduce(
             $filters,
-            function (string $query, Filter $filter) use (&$trimSign) {
+            static function (string $query, Filter $filter) use (&$trimSign) {
                 $condition = $filter->condition();
                 if (!$trimSign && $filter->conjunction()) {
                     $condition = $filter->conjunction() . ' ' . $condition;

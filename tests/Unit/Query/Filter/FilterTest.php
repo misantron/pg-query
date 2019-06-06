@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Filter;
 
@@ -11,7 +12,7 @@ use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 
 class FilterTest extends UnitTestCase
 {
-    public function testCreateWithInvalidConjunction()
+    public function testCreateWithInvalidConjunction(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Invalid conjunction - unexpected value: foo');
@@ -21,27 +22,27 @@ class FilterTest extends UnitTestCase
         Filter::create($condition, 'foo');
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $condition = new ValueCondition('bar', 5, '>');
 
         $filter = Filter::create($condition, 'AND');
 
-        $this->assertEquals($condition, $filter->condition());
+        $this->assertSame($condition->compile(), $filter->condition());
         $this->assertSame('AND', $filter->conjunction());
-        $this->assertSame(false, $filter->group());
+        $this->assertFalse($filter->group());
     }
 
-    public function testCondition()
+    public function testCondition(): void
     {
         $condition = new NullCondition('bar', 'IS');
 
         $filter = Filter::create($condition, 'AND');
 
-        $this->assertEquals($condition, $filter->condition());
+        $this->assertSame($condition->compile(), $filter->condition());
     }
 
-    public function testConjunction()
+    public function testConjunction(): void
     {
         $condition = new InCondition('bar', [1, 3], 'IN');
 
@@ -50,10 +51,10 @@ class FilterTest extends UnitTestCase
         $this->assertSame('AND', $filter->conjunction());
     }
 
-    public function testGroup()
+    public function testGroup(): void
     {
         $filter = Filter::create('(', 'AND', true);
 
-        $this->assertSame(true, $filter->group());
+        $this->assertTrue($filter->group());
     }
 }

@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query;
 
+use Misantron\QueryBuilder\Compilable;
 use Misantron\QueryBuilder\Expression\Field;
 use Misantron\QueryBuilder\Helper\Escape;
 use Misantron\QueryBuilder\Server;
-use Misantron\QueryBuilder\Stringable;
+use PDOStatement;
 
 /**
  * Class Query.
  */
-abstract class Query implements Stringable
+abstract class Query implements Compilable
 {
     use Escape;
 
@@ -20,7 +22,7 @@ abstract class Query implements Stringable
     protected $server;
 
     /**
-     * @var \PDOStatement
+     * @var PDOStatement
      */
     protected $statement;
 
@@ -42,7 +44,7 @@ abstract class Query implements Stringable
      *
      * @return Query
      */
-    public function table(string $name)
+    public function table(string $name): Query
     {
         $this->table = $this->escapeIdentifier($name);
 
@@ -52,12 +54,12 @@ abstract class Query implements Stringable
     /**
      * @return Query
      */
-    public function execute()
+    public function execute(): Query
     {
-        $query = $this->__toString();
+        $query = $this->compile();
 
         $this->statement = $this->server->pdo()->prepare($query);
-        if ($this->statement instanceof \PDOStatement) {
+        if ($this->statement instanceof PDOStatement) {
             $this->statement->execute();
         }
 
@@ -77,7 +79,7 @@ abstract class Query implements Stringable
 
         return array_filter(array_map(function ($item) {
             return $item instanceof Field
-                ? (string)$item
+                ? $item->compile()
                 : $this->escapeIdentifier(trim($item));
         }, $items));
     }

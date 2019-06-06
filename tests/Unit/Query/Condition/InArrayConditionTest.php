@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Condition;
 
@@ -11,7 +12,7 @@ class InArrayConditionTest extends UnitTestCase
 {
     use Escape;
 
-    public function testConstructorWithInvalidOperator()
+    public function testConstructorWithInvalidOperator(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Invalid condition - unexpected value: >');
@@ -19,7 +20,7 @@ class InArrayConditionTest extends UnitTestCase
         new InArrayCondition('foo', 3, '>');
     }
 
-    public function testConstructorWithNotScalarValue()
+    public function testConstructorWithNotScalarValue(): void
     {
         $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value must be a scalar');
@@ -27,7 +28,7 @@ class InArrayConditionTest extends UnitTestCase
         new InArrayCondition('foo', [], '=');
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $condition = new InArrayCondition('foo', 5, '=');
 
@@ -42,23 +43,21 @@ class InArrayConditionTest extends UnitTestCase
         $this->assertAttributeEquals('!=', 'operator', $condition);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $condition = InArrayCondition::create('foo', 5, '=');
 
         $this->assertEquals($condition, new InArrayCondition('foo', 5, '='));
     }
 
-    public function testToString()
+    public function testCompile(): void
     {
         $condition = new InArrayCondition('foo', 5, '=');
 
-        $this->assertSame('5 = ANY(foo)', $condition->__toString());
-        $this->assertSame('5 = ANY(foo)', (string)$condition);
+        $this->assertSame('5 = ANY(foo)', $condition->compile());
 
         $condition = new InArrayCondition('foo', 'bar', '!=');
 
-        $this->assertSame("'bar' != ANY(foo)", $condition->__toString());
-        $this->assertSame("'bar' != ANY(foo)", (string)$condition);
+        $this->assertSame("'bar' != ANY(foo)", $condition->compile());
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Mixin;
 
@@ -36,7 +37,7 @@ interface Retrievable
     /**
      * @return array|null
      */
-    public function fetchOneAssoc();
+    public function fetchOneAssoc(): ?array;
 
     /**
      * @return array

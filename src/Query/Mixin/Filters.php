@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Mixin;
 
@@ -24,7 +25,7 @@ trait Filters
     /**
      * @return Filterable
      */
-    public function beginGroup()
+    public function beginGroup(): Filterable
     {
         return $this->andGroup();
     }
@@ -32,7 +33,7 @@ trait Filters
     /**
      * @return Filterable
      */
-    public function andGroup()
+    public function andGroup(): Filterable
     {
         $this->filters->append(Filter::create('(', 'AND', true));
 
@@ -42,7 +43,7 @@ trait Filters
     /**
      * @return Filterable
      */
-    public function orGroup()
+    public function orGroup(): Filterable
     {
         $this->filters->append(Filter::create('(', 'OR', true));
 
@@ -52,7 +53,7 @@ trait Filters
     /**
      * @return Filterable
      */
-    public function endGroup()
+    public function endGroup(): Filterable
     {
         $this->filters->append(Filter::create(')'));
 
@@ -64,6 +65,6 @@ trait Filters
      */
     private function buildFilters(): string
     {
-        return $this->filters->notEmpty() ? ' WHERE ' . (string)$this->filters : '';
+        return $this->filters->notEmpty() ? ' WHERE ' . $this->filters->compile() : '';
     }
 }

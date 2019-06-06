@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Mixin\Filter;
 
@@ -22,7 +23,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function in(string $column, array $values)
+    public function in(string $column, array $values): Filterable
     {
         return $this->andIn($column, $values);
     }
@@ -33,7 +34,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function andIn(string $column, array $values)
+    public function andIn(string $column, array $values): Filterable
     {
         $this->filters->append(
             Filter::create(InCondition::create($column, $values, 'IN'), 'AND')
@@ -48,7 +49,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function orIn(string $column, array $values)
+    public function orIn(string $column, array $values): Filterable
     {
         $this->filters->append(
             Filter::create(InCondition::create($column, $values, 'IN'), 'OR')
@@ -63,7 +64,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function notIn(string $column, array $values)
+    public function notIn(string $column, array $values): Filterable
     {
         return $this->andNotIn($column, $values);
     }
@@ -74,7 +75,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function andNotIn(string $column, array $values)
+    public function andNotIn(string $column, array $values): Filterable
     {
         $this->filters->append(
             Filter::create(InCondition::create($column, $values, 'NOT IN'), 'AND')
@@ -89,7 +90,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function orNotIn(string $column, array $values)
+    public function orNotIn(string $column, array $values): Filterable
     {
         $this->filters->append(
             Filter::create(InCondition::create($column, $values, 'NOT IN'), 'OR')
@@ -104,7 +105,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function inArray(string $column, $value)
+    public function inArray(string $column, $value): Filterable
     {
         return $this->andInArray($column, $value);
     }
@@ -115,7 +116,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function andInArray(string $column, $value)
+    public function andInArray(string $column, $value): Filterable
     {
         $this->filters->append(
             Filter::create(InArrayCondition::create($column, $value, '='), 'AND')
@@ -130,7 +131,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function orInArray(string $column, $value)
+    public function orInArray(string $column, $value): Filterable
     {
         $this->filters->append(
             Filter::create(InArrayCondition::create($column, $value, '='), 'OR')
@@ -145,7 +146,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function notInArray(string $column, $value)
+    public function notInArray(string $column, $value): Filterable
     {
         return $this->andNotInArray($column, $value);
     }
@@ -156,7 +157,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function andNotInArray(string $column, $value)
+    public function andNotInArray(string $column, $value): Filterable
     {
         $this->filters->append(
             Filter::create(InArrayCondition::create($column, $value, '!='), 'AND')
@@ -171,7 +172,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function orNotInArray(string $column, $value)
+    public function orNotInArray(string $column, $value): Filterable
     {
         $this->filters->append(
             Filter::create(InArrayCondition::create($column, $value, '!='), 'OR')
@@ -186,7 +187,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function arrayContains(string $column, array $values)
+    public function arrayContains(string $column, array $values): Filterable
     {
         return $this->andArrayContains($column, $values);
     }
@@ -197,7 +198,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function andArrayContains(string $column, array $values)
+    public function andArrayContains(string $column, array $values): Filterable
     {
         $this->filters->append(
             Filter::create(ArrayContainsCondition::create($column, $values), 'AND')
@@ -212,7 +213,7 @@ trait ArrayCompare
      *
      * @return Filterable
      */
-    public function orArrayContains(string $column, array $values)
+    public function orArrayContains(string $column, array $values): Filterable
     {
         $this->filters->append(
             Filter::create(ArrayContainsCondition::create($column, $values), 'OR')

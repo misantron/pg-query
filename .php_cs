@@ -16,4 +16,6 @@ return PhpCsFixer\Config::create()
         'phpdoc_no_package' => true,
         'cast_spaces' => ['space' => 'none'],
         'yoda_style' => false,
+        'single_trait_insert_per_statement' => false,
+        'blank_line_after_opening_tag' => false,
     ]);

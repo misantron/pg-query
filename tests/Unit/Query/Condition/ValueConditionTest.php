@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query\Condition;
 
@@ -10,39 +11,36 @@ class ValueConditionTest extends UnitTestCase
 {
     use Escape;
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $condition = new ValueCondition('foo', 'bar', '=');
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals($this->escapeValue('bar'), 'value', $condition);
-        $this->assertAttributeEquals('=', 'operator', $condition);
+        $this->assertAttributeSame('foo', 'column', $condition);
+        $this->assertAttributeSame($this->escapeValue('bar'), 'value', $condition);
+        $this->assertAttributeSame('=', 'operator', $condition);
 
         $condition = new ValueCondition('foo', 5, '>=');
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
+        $this->assertAttributeSame('foo', 'column', $condition);
         $this->assertAttributeEquals(5, 'value', $condition);
-        $this->assertAttributeEquals('>=', 'operator', $condition);
+        $this->assertAttributeSame('>=', 'operator', $condition);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $condition = ValueCondition::create('foo', 'bar', '=');
 
-        $this->assertInstanceOf(ValueCondition::class, $condition);
         $this->assertEquals(new ValueCondition('foo', 'bar', '='), $condition);
     }
 
-    public function testToString()
+    public function testCompile(): void
     {
         $condition = new ValueCondition('foo', 'bar', '=');
 
-        $this->assertSame("foo = 'bar'", $condition->__toString());
-        $this->assertSame("foo = 'bar'", (string)$condition);
+        $this->assertSame("foo = 'bar'", $condition->compile());
 
         $condition = new ValueCondition('foo', 5, '>=');
 
-        $this->assertSame('foo >= 5', $condition->__toString());
-        $this->assertSame('foo >= 5', (string)$condition);
+        $this->assertSame('foo >= 5', $condition->compile());
     }
 }

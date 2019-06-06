@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Mixin;
 
@@ -22,7 +23,7 @@ trait Columns
      *
      * @return Selectable
      */
-    public function columns($items)
+    public function columns($items): Selectable
     {
         QueryAssert::columnsNotEmpty($items);
 

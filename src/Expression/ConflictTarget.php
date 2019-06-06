@@ -1,15 +1,16 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Expression;
 
 use Misantron\QueryBuilder\Assert\QueryAssert;
+use Misantron\QueryBuilder\Compilable;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
-use Misantron\QueryBuilder\Stringable;
 
 /**
  * Class ConflictTarget.
  */
-class ConflictTarget implements Stringable
+final class ConflictTarget implements Compilable
 {
     /**
      * @var string
@@ -61,14 +62,14 @@ class ConflictTarget implements Stringable
     {
         QueryAssert::filterGroupNotEmpty($group);
 
-        return new static('WHERE ' . (string)$group);
+        return new static('WHERE ' . $group->compile());
     }
 
     /**
      * @return string
      */
-    public function __toString(): string
+    public function compile(): string
     {
-        return $this->expr ?: '';
+        return $this->expr;
     }
 }

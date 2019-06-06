@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
@@ -7,7 +8,7 @@ use Misantron\QueryBuilder\Assert\QueryAssert;
 /**
  * Class ArrayContainsCondition.
  */
-class ArrayContainsCondition extends Condition
+final class ArrayContainsCondition extends Condition
 {
     /**
      * @var string
@@ -33,7 +34,7 @@ class ArrayContainsCondition extends Condition
      *
      * @return ArrayContainsCondition
      */
-    public static function create(string $column, array $values)
+    public static function create(string $column, array $values): ArrayContainsCondition
     {
         return new static($column, $values);
     }
@@ -49,7 +50,7 @@ class ArrayContainsCondition extends Condition
     /**
      * @return string
      */
-    public function __toString(): string
+    public function compile(): string
     {
         return sprintf('%s @> %s', $this->column, $this->values);
     }

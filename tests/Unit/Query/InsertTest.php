@@ -1,20 +1,26 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Exception\QueryRuntimeException;
+use Misantron\QueryBuilder\Exception\ServerException;
 use Misantron\QueryBuilder\Expression\ConflictTarget;
+use Misantron\QueryBuilder\Expression\OnConflict;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query\Insert;
 use Misantron\QueryBuilder\Query\Select;
 use Misantron\QueryBuilder\Query\Update;
 use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
+use PDO;
+use PDOStatement;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class InsertTest extends UnitTestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $query = $this->createQuery();
 
@@ -26,16 +32,16 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame(null, 'rowSet', $query);
     }
 
-    public function testColumnsWithEmptyList()
+    public function testColumnsWithEmptyList(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Column list is empty');
 
         $query = $this->createQuery();
         $query->columns([]);
     }
 
-    public function testColumns()
+    public function testColumns(): void
     {
         $query = $this->createQuery();
 
@@ -50,16 +56,16 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame($columnsList, 'columns', $query);
     }
 
-    public function testValuesWithEmptyList()
+    public function testValuesWithEmptyList(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value list is empty');
 
         $query = $this->createQuery();
         $query->values([]);
     }
 
-    public function testValuesWithSingleRow()
+    public function testValuesWithSingleRow(): void
     {
         $values = ['foo' => 1, 'bar' => 2];
 
@@ -70,7 +76,7 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame([[1, 2]], 'values', $query);
     }
 
-    public function testValuesWithMultipleRows()
+    public function testValuesWithMultipleRows(): void
     {
         $values = [
             ['foo' => 1, 'bar' => 2],
@@ -84,23 +90,31 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeSame([[1, 2], [3, 4]], 'values', $query);
     }
 
-    public function testOnConflictWithoutAction()
+    public function testOnConflictWithNotAcceptableServerVersion(): void
     {
+        $this->expectException(ServerException::class);
+        $this->expectExceptionMessage('Feature available since 9.5 version');
+
+        $server = new Server([], [], '9.2');
+
         $target = ConflictTarget::fromField('foo');
+        $factory = Factory::create($this->createServerMock());
+        $factory->setServer($server);
 
-        $query = $this->createQuery();
-        $query->onConflict($target);
+        $action = $factory
+            ->update()
+            ->set(['foo' => 'bar'])
+            ->andEquals('baz', 5);
 
-        $this->assertAttributeInstanceOf(ConflictTarget::class, 'conflictTarget', $query);
-        $this->assertAttributeSame(null, 'conflictAction', $query);
+        $query = $this->createQuery($server);
+        $query->onConflict($target, $action);
     }
 
-    public function testOnConflictWithTargetAndAction()
+    public function testOnConflict(): void
     {
         $target = ConflictTarget::fromConstraint('foo_unique');
         $factory = Factory::create($this->createServerMock());
 
-        /** @var Update $action */
         $action = $factory
             ->update()
             ->set(['foo' => 'bar'])
@@ -109,11 +123,10 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->onConflict($target, $action);
 
-        $this->assertAttributeInstanceOf(ConflictTarget::class, 'conflictTarget', $query);
-        $this->assertAttributeInstanceOf(Update::class, 'conflictAction', $query);
+        $this->assertAttributeInstanceOf(OnConflict::class, 'onConflict', $query);
     }
 
-    public function testFromRows()
+    public function testFromRows(): void
     {
         $server = $this->createServerMock();
         $table = 'foo.test';
@@ -126,26 +139,26 @@ class InsertTest extends UnitTestCase
         $this->assertAttributeInstanceOf(Select::class, 'rowSet', $query);
     }
 
-    public function testBuildWithoutColumns()
+    public function testCompileWithoutColumns(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Column list is empty');
 
         $query = $this->createQuery();
-        $query->__toString();
+        $query->compile();
     }
 
-    public function testBuildWithoutValues()
+    public function testCompileWithoutValues(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(QueryParameterException::class);
         $this->expectExceptionMessage('Value list is empty');
 
         $query = $this->createQuery();
         $query->columns(['foo', 'bar']);
-        $query->__toString();
+        $query->compile();
     }
 
-    public function testBuildWithValues()
+    public function testCompileWithValues(): void
     {
         $values = [
             ['foo' => 1, 'bar' => 'test1'],
@@ -157,10 +170,13 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertSame("INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])", $query->__toString());
+        $this->assertSame(
+            "INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])",
+            $query->compile()
+        );
     }
 
-    public function testBuildWithOnConflict()
+    public function testCompileWithOnConflict(): void
     {
         $target = ConflictTarget::fromConstraint('pk_unique');
         $factory = Factory::create($this->createServerMock());
@@ -176,10 +192,14 @@ class InsertTest extends UnitTestCase
             ->values(['foo' => 'bar'])
             ->onConflict($target, $action);
 
-        $this->assertSame("INSERT INTO foo.bar (foo) VALUES ('bar') ON CONFLICT ON CONSTRAINT pk_unique DO UPDATE SET foo = 'bar' WHERE baz = 5", $query->__toString());
+        $this->assertSame(
+            "INSERT INTO foo.bar (foo) VALUES ('bar') " .
+            "ON CONFLICT ON CONSTRAINT pk_unique DO UPDATE SET foo = 'bar' WHERE baz = 5",
+            $query->compile()
+        );
     }
 
-    public function testBuildWithRowSet()
+    public function testCompileWithRowSet(): void
     {
         $server = $this->createServerMock();
         $columns = ['foo', 'bar'];
@@ -197,18 +217,13 @@ class InsertTest extends UnitTestCase
             ->columns($columns)
             ->fromRows($rowSetQuery);
 
-        $this->assertSame('INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0', $query->__toString());
+        $this->assertSame(
+            'INSERT INTO bar.foo (foo,bar) SELECT foo,bar FROM foo.bar t1 WHERE test = 1 LIMIT 50 OFFSET 0',
+            $query->compile()
+        );
     }
 
-    public function testToString()
-    {
-        $query = $this->createQuery();
-        $query->values(['foo' => 1]);
-
-        $this->assertSame((string)$query, $query->__toString());
-    }
-
-    public function testGetInsertedRowWithoutReturningSet()
+    public function testGetInsertedRowWithoutReturningSet(): void
     {
         $this->expectException(QueryRuntimeException::class);
         $this->expectExceptionMessage('Returning fields must be set previously');
@@ -219,7 +234,7 @@ class InsertTest extends UnitTestCase
             ->getInsertedRow();
     }
 
-    public function testGetInsertedRowBeforeQueryExecute()
+    public function testGetInsertedRowBeforeQueryExecute(): void
     {
         $this->expectException(QueryRuntimeException::class);
         $this->expectExceptionMessage('Query must be executed before data fetching');
@@ -231,11 +246,11 @@ class InsertTest extends UnitTestCase
             ->getInsertedRow();
     }
 
-    public function testGetInsertedRow()
+    public function testGetInsertedRow(): void
     {
         $pdo = $this->createPDOMock();
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
+        $statement = $this->getMockBuilder(PDOStatement::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -247,7 +262,7 @@ class InsertTest extends UnitTestCase
         $statement
             ->expects($this->once())
             ->method('fetch')
-            ->with(\PDO::FETCH_ASSOC)
+            ->with(PDO::FETCH_ASSOC)
             ->willReturn([
                 'id' => 1,
                 'foo' => 'bar',
@@ -284,7 +299,7 @@ class InsertTest extends UnitTestCase
         ], $inserted);
     }
 
-    public function testGetInsertedRowsWithoutReturningSet()
+    public function testGetInsertedRowsWithoutReturningSet(): void
     {
         $this->expectException(QueryRuntimeException::class);
         $this->expectExceptionMessage('Returning fields must be set previously');
@@ -298,7 +313,7 @@ class InsertTest extends UnitTestCase
             ->getInsertedRows();
     }
 
-    public function testGetInsertedRowsBeforeQueryExecute()
+    public function testGetInsertedRowsBeforeQueryExecute(): void
     {
         $this->expectException(QueryRuntimeException::class);
         $this->expectExceptionMessage('Query must be executed before data fetching');
@@ -313,11 +328,11 @@ class InsertTest extends UnitTestCase
             ->getInsertedRows();
     }
 
-    public function testGetInsertedRows()
+    public function testGetInsertedRows(): void
     {
         $pdo = $this->createPDOMock();
 
-        $statement = $this->getMockBuilder(\PDOStatement::class)
+        $statement = $this->getMockBuilder(PDOStatement::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -329,7 +344,7 @@ class InsertTest extends UnitTestCase
         $statement
             ->expects($this->once())
             ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
+            ->with(PDO::FETCH_ASSOC)
             ->willReturn([
                 [
                     'id' => 1,
@@ -379,9 +394,12 @@ class InsertTest extends UnitTestCase
         ], $inserted);
     }
 
-    private function createQuery(): Insert
+    private function createQuery(?Server $server = null): Insert
     {
-        $server = $this->createServerMock();
+        if ($server === null) {
+            $server = $this->createServerMock();
+        }
+
         $table = 'foo.bar';
 
         return new Insert($server, $table);

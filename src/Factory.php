@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder;
 
 /**
  * Class Factory.
  */
-class Factory
+final class Factory
 {
     /**
      * @var Server

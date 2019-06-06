@@ -1,11 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Exception;
+
+use InvalidArgumentException;
 
 /**
  * Class IdentifierException.
  */
-class IdentifierException extends \InvalidArgumentException
+final class IdentifierException extends InvalidArgumentException
 {
     /**
      * @return IdentifierException

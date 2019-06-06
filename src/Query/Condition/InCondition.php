@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
  * Class InCondition.
  */
-class InCondition extends Condition
+final class InCondition extends Condition
 {
     /**
      * @var array
@@ -47,7 +48,7 @@ class InCondition extends Condition
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         return sprintf('%s %s (%s)', $this->column, $this->operator, implode(',', $this->values));
     }

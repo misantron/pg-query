@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
@@ -6,10 +7,11 @@ use Misantron\QueryBuilder\Query\Delete;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
+use PDO;
 
 class DeleteTest extends UnitTestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $query = $this->createQuery();
 
@@ -18,20 +20,20 @@ class DeleteTest extends UnitTestCase
         $this->assertAttributeEquals('foo.bar', 'table', $query);
     }
 
-    public function testBuildWithoutConditions()
+    public function testBuildWithoutConditions(): void
     {
         $query = $this->createQuery();
 
-        $this->assertSame('DELETE FROM foo.bar', $query->__toString());
+        $this->assertSame('DELETE FROM foo.bar', $query->compile());
     }
 
-    public function testBuild()
+    public function testCompile(): void
     {
         $pdo = $this->createPDOMock();
 
         $pdo
             ->method('quote')
-            ->withConsecutive(['test', \PDO::PARAM_STR])
+            ->withConsecutive(['test', PDO::PARAM_STR])
             ->willReturnOnConsecutiveCalls("'test'");
 
         $server = $this->getMockBuilder(Server::class)
@@ -47,7 +49,7 @@ class DeleteTest extends UnitTestCase
             ->andEquals('col1', 1)
             ->andEquals('col2', 'test');
 
-        $this->assertSame("DELETE FROM foo.bar WHERE col1 = 1 AND col2 = 'test'", $query->__toString());
+        $this->assertSame("DELETE FROM foo.bar WHERE col1 = 1 AND col2 = 'test'", $query->compile());
     }
 
     private function createQuery($server = null): Delete

@@ -1,14 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Expression;
 
+use Misantron\QueryBuilder\Compilable;
 use Misantron\QueryBuilder\Helper\Escape;
-use Misantron\QueryBuilder\Stringable;
 
 /**
  * Class Field.
  */
-class Field implements Stringable
+final class Field implements Compilable
 {
     use Escape;
 
@@ -46,7 +47,7 @@ class Field implements Stringable
     /**
      * {@inheritdoc}
      */
-    public function __toString(): string
+    public function compile(): string
     {
         return $this->expression . ($this->alias ? ' AS ' . $this->alias : '');
     }
