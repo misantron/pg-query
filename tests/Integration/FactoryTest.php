@@ -7,7 +7,7 @@ use Misantron\QueryBuilder\Query;
 
 class FactoryTest extends IntegrationTestCase
 {
-    public function testInsert()
+    public function testInsert(): void
     {
         $factory = $this->createFactory();
 
@@ -15,7 +15,7 @@ class FactoryTest extends IntegrationTestCase
         $this->assertInstanceOf(Query\Insert::class, $query);
     }
 
-    public function testSelect()
+    public function testSelect(): void
     {
         $factory = $this->createFactory();
 
@@ -23,7 +23,7 @@ class FactoryTest extends IntegrationTestCase
         $this->assertInstanceOf(Query\Select::class, $query);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $factory = $this->createFactory();
 
@@ -31,7 +31,7 @@ class FactoryTest extends IntegrationTestCase
         $this->assertInstanceOf(Query\Update::class, $query);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $factory = $this->createFactory();
 
