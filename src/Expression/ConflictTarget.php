@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Expression;
 
@@ -9,7 +10,7 @@ use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 /**
  * Class ConflictTarget.
  */
-class ConflictTarget implements Compilable
+final class ConflictTarget implements Compilable
 {
     /**
      * @var string

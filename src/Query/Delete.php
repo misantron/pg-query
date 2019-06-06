@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query;
 
@@ -62,7 +63,7 @@ use Misantron\QueryBuilder\Server;
  * @method Delete andIsNotNull(string $column)
  * @method Delete orIsNotNull(string $column)
  */
-class Delete extends Query implements Filterable
+final class Delete extends Query implements Filterable
 {
     use Filters, Returning;
 

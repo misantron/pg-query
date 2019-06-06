@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
  * Class NullCondition.
  */
-class NullCondition extends Condition
+final class NullCondition extends Condition
 {
     /**
      * @param string $column

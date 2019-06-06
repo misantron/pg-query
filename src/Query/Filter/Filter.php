@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Filter;
 
@@ -8,7 +9,7 @@ use Misantron\QueryBuilder\Query\Condition\Condition;
 /**
  * Class Filter.
  */
-class Filter
+final class Filter
 {
     /**
      * @var string

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
@@ -7,7 +8,7 @@ use Misantron\QueryBuilder\Assert\QueryAssert;
 /**
  * Class BetweenCondition.
  */
-class BetweenCondition extends Condition
+final class BetweenCondition extends Condition
 {
     /**
      * @var array

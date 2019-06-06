@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Expression;
 
 use Misantron\QueryBuilder\Compilable;
 
-class ActionNothing implements Compilable
+final class ActionNothing implements Compilable
 {
     /**
      * @return string

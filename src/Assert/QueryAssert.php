@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Assert;
 
@@ -13,7 +14,7 @@ use PDOStatement;
 /**
  * Class QueryAssert.
  */
-class QueryAssert
+final class QueryAssert
 {
     /**
      * @param array $items

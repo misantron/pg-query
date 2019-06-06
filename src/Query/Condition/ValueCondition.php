@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Condition;
 
 /**
  * Class ValueCondition.
  */
-class ValueCondition extends Condition
+final class ValueCondition extends Condition
 {
     /**
      * @var mixed

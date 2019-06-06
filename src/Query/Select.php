@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query;
 
@@ -67,7 +68,7 @@ use Misantron\QueryBuilder\Server;
  * @method Select andIsNotNull(string $column)
  * @method Select orIsNotNull(string $column)
  */
-class Select extends Query implements Selectable, Filterable, Retrievable
+final class Select extends Query implements Selectable, Filterable, Retrievable
 {
     use Columns, Filters, DataFetching;
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Assert;
 
@@ -9,7 +10,7 @@ use PDO;
 /**
  * Class ServerAssert.
  */
-class ServerAssert
+final class ServerAssert
 {
     private const CONNECTION_OPTIONS = [
         PDO::ATTR_AUTOCOMMIT,

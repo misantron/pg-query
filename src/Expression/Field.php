@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Expression;
 
@@ -8,7 +9,7 @@ use Misantron\QueryBuilder\Helper\Escape;
 /**
  * Class Field.
  */
-class Field implements Compilable
+final class Field implements Compilable
 {
     use Escape;
 

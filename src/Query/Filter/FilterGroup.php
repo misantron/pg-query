@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Filter;
 
@@ -7,7 +8,7 @@ use Misantron\QueryBuilder\Compilable;
 /**
  * Class FilterGroup.
  */
-class FilterGroup implements Compilable
+final class FilterGroup implements Compilable
 {
     /**
      * @var Filter[]

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Helper;
 
@@ -41,7 +42,7 @@ trait Escape
         switch (strtolower(gettype($value))) {
             case 'integer':
             case 'double':
-                $escaped = $value;
+                $escaped = (string)$value;
                 break;
             case 'boolean':
                 $escaped = $value ? 'true' : 'false';

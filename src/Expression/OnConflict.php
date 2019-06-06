@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Expression;
 
 use Misantron\QueryBuilder\Compilable;
 use Misantron\QueryBuilder\Query\Update;
 
-class OnConflict implements Compilable
+final class OnConflict implements Compilable
 {
     /**
      * @var ConflictTarget

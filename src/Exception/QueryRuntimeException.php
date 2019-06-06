@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Exception;
 
@@ -7,7 +8,7 @@ use RuntimeException;
 /**
  * Class QueryRuntimeException.
  */
-class QueryRuntimeException extends RuntimeException
+final class QueryRuntimeException extends RuntimeException
 {
     /**
      * @return QueryRuntimeException

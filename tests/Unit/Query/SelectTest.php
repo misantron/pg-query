@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
@@ -8,7 +9,6 @@ use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Expression\Field;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
-use Misantron\QueryBuilder\Query\Insert;
 use Misantron\QueryBuilder\Query\Select;
 use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
@@ -149,9 +149,9 @@ class SelectTest extends UnitTestCase
 
         $factory = Factory::create($this->createServerMock());
 
-        $insertQuery = $this->getMockBuilder(Insert::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $insertQuery = $factory
+            ->insert('region')
+            ->values(['foo' => 'bar']);
 
         $cte = [
             'regional_sales' => $factory

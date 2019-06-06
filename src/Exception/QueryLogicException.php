@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Exception;
 
@@ -7,7 +8,7 @@ use LogicException;
 /**
  * Class QueryLogicException.
  */
-class QueryLogicException extends LogicException
+final class QueryLogicException extends LogicException
 {
     /**
      * @return QueryLogicException

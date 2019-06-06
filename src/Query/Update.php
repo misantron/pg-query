@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query;
 
@@ -63,7 +64,7 @@ use Misantron\QueryBuilder\Server;
  * @method Update andIsNotNull(string $column)
  * @method Update orIsNotNull(string $column)
  */
-class Update extends Query implements Filterable
+final class Update extends Query implements Filterable
 {
     use Filters, Returning;
 

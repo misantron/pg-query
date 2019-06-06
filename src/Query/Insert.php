@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query;
 
@@ -21,7 +22,7 @@ use PDO;
  * @method Insert execute()
  * @method Insert returning($items)
  */
-class Insert extends Query implements Selectable
+final class Insert extends Query implements Selectable
 {
     use Columns, Returning;
 
