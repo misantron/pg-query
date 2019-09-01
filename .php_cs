@@ -18,6 +18,4 @@ return PhpCsFixer\Config::create()
         'yoda_style' => false,
         'single_trait_insert_per_statement' => false,
         'blank_line_after_opening_tag' => false,
-        'php_unit_dedicate_assert' => true,
-        'php_unit_dedicate_assert_internal_type' => true,
     ]);
