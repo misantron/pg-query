@@ -29,13 +29,13 @@ class FieldTest extends UnitTestCase
     {
         $field = Field::create('SUM(field)');
 
-        $this->assertAttributeEquals('SUM(field)', 'expression', $field);
-        $this->assertAttributeEquals('', 'alias', $field);
+        $this->assertPropertySame('SUM(field)', 'expression', $field);
+        $this->assertPropertySame('', 'alias', $field);
 
         $field = Field::create('SUM(field)', 'total');
 
-        $this->assertAttributeEquals('SUM(field)', 'expression', $field);
-        $this->assertAttributeEquals('total', 'alias', $field);
+        $this->assertPropertySame('SUM(field)', 'expression', $field);
+        $this->assertPropertySame('total', 'alias', $field);
     }
 
     public function testCompile(): void

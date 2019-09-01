@@ -15,9 +15,9 @@ class DeleteTest extends UnitTestCase
     {
         $query = $this->createQuery();
 
-        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
-        $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
-        $this->assertAttributeEquals('foo.bar', 'table', $query);
+        $this->assertPropertyInstanceOf(Server::class, 'server', $query);
+        $this->assertPropertyInstanceOf(FilterGroup::class, 'filters', $query);
+        $this->assertPropertySame('foo.bar', 'table', $query);
     }
 
     public function testBuildWithoutConditions(): void

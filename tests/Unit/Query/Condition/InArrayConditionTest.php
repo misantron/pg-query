@@ -32,15 +32,15 @@ class InArrayConditionTest extends UnitTestCase
     {
         $condition = new InArrayCondition('foo', 5, '=');
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals(5, 'value', $condition);
-        $this->assertAttributeEquals('=', 'operator', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame('5', 'value', $condition);
+        $this->assertPropertySame('=', 'operator', $condition);
 
         $condition = new InArrayCondition('foo', 'bar', '!=');
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals($this->escapeValue('bar'), 'value', $condition);
-        $this->assertAttributeEquals('!=', 'operator', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame($this->escapeValue('bar'), 'value', $condition);
+        $this->assertPropertySame('!=', 'operator', $condition);
     }
 
     public function testCreate(): void

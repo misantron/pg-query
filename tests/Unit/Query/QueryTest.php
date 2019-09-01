@@ -19,9 +19,9 @@ class QueryTest extends UnitTestCase
                 throw new BadMethodCallException('Not implemented');
             }
         };
-        $this->assertAttributeSame(null, 'table', $query);
+        $this->assertPropertyNull('table', $query);
 
         $query->table('foo.bar');
-        $this->assertAttributeSame('foo.bar', 'table', $query);
+        $this->assertPropertySame('foo.bar', 'table', $query);
     }
 }

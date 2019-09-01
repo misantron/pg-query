@@ -12,13 +12,13 @@ class NullConditionTest extends UnitTestCase
     {
         $condition = new NullCondition('foo', 'IS');
 
-        $this->assertAttributeSame('foo', 'column', $condition);
-        $this->assertAttributeSame('IS', 'operator', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame('IS', 'operator', $condition);
 
         $condition = new NullCondition('foo', 'IS NOT');
 
-        $this->assertAttributeSame('foo', 'column', $condition);
-        $this->assertAttributeSame('IS NOT', 'operator', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame('IS NOT', 'operator', $condition);
     }
 
     public function testCreate(): void

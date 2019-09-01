@@ -1,6 +1,7 @@
 # PG.Query
 
 [![Build Status](https://img.shields.io/travis/misantron/pg-query.svg?style=flat-square&maxAge=2592000)](https://travis-ci.org/misantron/pg-query)
+[![PHP Version](https://img.shields.io/travis/php-v/misantron/pg-query.svg?style=flat-square&maxAge=2592000)](https://travis-ci.org/misantron/pg-query)
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/misantron/pg-query.svg?style=flat-square)](https://scrutinizer-ci.com/g/misantron/pg-query)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/misantron/pg-query.svg?style=flat-square)](https://scrutinizer-ci.com/g/misantron/pg-query)
 [![License](https://img.shields.io/github/license/newmediatech/pg-query.svg?style=flat-square)](https://github.com/misantron/pg-query)

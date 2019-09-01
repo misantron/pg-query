@@ -32,7 +32,7 @@ class InsertTest extends IntegrationTestCase
             ->getInsertedRow();
 
         $this->assertArrayHasKey('sku', $response);
-        $this->assertEquals('S12T-Gec-RS', $response['sku']);
+        $this->assertSame('S12T-Gec-RS', $response['sku']);
         $this->assertArrayHasKey('status_id', $response);
         $this->assertEquals(1, $response['status_id']);
     }
@@ -113,7 +113,7 @@ class InsertTest extends IntegrationTestCase
             ->select('foo.tags')
             ->execute();
 
-        $this->assertEquals(4, $select->rowsCount());
+        $this->assertSame(4, $select->rowsCount());
     }
 
     protected function tearDown(): void

@@ -33,6 +33,17 @@ final class QueryParameterException extends InvalidArgumentException
 
     /**
      * @param string $type
+     * @param array  $values
+     *
+     * @return QueryParameterException
+     */
+    public static function unexpectedValues(string $type, array $values): QueryParameterException
+    {
+        return new static("Invalid {$type} - unexpected value: {$values}");
+    }
+
+    /**
+     * @param string $type
      *
      * @return QueryParameterException
      */
@@ -49,5 +60,15 @@ final class QueryParameterException extends InvalidArgumentException
     public static function numberOfElements(int $number): QueryParameterException
     {
         return new static("Array must contains {$number} elements");
+    }
+
+    /**
+     * @param string $error
+     *
+     * @return QueryParameterException
+     */
+    public static function encodingError(string $error): QueryParameterException
+    {
+        return new static("Value encoding error: {$error}");
     }
 }

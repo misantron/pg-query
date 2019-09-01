@@ -15,15 +15,15 @@ class ValueConditionTest extends UnitTestCase
     {
         $condition = new ValueCondition('foo', 'bar', '=');
 
-        $this->assertAttributeSame('foo', 'column', $condition);
-        $this->assertAttributeSame($this->escapeValue('bar'), 'value', $condition);
-        $this->assertAttributeSame('=', 'operator', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame($this->escapeValue('bar'), 'value', $condition);
+        $this->assertPropertySame('=', 'operator', $condition);
 
         $condition = new ValueCondition('foo', 5, '>=');
 
-        $this->assertAttributeSame('foo', 'column', $condition);
-        $this->assertAttributeEquals(5, 'value', $condition);
-        $this->assertAttributeSame('>=', 'operator', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame('5', 'value', $condition);
+        $this->assertPropertySame('>=', 'operator', $condition);
     }
 
     public function testCreate(): void

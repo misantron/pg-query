@@ -24,12 +24,12 @@ class InsertTest extends UnitTestCase
     {
         $query = $this->createQuery();
 
-        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
-        $this->assertAttributeSame('foo.bar', 'table', $query);
+        $this->assertPropertyInstanceOf(Server::class, 'server', $query);
+        $this->assertPropertySame('foo.bar', 'table', $query);
 
-        $this->assertAttributeSame([], 'columns', $query);
-        $this->assertAttributeSame(null, 'values', $query);
-        $this->assertAttributeSame(null, 'rowSet', $query);
+        $this->assertPropertySame([], 'columns', $query);
+        $this->assertPropertyNull('values', $query);
+        $this->assertPropertyNull('rowSet', $query);
     }
 
     public function testColumnsWithEmptyList(): void
@@ -48,12 +48,12 @@ class InsertTest extends UnitTestCase
         $columnsList = ['foo', 'bar'];
         $query->columns($columnsList);
 
-        $this->assertAttributeSame($columnsList, 'columns', $query);
+        $this->assertPropertySame($columnsList, 'columns', $query);
 
         $columns = 'foo ,  bar ';
         $query->columns($columns);
 
-        $this->assertAttributeSame($columnsList, 'columns', $query);
+        $this->assertPropertySame($columnsList, 'columns', $query);
     }
 
     public function testValuesWithEmptyList(): void
@@ -72,8 +72,8 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertAttributeSame(['foo', 'bar'], 'columns', $query);
-        $this->assertAttributeSame([[1, 2]], 'values', $query);
+        $this->assertPropertySame(['foo', 'bar'], 'columns', $query);
+        $this->assertPropertySame([[1, 2]], 'values', $query);
     }
 
     public function testValuesWithMultipleRows(): void
@@ -86,8 +86,8 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->values($values);
 
-        $this->assertAttributeSame(['foo', 'bar'], 'columns', $query);
-        $this->assertAttributeSame([[1, 2], [3, 4]], 'values', $query);
+        $this->assertPropertySame(['foo', 'bar'], 'columns', $query);
+        $this->assertPropertySame([[1, 2], [3, 4]], 'values', $query);
     }
 
     public function testOnConflictWithNotAcceptableServerVersion(): void
@@ -123,7 +123,7 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->onConflict($target, $action);
 
-        $this->assertAttributeInstanceOf(OnConflict::class, 'onConflict', $query);
+        $this->assertPropertyInstanceOf(OnConflict::class, 'onConflict', $query);
     }
 
     public function testFromRows(): void
@@ -136,7 +136,7 @@ class InsertTest extends UnitTestCase
         $query = $this->createQuery();
         $query->fromRows($selectQuery);
 
-        $this->assertAttributeInstanceOf(Select::class, 'rowSet', $query);
+        $this->assertPropertyInstanceOf(Select::class, 'rowSet', $query);
     }
 
     public function testCompileWithoutColumns(): void
@@ -171,7 +171,7 @@ class InsertTest extends UnitTestCase
         $query->values($values);
 
         $this->assertSame(
-            "INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,ARRAY[5,8]::INTEGER[])",
+            "INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,'{5,8}')",
             $query->compile()
         );
     }

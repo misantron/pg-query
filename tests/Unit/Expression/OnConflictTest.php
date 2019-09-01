@@ -16,13 +16,13 @@ class OnConflictTest extends UnitTestCase
     {
         $conflict = $this->createOnConflictWithoutAction();
 
-        $this->assertAttributeInstanceOf(ConflictTarget::class, 'target', $conflict);
-        $this->assertAttributeInstanceOf(ActionNothing::class, 'action', $conflict);
+        $this->assertPropertyInstanceOf(ConflictTarget::class, 'target', $conflict);
+        $this->assertPropertyInstanceOf(ActionNothing::class, 'action', $conflict);
 
         $conflict = $this->createOnConflictWithAction();
 
-        $this->assertAttributeInstanceOf(ConflictTarget::class, 'target', $conflict);
-        $this->assertAttributeInstanceOf(Update::class, 'action', $conflict);
+        $this->assertPropertyInstanceOf(ConflictTarget::class, 'target', $conflict);
+        $this->assertPropertyInstanceOf(Update::class, 'action', $conflict);
     }
 
     public function testCompile(): void

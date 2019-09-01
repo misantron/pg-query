@@ -25,23 +25,23 @@ class SelectTest extends UnitTestCase
 
         $query = new Select($server, $table);
 
-        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
-        $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
-        $this->assertAttributeSame('foo.bar', 'table', $query);
-        $this->assertAttributeSame('t1', 'alias', $query);
-        $this->assertAttributeSame([], 'columns', $query);
-        $this->assertAttributeSame([], 'joins', $query);
-        $this->assertAttributeSame([], 'groupBy', $query);
-        $this->assertAttributeSame([], 'orderBy', $query);
-        $this->assertAttributeSame([], 'with', $query);
-        $this->assertAttributeSame(null, 'distinct', $query);
-        $this->assertAttributeSame(null, 'having', $query);
-        $this->assertAttributeSame(null, 'limit', $query);
-        $this->assertAttributeSame(null, 'offset', $query);
+        $this->assertPropertyInstanceOf(Server::class, 'server', $query);
+        $this->assertPropertyInstanceOf(FilterGroup::class, 'filters', $query);
+        $this->assertPropertySame('foo.bar', 'table', $query);
+        $this->assertPropertySame('t1', 'alias', $query);
+        $this->assertPropertySame([], 'columns', $query);
+        $this->assertPropertySame([], 'joins', $query);
+        $this->assertPropertySame([], 'groupBy', $query);
+        $this->assertPropertySame([], 'orderBy', $query);
+        $this->assertPropertySame([], 'with', $query);
+        $this->assertPropertyNull('distinct', $query);
+        $this->assertPropertyNull('having', $query);
+        $this->assertPropertyNull('limit', $query);
+        $this->assertPropertyNull('offset', $query);
 
         $query = new Select($server, $table, 'test');
 
-        $this->assertAttributeSame('test', 'alias', $query);
+        $this->assertPropertySame('test', 'alias', $query);
     }
 
     public function testAlias(): void
@@ -49,7 +49,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->alias('s1');
 
-        $this->assertAttributeSame('s1', 'alias', $query);
+        $this->assertPropertySame('s1', 'alias', $query);
     }
 
     public function testColumnsWithEmptyList(): void
@@ -68,12 +68,12 @@ class SelectTest extends UnitTestCase
         $columnsList = ['foo', 'bar'];
         $query->columns($columnsList);
 
-        $this->assertAttributeSame($columnsList, 'columns', $query);
+        $this->assertPropertySame($columnsList, 'columns', $query);
 
         $columns = 'foo ,  bar ';
         $query->columns($columns);
 
-        $this->assertAttributeSame($columnsList, 'columns', $query);
+        $this->assertPropertySame($columnsList, 'columns', $query);
     }
 
     public function testDistinct(): void
@@ -81,11 +81,11 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->distinct();
 
-        $this->assertAttributeSame(true, 'distinct', $query);
+        $this->assertPropertySame(true, 'distinct', $query);
 
         $query->distinct(false);
 
-        $this->assertAttributeSame(false, 'distinct', $query);
+        $this->assertPropertySame(false, 'distinct', $query);
     }
 
     public function testJoinWithAlreadyJoinedTable(): void
@@ -115,7 +115,7 @@ class SelectTest extends UnitTestCase
 
         $hash = sha1('inner_test_t2');
 
-        $this->assertAttributeSame([
+        $this->assertPropertySame([
             $hash => [
                 'type' => 'inner',
                 'table' => 'test',
@@ -132,7 +132,7 @@ class SelectTest extends UnitTestCase
 
         $hash = sha1('left_test_t2');
 
-        $this->assertAttributeSame([
+        $this->assertPropertySame([
             $hash => [
                 'type' => 'left',
                 'table' => 'test',
@@ -183,7 +183,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->with($cte);
 
-        $this->assertAttributeSame($cte, 'with', $query);
+        $this->assertPropertySame($cte, 'with', $query);
     }
 
     public function testGroupBy(): void
@@ -191,7 +191,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->groupBy(['test']);
 
-        $this->assertAttributeSame(['test'], 'groupBy', $query);
+        $this->assertPropertySame(['test'], 'groupBy', $query);
     }
 
     public function testOrderBy(): void
@@ -199,7 +199,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->orderBy(['test', 'field desc']);
 
-        $this->assertAttributeSame(['test', 'field desc'], 'orderBy', $query);
+        $this->assertPropertySame(['test', 'field desc'], 'orderBy', $query);
     }
 
     public function testHaving(): void
@@ -207,7 +207,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->having('total_amount >= 1500');
 
-        $this->assertAttributeSame('total_amount >= 1500', 'having', $query);
+        $this->assertPropertySame('total_amount >= 1500', 'having', $query);
     }
 
     public function testLimit(): void
@@ -215,7 +215,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->limit(500);
 
-        $this->assertAttributeSame(500, 'limit', $query);
+        $this->assertPropertySame(500, 'limit', $query);
     }
 
     public function testOffset(): void
@@ -223,7 +223,7 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->offset(20);
 
-        $this->assertAttributeSame(20, 'offset', $query);
+        $this->assertPropertySame(20, 'offset', $query);
     }
 
     public function testRange(): void
@@ -231,8 +231,8 @@ class SelectTest extends UnitTestCase
         $query = $this->createQuery();
         $query->range(100, 500);
 
-        $this->assertAttributeSame(100, 'offset', $query);
-        $this->assertAttributeSame(500, 'limit', $query);
+        $this->assertPropertySame(100, 'offset', $query);
+        $this->assertPropertySame(500, 'limit', $query);
     }
 
     public function testCompileWithHavingWithoutGroupBy(): void
@@ -496,7 +496,7 @@ class SelectTest extends UnitTestCase
 
         $this->assertSame(
             'SELECT * FROM foo.bar t1 ' .
-            'WHERE foo @> ARRAY[1,2]::INTEGER[] AND bar @> ARRAY[5,6]::INTEGER[] OR baz @> ARRAY[10,20]::INTEGER[]',
+            "WHERE foo @> '{1,2}' AND bar @> '{5,6}' OR baz @> '{10,20}'",
             $query->compile()
         );
     }
@@ -523,7 +523,7 @@ class SelectTest extends UnitTestCase
             ->limit(10);
 
         $this->assertInstanceOf(Select::class, $query->execute());
-        $this->assertAttributeInstanceOf(PDOStatement::class, 'statement', $query);
+        $this->assertPropertyInstanceOf(PDOStatement::class, 'statement', $query);
     }
 
     public function testRowCountBeforeQueryExecute(): void

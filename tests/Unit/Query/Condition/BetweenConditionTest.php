@@ -35,8 +35,8 @@ class BetweenConditionTest extends UnitTestCase
             return $this->escapeValue($value);
         }, $values);
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals($expected, 'values', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame($expected, 'values', $condition);
     }
 
     public function testCreate(): void
@@ -52,8 +52,8 @@ class BetweenConditionTest extends UnitTestCase
             return $this->escapeValue($value);
         }, $values);
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals($expected, 'values', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame($expected, 'values', $condition);
     }
 
     public function testCompile(): void

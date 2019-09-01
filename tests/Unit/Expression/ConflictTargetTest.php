@@ -15,14 +15,14 @@ class ConflictTargetTest extends UnitTestCase
     {
         $target = ConflictTarget::fromField('foo');
 
-        $this->assertAttributeSame('(foo)', 'expr', $target);
+        $this->assertPropertySame('(foo)', 'expr', $target);
     }
 
     public function testCreateFromConstraint(): void
     {
         $target = ConflictTarget::fromConstraint('foo_bar_key');
 
-        $this->assertAttributeSame('ON CONSTRAINT foo_bar_key', 'expr', $target);
+        $this->assertPropertySame('ON CONSTRAINT foo_bar_key', 'expr', $target);
     }
 
     public function testCreateFromEmptyCondition(): void
@@ -42,7 +42,7 @@ class ConflictTargetTest extends UnitTestCase
 
         $target = ConflictTarget::fromCondition($condition);
 
-        $this->assertAttributeSame('WHERE foo > 5', 'expr', $target);
+        $this->assertPropertySame('WHERE foo > 5', 'expr', $target);
     }
 
     public function testCompile(): void

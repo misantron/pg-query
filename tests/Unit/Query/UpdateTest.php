@@ -17,10 +17,10 @@ class UpdateTest extends UnitTestCase
     {
         $query = $this->createQuery();
 
-        $this->assertAttributeInstanceOf(Server::class, 'server', $query);
-        $this->assertAttributeInstanceOf(FilterGroup::class, 'filters', $query);
-        $this->assertAttributeSame(null, 'table', $query);
-        $this->assertAttributeSame([], 'set', $query);
+        $this->assertPropertyInstanceOf(Server::class, 'server', $query);
+        $this->assertPropertyInstanceOf(FilterGroup::class, 'filters', $query);
+        $this->assertPropertyNull('table', $query);
+        $this->assertPropertySame([], 'set', $query);
     }
 
     public function testSetWithEmptyData(): void
@@ -55,7 +55,7 @@ class UpdateTest extends UnitTestCase
             'bar' => 'test',
         ]);
 
-        $this->assertAttributeEquals(['foo' => 1, 'bar' => "'test'"], 'set', $query);
+        $this->assertPropertySame(['foo' => '1', 'bar' => "'test'"], 'set', $query);
     }
 
     public function testCompileWithoutConditions(): void

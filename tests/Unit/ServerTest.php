@@ -13,9 +13,9 @@ class ServerTest extends UnitTestCase
     {
         $server = new Server([], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
-        $this->assertAttributeSame(['host' => 'localhost', 'port' => '5432'], 'credentials', $server);
-        $this->assertAttributeSame([PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION], 'options', $server);
-        $this->assertAttributeSame(null, 'version', $server);
+        $this->assertPropertySame(['host' => 'localhost', 'port' => '5432'], 'credentials', $server);
+        $this->assertPropertySame([PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION], 'options', $server);
+        $this->assertPropertyNull('version', $server);
     }
 
     public function testSetOptionWithInvalidValue(): void
@@ -30,10 +30,10 @@ class ServerTest extends UnitTestCase
     public function testSetOption(): void
     {
         $server = new Server([], []);
-        $this->assertAttributeSame([], 'options', $server);
+        $this->assertPropertySame([], 'options', $server);
 
         $server->setOption(PDO::ATTR_EMULATE_PREPARES, true);
-        $this->assertAttributeSame([PDO::ATTR_EMULATE_PREPARES => true], 'options', $server);
+        $this->assertPropertySame([PDO::ATTR_EMULATE_PREPARES => true], 'options', $server);
     }
 
     public function testGetVersion(): void

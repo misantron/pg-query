@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class UnitTestCase extends TestCase
 {
+    use AssertObjectProperty;
+
     /**
      * @return MockObject|PDO
      */

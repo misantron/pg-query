@@ -21,10 +21,10 @@ class ServerTest extends IntegrationTestCase
             PDO::ATTR_EMULATE_PREPARES => false,
         ];
 
-        $this->assertAttributeSame($expectedCredentials, 'credentials', $this->getServer());
-        $this->assertAttributeSame($expectedOptions, 'options', $this->getServer());
-        $this->assertAttributeSame('9.5', 'version', $this->getServer());
-        $this->assertAttributeSame(null, 'pdo', $this->getServer());
+        $this->assertPropertySame($expectedCredentials, 'credentials', $this->getServer());
+        $this->assertPropertySame($expectedOptions, 'options', $this->getServer());
+        $this->assertPropertySame('9.5', 'version', $this->getServer());
+        $this->assertPropertyNull('pdo', $this->getServer());
     }
 
     public function testGetVersion(): void
@@ -36,7 +36,7 @@ class ServerTest extends IntegrationTestCase
     {
         $pdo = $this->getServer()->pdo();
 
-        $this->assertAttributeInstanceOf(PDO::class, 'pdo', $this->getServer());
+        $this->assertPropertyInstanceOf(PDO::class, 'pdo', $this->getServer());
         $this->assertFalse($pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES));
     }
 }

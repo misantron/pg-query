@@ -24,15 +24,15 @@ class InConditionTest extends UnitTestCase
     {
         $condition = new InCondition('foo', [1, 2, 3], 'IN');
 
-        $this->assertAttributeSame('foo', 'column', $condition);
-        $this->assertAttributeSame([1, 2, 3], 'values', $condition);
-        $this->assertAttributeSame('IN', 'operator', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame([1, 2, 3], 'values', $condition);
+        $this->assertPropertySame('IN', 'operator', $condition);
 
         $condition = new InCondition('foo', ['bar', 'baz'], 'NOT IN');
 
-        $this->assertAttributeSame('foo', 'column', $condition);
-        $this->assertAttributeSame($this->escapeList(['bar', 'baz']), 'values', $condition);
-        $this->assertAttributeSame('NOT IN', 'operator', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame($this->escapeList(['bar', 'baz']), 'values', $condition);
+        $this->assertPropertySame('NOT IN', 'operator', $condition);
     }
 
     public function testCreate(): void

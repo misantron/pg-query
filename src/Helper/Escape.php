@@ -5,6 +5,7 @@ namespace Misantron\QueryBuilder\Helper;
 
 use Misantron\QueryBuilder\Assert\QueryAssert;
 use Misantron\QueryBuilder\Exception\IdentifierException;
+use Misantron\QueryBuilder\Exception\QueryParameterException;
 
 /**
  * Trait Escape.
@@ -53,6 +54,9 @@ trait Escape
             case 'array':
                 $escaped = $this->escapeArray($value);
                 break;
+            case 'object':
+                $escaped = $this->jsonEncode($value);
+                break;
             default:
                 $escaped = $this->quote($value);
         }
@@ -67,16 +71,28 @@ trait Escape
      */
     protected function escapeArray(array $values): string
     {
-        $type = $this->isIntegerArray($values) ? 'integer' : 'string';
-        $cast = $type === 'integer' ? 'INTEGER[]' : 'VARCHAR[]';
-
-        if ($type === 'string') {
-            $values = array_map(function (string $value) {
-                return $this->quote($value);
-            }, $values);
+        $first = reset($values);
+        if ($first === false) {
+            return "'{}'";
         }
 
-        return 'ARRAY[' . implode(',', $values) . ']::' . $cast;
+        if ($values !== array_values($values)) {
+            return $this->jsonEncode($values);
+        }
+
+        $type = strtolower(gettype($first));
+        $nonQuotedTypes = ['integer', 'double', 'boolean', 'null'];
+        if (!in_array($type, $nonQuotedTypes, true)) {
+            if ($type === 'string') {
+                $values = array_map(static function (string $value) {
+                    return '"' . str_replace('"', '\"', $value) . '"';
+                }, $values);
+            } else {
+                throw QueryParameterException::unexpectedValues($type, $values);
+            }
+        }
+
+        return "'{" . implode(',', $values) . "}'";
     }
 
     /**
@@ -122,5 +138,19 @@ trait Escape
     protected function quote($value): string
     {
         return "'" . str_replace("'", "''", (string)$value) . "'";
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function jsonEncode($value): string
+    {
+        $encoded = json_encode($value);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw QueryParameterException::encodingError(json_last_error_msg());
+        }
+        return "'{$encoded}'";
     }
 }

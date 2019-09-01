@@ -24,13 +24,13 @@ class ArrayContainsConditionTest extends UnitTestCase
     {
         $condition = new ArrayContainsCondition('foo', [3, 5, 8]);
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals($this->escapeArray([3, 5, 8]), 'values', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame($this->escapeArray([3, 5, 8]), 'values', $condition);
 
         $condition = new ArrayContainsCondition('foo', ['bar', 'baz']);
 
-        $this->assertAttributeEquals('foo', 'column', $condition);
-        $this->assertAttributeEquals($this->escapeArray(['bar', 'baz']), 'values', $condition);
+        $this->assertPropertySame('foo', 'column', $condition);
+        $this->assertPropertySame($this->escapeArray(['bar', 'baz']), 'values', $condition);
     }
 
     public function testCreate(): void
@@ -48,10 +48,10 @@ class ArrayContainsConditionTest extends UnitTestCase
     {
         $condition = new ArrayContainsCondition('foo', [3, 5, 8]);
 
-        $this->assertSame('foo @> ARRAY[3,5,8]::INTEGER[]', $condition->compile());
+        $this->assertSame("foo @> '{3,5,8}'", $condition->compile());
 
         $condition = new ArrayContainsCondition('foo', ['bar', 'baz']);
 
-        $this->assertSame("foo @> ARRAY['bar','baz']::VARCHAR[]", $condition->compile());
+        $this->assertSame("foo @> '{\"bar\",\"baz\"}'", $condition->compile());
     }
 }

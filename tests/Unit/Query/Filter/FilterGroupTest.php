@@ -36,7 +36,7 @@ class FilterGroupTest extends UnitTestCase
         $group = new FilterGroup();
         $group->append($filter);
 
-        $this->assertAttributeEquals([$filter], 'list', $group);
+        $this->assertPropertySame([$filter], 'list', $group);
     }
 
     public function testCompile(): void

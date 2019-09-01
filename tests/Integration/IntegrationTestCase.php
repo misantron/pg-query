@@ -5,6 +5,7 @@ namespace Misantron\QueryBuilder\Tests\Integration;
 
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Server;
+use Misantron\QueryBuilder\Tests\Unit\AssertObjectProperty;
 use PDO;
 use PHPUnit\Framework\TestCase;
 
@@ -13,6 +14,8 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class IntegrationTestCase extends TestCase
 {
+    use AssertObjectProperty;
+
     /**
      * @var Server
      */
