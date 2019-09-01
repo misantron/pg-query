@@ -151,6 +151,7 @@ trait Escape
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw QueryParameterException::encodingError(json_last_error_msg());
         }
+
         return "'{$encoded}'";
     }
 }
