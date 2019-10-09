@@ -48,7 +48,7 @@ final class FilterGroup implements Compilable
         $trimSign = true;
         $filters = $this->list;
 
-        return (string)array_reduce(
+        return (string) array_reduce(
             $filters,
             static function (string $query, Filter $filter) use (&$trimSign) {
                 $condition = $filter->condition();

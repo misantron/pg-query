@@ -44,7 +44,7 @@ trait Escape
         switch (strtolower(gettype($value))) {
             case 'integer':
             case 'double':
-                $escaped = (string)$value;
+                $escaped = (string) $value;
                 break;
             case 'boolean':
                 $escaped = $value ? 'true' : 'false';
