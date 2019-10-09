@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query;
@@ -66,7 +67,8 @@ use Misantron\QueryBuilder\Server;
  */
 final class Update extends Query implements Filterable
 {
-    use Filters, Returning;
+    use Filters;
+    use Returning;
 
     /**
      * @var array

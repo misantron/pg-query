@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit\Query;
 
+use JsonSerializable;
 use Misantron\QueryBuilder\Exception\QueryParameterException;
 use Misantron\QueryBuilder\Exception\QueryRuntimeException;
 use Misantron\QueryBuilder\Exception\ServerException;
@@ -164,14 +166,48 @@ class InsertTest extends UnitTestCase
             ['foo' => 1, 'bar' => 'test1'],
             ['foo' => 3, 'bar' => false],
             ['foo' => 4, 'bar' => null],
-            ['foo' => 5, 'bar' => [5, 8]],
+            ['foo' => 5, 'bar' => 2],
         ];
 
         $query = $this->createQuery();
         $query->values($values);
 
         $this->assertSame(
-            "INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,'{5,8}')",
+            "INSERT INTO foo.bar (foo,bar) VALUES (1,'test1'),(3,false),(4,null),(5,2)",
+            $query->compile()
+        );
+
+        $obj = new class() implements JsonSerializable {
+            private $foo = 'bar';
+
+            public function jsonSerialize(): string
+            {
+                return json_encode(['foo' => $this->foo]);
+            }
+        };
+
+        $values = ['foo' => ['bar' => 'baz']];
+
+        $query = $this->createQuery();
+        $query->values($values);
+
+        $this->assertSame(
+            "INSERT INTO foo.bar (foo) VALUES ('{\"bar\":\"baz\"}')",
+            $query->compile()
+        );
+
+        $values = [
+            ['foo' => 1, 'bar' => []],
+            ['foo' => 2, 'bar' => [5, 8]],
+            ['foo' => 3, 'bar' => ['foo', 'baz']],
+            ['foo' => 4, 'bar' => $obj],
+        ];
+
+        $query = $this->createQuery();
+        $query->values($values);
+
+        $this->assertSame(
+            "INSERT INTO foo.bar (foo,bar) VALUES (1,'{}'),(2,'{5,8}'),(3,'{\"foo\",\"baz\"}'),(4,'{\"foo\":\"bar\"}')",
             $query->compile()
         );
     }

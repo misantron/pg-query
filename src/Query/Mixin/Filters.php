@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query\Mixin;
@@ -15,7 +16,10 @@ use Misantron\QueryBuilder\Query\Mixin\Filter\ValueCompare;
  */
 trait Filters
 {
-    use ValueCompare, NullCompare, RangeCompare, ArrayCompare;
+    use ArrayCompare;
+    use NullCompare;
+    use ValueCompare;
+    use RangeCompare;
 
     /**
      * @var FilterGroup

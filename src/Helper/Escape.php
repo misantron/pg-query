@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Helper;
@@ -43,7 +44,7 @@ trait Escape
         switch (strtolower(gettype($value))) {
             case 'integer':
             case 'double':
-                $escaped = (string)$value;
+                $escaped = (string) $value;
                 break;
             case 'boolean':
                 $escaped = $value ? 'true' : 'false';
@@ -137,7 +138,7 @@ trait Escape
      */
     protected function quote($value): string
     {
-        return "'" . str_replace("'", "''", (string)$value) . "'";
+        return "'" . str_replace("'", "''", (string) $value) . "'";
     }
 
     /**
@@ -151,7 +152,8 @@ trait Escape
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw QueryParameterException::encodingError(json_last_error_msg());
         }
+        $trimmed = stripslashes(trim($encoded, '"'));
 
-        return "'{$encoded}'";
+        return "'{$trimmed}'";
     }
 }
