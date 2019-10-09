@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit;
@@ -9,14 +10,14 @@ use Misantron\QueryBuilder\Server;
 
 class FactoryTest extends UnitTestCase
 {
-    public function testGetServer()
+    public function testGetServer(): void
     {
         $factory = $this->createFactory();
 
         $this->assertInstanceOf(Server::class, $factory->getServer());
     }
 
-    public function testSetServer()
+    public function testSetServer(): void
     {
         $factory = $this->createFactory();
         $currentServer = $factory->getServer();
@@ -27,7 +28,7 @@ class FactoryTest extends UnitTestCase
         $this->assertNotSame($currentServer, $factory->getServer());
     }
 
-    public function testInsert()
+    public function testInsert(): void
     {
         $factory = $this->createFactory();
 
@@ -35,7 +36,7 @@ class FactoryTest extends UnitTestCase
         $this->assertInstanceOf(Query\Insert::class, $query);
     }
 
-    public function testSelect()
+    public function testSelect(): void
     {
         $factory = $this->createFactory();
 
@@ -43,7 +44,7 @@ class FactoryTest extends UnitTestCase
         $this->assertInstanceOf(Query\Select::class, $query);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $factory = $this->createFactory();
 
@@ -51,7 +52,7 @@ class FactoryTest extends UnitTestCase
         $this->assertInstanceOf(Query\Update::class, $query);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $factory = $this->createFactory();
 

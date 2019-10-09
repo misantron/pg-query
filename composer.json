@@ -34,7 +34,7 @@
   },
   "scripts": {
     "unit-tests": "phpunit --testsuite Unit --verbose",
-    "phpcs": "phpcs --standard=PSR2 src",
+    "phpcs": "phpcs --standard=PSR12 src",
     "phpcs-fix": "php-cs-fixer fix --config=.php_cs -v --diff"
   },
   "config": {

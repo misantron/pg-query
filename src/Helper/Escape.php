@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Helper;
@@ -137,7 +138,7 @@ trait Escape
      */
     protected function quote($value): string
     {
-        return "'" . str_replace("'", "''", (string)$value) . "'";
+        return "'" . str_replace("'", "''", (string) $value) . "'";
     }
 
     /**

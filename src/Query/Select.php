@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Query;
@@ -70,7 +71,9 @@ use Misantron\QueryBuilder\Server;
  */
 final class Select extends Query implements Selectable, Filterable, Retrievable
 {
-    use Columns, Filters, DataFetching;
+    use Columns;
+    use DataFetching;
+    use Filters;
 
     private const DEFAULT_TABLE_ALIAS = 't1';
 
