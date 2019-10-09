@@ -14,7 +14,7 @@ return PhpCsFixer\Config::create()
         'concat_space' => ['spacing' => 'one'],
         'phpdoc_annotation_without_dot' => false,
         'phpdoc_no_package' => true,
-        'cast_spaces' => ['space' => 'one'],
+        'cast_spaces' => ['space' => 'single'],
         'yoda_style' => false,
         'single_trait_insert_per_statement' => false,
         'blank_line_after_opening_tag' => false,
