@@ -32,9 +32,6 @@ final class FilterGroup implements Compilable
         return empty($this->list);
     }
 
-    /**
-     * @param Filter $filter
-     */
     public function append(Filter $filter): void
     {
         $this->list[] = $filter;

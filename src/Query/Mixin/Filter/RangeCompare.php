@@ -17,9 +17,6 @@ use Misantron\QueryBuilder\Query\Mixin\Filterable;
 trait RangeCompare
 {
     /**
-     * @param string $column
-     * @param array  $values
-     *
      * @return Filterable
      */
     public function between(string $column, array $values): Filterable
@@ -28,9 +25,6 @@ trait RangeCompare
     }
 
     /**
-     * @param string $column
-     * @param array  $values
-     *
      * @return Filterable
      */
     public function andBetween(string $column, array $values): Filterable
@@ -43,9 +37,6 @@ trait RangeCompare
     }
 
     /**
-     * @param string $column
-     * @param array  $values
-     *
      * @return Filterable
      */
     public function orBetween(string $column, array $values): Filterable

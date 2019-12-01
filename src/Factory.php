@@ -14,17 +14,12 @@ final class Factory
      */
     private $server;
 
-    /**
-     * @param Server $server
-     */
     private function __construct(Server $server)
     {
         $this->server = $server;
     }
 
     /**
-     * @param Server $server
-     *
      * @return Factory
      */
     public static function create(Server $server): Factory
@@ -33,8 +28,6 @@ final class Factory
     }
 
     /**
-     * @param Server $server
-     *
      * @return Factory
      */
     public function setServer(Server $server): Factory
@@ -53,8 +46,6 @@ final class Factory
     }
 
     /**
-     * @param string $table
-     *
      * @return Query\Select
      */
     public function select(string $table): Query\Select
@@ -71,8 +62,6 @@ final class Factory
     }
 
     /**
-     * @param string $table
-     *
      * @return Query\Delete
      */
     public function delete(string $table): Query\Delete
@@ -81,8 +70,6 @@ final class Factory
     }
 
     /**
-     * @param string $table
-     *
      * @return Query\Insert
      */
     public function insert(string $table): Query\Insert

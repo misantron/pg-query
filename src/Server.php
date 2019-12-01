@@ -43,11 +43,6 @@ class Server
         'password' => null,
     ];
 
-    /**
-     * @param array       $credentials
-     * @param array       $options
-     * @param string|null $version
-     */
     public function __construct(array $credentials, array $options = [], ?string $version = null)
     {
         $default = self::$defaultCredentials;
@@ -63,7 +58,6 @@ class Server
     }
 
     /**
-     * @param int   $key
      * @param mixed $value
      *
      * @return Server

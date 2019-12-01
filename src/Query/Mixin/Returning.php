@@ -9,7 +9,6 @@ use Misantron\QueryBuilder\Assert\QueryAssert;
 /**
  * Trait Returning.
  *
- *
  * @method array parseList($items)
  */
 trait Returning

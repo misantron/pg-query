@@ -14,7 +14,6 @@ use Misantron\QueryBuilder\Server;
 /**
  * Class Update.
  *
- *
  * @method Update table(string $name)
  * @method Update execute()
  * @method Update returning($items)
@@ -75,9 +74,6 @@ final class Update extends Query implements Filterable
      */
     private $set = [];
 
-    /**
-     * @param Server $server
-     */
     public function __construct(Server $server)
     {
         parent::__construct($server);
@@ -86,8 +82,6 @@ final class Update extends Query implements Filterable
     }
 
     /**
-     * @param array $data
-     *
      * @return Update
      */
     public function set(array $data): Update

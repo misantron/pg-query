@@ -13,7 +13,6 @@ use Misantron\QueryBuilder\Server;
 /**
  * Class Delete.
  *
- *
  * @method Delete table(string $name)
  * @method Delete execute()
  * @method Delete returning($items)
@@ -69,10 +68,6 @@ final class Delete extends Query implements Filterable
     use Filters;
     use Returning;
 
-    /**
-     * @param Server $server
-     * @param string $table
-     */
     public function __construct(Server $server, string $table)
     {
         parent::__construct($server);

@@ -10,22 +10,16 @@ namespace Misantron\QueryBuilder\Query\Mixin;
 interface Retrievable
 {
     /**
-     * @param string $className
-     *
      * @return array
      */
     public function fetchAllObject(string $className): array;
 
     /**
-     * @param string $className
-     *
      * @return object|null
      */
     public function fetchOneObject(string $className);
 
     /**
-     * @param callable $callback
-     *
      * @return array
      */
     public function fetchCallback(callable $callback): array;

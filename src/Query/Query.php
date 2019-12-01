@@ -32,17 +32,12 @@ abstract class Query implements Compilable
      */
     protected $table;
 
-    /**
-     * @param Server $server
-     */
     public function __construct(Server $server)
     {
         $this->server = $server;
     }
 
     /**
-     * @param string $name
-     *
      * @return Query
      */
     public function table(string $name): Query

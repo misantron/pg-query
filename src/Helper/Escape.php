@@ -14,8 +14,6 @@ use Misantron\QueryBuilder\Exception\QueryParameterException;
 trait Escape
 {
     /**
-     * @param string $value
-     *
      * @return string
      *
      * @throws IdentifierException
@@ -66,8 +64,6 @@ trait Escape
     }
 
     /**
-     * @param array $values
-     *
      * @return string
      */
     protected function escapeArray(array $values): string
@@ -97,8 +93,6 @@ trait Escape
     }
 
     /**
-     * @param array $items
-     *
      * @return array
      */
     protected function escapeList(array $items): array
@@ -118,8 +112,6 @@ trait Escape
     }
 
     /**
-     * @param array $array
-     *
      * @return bool
      */
     protected function isIntegerArray(array $array): bool

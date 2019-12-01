@@ -15,9 +15,7 @@ final class ValueCondition extends Condition
     private $value;
 
     /**
-     * @param string $column
-     * @param mixed  $value
-     * @param string $operator
+     * @param mixed $value
      */
     public function __construct(string $column, $value, string $operator)
     {
@@ -27,9 +25,7 @@ final class ValueCondition extends Condition
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
-     * @param string $operator
+     * @param mixed $value
      *
      * @return ValueCondition
      */

@@ -17,7 +17,6 @@ use PDO;
 /**
  * Class Insert.
  *
- *
  * @method Insert table(string $name)
  * @method Insert columns($items)
  * @method Insert execute()
@@ -43,10 +42,6 @@ final class Insert extends Query implements Selectable
      */
     private $rowSet;
 
-    /**
-     * @param Server $server
-     * @param string $table
-     */
     public function __construct(Server $server, string $table)
     {
         parent::__construct($server);
@@ -55,8 +50,6 @@ final class Insert extends Query implements Selectable
     }
 
     /**
-     * @param array $items
-     *
      * @return Insert
      */
     public function values(array $items): Insert
@@ -78,9 +71,6 @@ final class Insert extends Query implements Selectable
     }
 
     /**
-     * @param ConflictTarget $target
-     * @param Update|null    $action
-     *
      * @return Insert
      */
     public function onConflict(ConflictTarget $target, ?Update $action = null): Insert
@@ -93,8 +83,6 @@ final class Insert extends Query implements Selectable
     }
 
     /**
-     * @param Select $rowSet
-     *
      * @return Insert
      */
     public function fromRows(Select $rowSet): Insert

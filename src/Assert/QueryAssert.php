@@ -42,8 +42,6 @@ final class QueryAssert
     }
 
     /**
-     * @param FilterGroup $group
-     *
      * @throws QueryParameterException
      */
     public static function filterGroupNotEmpty(FilterGroup $group): void
@@ -66,8 +64,6 @@ final class QueryAssert
     }
 
     /**
-     * @param Query $query
-     *
      * @throws QueryParameterException
      */
     public static function valueIsSelectQuery(Query $query): void
@@ -78,9 +74,6 @@ final class QueryAssert
     }
 
     /**
-     * @param array $values
-     * @param int   $number
-     *
      * @throws QueryParameterException
      */
     public static function numberOfElements(array $values, int $number): void
@@ -91,9 +84,6 @@ final class QueryAssert
     }
 
     /**
-     * @param string $operator
-     * @param array  $operators
-     *
      * @throws QueryParameterException
      */
     public static function validConditionOperator(string $operator, array $operators): void
@@ -104,8 +94,6 @@ final class QueryAssert
     }
 
     /**
-     * @param string $operator
-     *
      * @throws QueryParameterException
      */
     public static function validConjunctionOperator(string $operator): void
@@ -116,10 +104,6 @@ final class QueryAssert
     }
 
     /**
-     * @param array  $joins
-     * @param string $alias
-     * @param string $hash
-     *
      * @throws QueryLogicException
      */
     public static function tableJoinPossible(array $joins, string $alias, string $hash): void
@@ -136,8 +120,6 @@ final class QueryAssert
     }
 
     /**
-     * @param array $returning
-     *
      * @throws QueryRuntimeException
      */
     public static function returningConditionSet(array $returning): void
@@ -148,8 +130,6 @@ final class QueryAssert
     }
 
     /**
-     * @param array $set
-     *
      * @throws QueryRuntimeException
      */
     public static function querySetPartNotEmpty(array $set): void

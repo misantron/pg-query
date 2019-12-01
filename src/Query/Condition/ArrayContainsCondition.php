@@ -16,10 +16,6 @@ final class ArrayContainsCondition extends Condition
      */
     private $values;
 
-    /**
-     * @param string $column
-     * @param array  $values
-     */
     public function __construct(string $column, array $values)
     {
         parent::__construct($column);
@@ -30,9 +26,6 @@ final class ArrayContainsCondition extends Condition
     }
 
     /**
-     * @param string $column
-     * @param array  $values
-     *
      * @return ArrayContainsCondition
      */
     public static function create(string $column, array $values): ArrayContainsCondition

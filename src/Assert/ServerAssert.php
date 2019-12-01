@@ -31,8 +31,6 @@ final class ServerAssert
     ];
 
     /**
-     * @param int $option
-     *
      * @throws ServerException
      */
     public static function validConnectionOption(int $option): void
@@ -43,9 +41,6 @@ final class ServerAssert
     }
 
     /**
-     * @param Server $server
-     * @param string $version
-     *
      * @throws ServerException
      */
     public static function engineFeatureAvailable(Server $server, string $version): void

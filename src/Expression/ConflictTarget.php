@@ -20,8 +20,6 @@ final class ConflictTarget implements Compilable
 
     /**
      * Instance can be created from static factory method only.
-     *
-     * @param string $expr
      */
     private function __construct(string $expr)
     {
@@ -30,8 +28,6 @@ final class ConflictTarget implements Compilable
 
     /**
      * Create target from table field name.
-     *
-     * @param string $field
      *
      * @return ConflictTarget
      */
@@ -43,8 +39,6 @@ final class ConflictTarget implements Compilable
     /**
      * Create target from table constraint name.
      *
-     * @param string $constraint
-     *
      * @return ConflictTarget
      */
     public static function fromConstraint(string $constraint): ConflictTarget
@@ -54,8 +48,6 @@ final class ConflictTarget implements Compilable
 
     /**
      * Create target from where clause with a predicate.
-     *
-     * @param FilterGroup $group
      *
      * @return ConflictTarget
      */

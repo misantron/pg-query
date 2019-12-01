@@ -27,11 +27,6 @@ final class Filter
      */
     private $group;
 
-    /**
-     * @param string $condition
-     * @param string $conjunction
-     * @param bool   $group
-     */
     private function __construct(string $condition, string $conjunction, bool $group)
     {
         QueryAssert::validConjunctionOperator($conjunction);
@@ -43,8 +38,6 @@ final class Filter
 
     /**
      * @param Condition|string $condition
-     * @param string           $conjunction
-     * @param bool             $group
      *
      * @return Filter
      */

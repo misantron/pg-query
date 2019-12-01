@@ -20,8 +20,6 @@ final class ServerException extends RuntimeException
     }
 
     /**
-     * @param string $version
-     *
      * @return ServerException
      */
     public static function engineFeatureNotAvailable(string $version): ServerException

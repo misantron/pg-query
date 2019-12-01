@@ -14,11 +14,6 @@ final class InCondition extends Condition
      */
     private $values;
 
-    /**
-     * @param string $column
-     * @param array  $values
-     * @param string $operator
-     */
     public function __construct(string $column, array $values, string $operator)
     {
         parent::__construct($column, $operator);
@@ -27,10 +22,6 @@ final class InCondition extends Condition
     }
 
     /**
-     * @param string $column
-     * @param array  $values
-     * @param string $operator
-     *
      * @return InCondition
      */
     public static function create(string $column, array $values, string $operator): InCondition

@@ -25,10 +25,6 @@ abstract class Condition implements Compilable
      */
     protected $operator;
 
-    /**
-     * @param string $column
-     * @param string $operator
-     */
     public function __construct(string $column, string $operator = '')
     {
         QueryAssert::validConditionOperator($operator, $this->getAcceptableOperators());

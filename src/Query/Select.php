@@ -18,7 +18,6 @@ use Misantron\QueryBuilder\Server;
 /**
  * Class Select.
  *
- *
  * @method Select table(string $name)
  * @method Select columns($items)
  * @method Select execute()
@@ -122,11 +121,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
      */
     private $with = [];
 
-    /**
-     * @param Server $server
-     * @param string $table
-     * @param string $alias
-     */
     public function __construct(Server $server, string $table, string $alias = self::DEFAULT_TABLE_ALIAS)
     {
         parent::__construct($server);
@@ -137,8 +131,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param string $value
-     *
      * @return Select
      */
     public function alias(string $value): Select
@@ -149,8 +141,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param bool $value
-     *
      * @return Select
      */
     public function distinct(bool $value = true): Select
@@ -161,10 +151,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param string $table
-     * @param string $alias
-     * @param string $condition
-     *
      * @return Select
      */
     public function innerJoin(string $table, string $alias, string $condition): Select
@@ -175,10 +161,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param string $table
-     * @param string $alias
-     * @param string $condition
-     *
      * @return Select
      */
     public function leftJoin(string $table, string $alias, string $condition): Select
@@ -188,12 +170,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @param string $type
-     * @param string $table
-     * @param string $alias
-     * @param string $condition
-     */
     private function appendJoin(string $type, string $table, string $alias, string $condition): void
     {
         $hash = $this->makeHash($type, $table, $alias);
@@ -209,10 +185,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param string $type
-     * @param string $table
-     * @param string $alias
-     *
      * @return string
      */
     private function makeHash(string $type, string $table, string $alias): string
@@ -252,8 +224,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param array $values
-     *
      * @return Select
      */
     public function orderBy(array $values): Select
@@ -264,8 +234,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param string $condition
-     *
      * @return Select
      */
     public function having(string $condition): Select
@@ -276,8 +244,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param int $value
-     *
      * @return Select
      */
     public function limit(int $value): Select
@@ -288,8 +254,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param int $value
-     *
      * @return Select
      */
     public function offset(int $value): Select
@@ -300,9 +264,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
-     *
      * @return Select
      */
     public function range(int $offset, int $limit): Select

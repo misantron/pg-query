@@ -17,8 +17,6 @@ use Misantron\QueryBuilder\Query\Mixin\Filterable;
 trait NullCompare
 {
     /**
-     * @param string $column
-     *
      * @return Filterable
      */
     public function isNull(string $column): Filterable
@@ -27,8 +25,6 @@ trait NullCompare
     }
 
     /**
-     * @param string $column
-     *
      * @return Filterable
      */
     public function andIsNull(string $column): Filterable
@@ -41,8 +37,6 @@ trait NullCompare
     }
 
     /**
-     * @param string $column
-     *
      * @return Filterable
      */
     public function orIsNull(string $column): Filterable
@@ -55,8 +49,6 @@ trait NullCompare
     }
 
     /**
-     * @param string $column
-     *
      * @return Filterable
      */
     public function isNotNull(string $column): Filterable
@@ -65,8 +57,6 @@ trait NullCompare
     }
 
     /**
-     * @param string $column
-     *
      * @return Filterable
      */
     public function andIsNotNull(string $column): Filterable
@@ -79,8 +69,6 @@ trait NullCompare
     }
 
     /**
-     * @param string $column
-     *
      * @return Filterable
      */
     public function orIsNotNull(string $column): Filterable

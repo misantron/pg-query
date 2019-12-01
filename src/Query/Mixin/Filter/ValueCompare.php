@@ -17,8 +17,7 @@ use Misantron\QueryBuilder\Query\Mixin\Filterable;
 trait ValueCompare
 {
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -28,8 +27,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -43,8 +41,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -58,8 +55,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -69,8 +65,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -84,8 +79,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -99,8 +93,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -110,8 +103,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -125,8 +117,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -140,8 +131,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -151,8 +141,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -166,8 +155,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -181,8 +169,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -192,8 +179,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -207,8 +193,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -222,8 +207,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -233,8 +217,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */
@@ -248,8 +231,7 @@ trait ValueCompare
     }
 
     /**
-     * @param string $column
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Filterable
      */

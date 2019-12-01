@@ -10,9 +10,6 @@ namespace Misantron\QueryBuilder\Query\Condition;
 final class NullCondition extends Condition
 {
     /**
-     * @param string $column
-     * @param string $operator
-     *
      * @return NullCondition
      */
     public static function create(string $column, string $operator): NullCondition

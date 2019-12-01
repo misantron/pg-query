@@ -12,8 +12,6 @@ use InvalidArgumentException;
 final class QueryParameterException extends InvalidArgumentException
 {
     /**
-     * @param string $name
-     *
      * @return QueryParameterException
      */
     public static function emptyValue(string $name): QueryParameterException
@@ -22,9 +20,6 @@ final class QueryParameterException extends InvalidArgumentException
     }
 
     /**
-     * @param string $type
-     * @param string $value
-     *
      * @return QueryParameterException
      */
     public static function unexpectedValue(string $type, string $value): QueryParameterException
@@ -33,9 +28,6 @@ final class QueryParameterException extends InvalidArgumentException
     }
 
     /**
-     * @param string $type
-     * @param array  $values
-     *
      * @return QueryParameterException
      */
     public static function unexpectedValues(string $type, array $values): QueryParameterException
@@ -44,8 +36,6 @@ final class QueryParameterException extends InvalidArgumentException
     }
 
     /**
-     * @param string $type
-     *
      * @return QueryParameterException
      */
     public static function notTypeOf(string $type): QueryParameterException
@@ -54,8 +44,6 @@ final class QueryParameterException extends InvalidArgumentException
     }
 
     /**
-     * @param int $number
-     *
      * @return QueryParameterException
      */
     public static function numberOfElements(int $number): QueryParameterException
@@ -64,8 +52,6 @@ final class QueryParameterException extends InvalidArgumentException
     }
 
     /**
-     * @param string $error
-     *
      * @return QueryParameterException
      */
     public static function encodingError(string $error): QueryParameterException

@@ -16,10 +16,6 @@ final class BetweenCondition extends Condition
      */
     private $values;
 
-    /**
-     * @param string $column
-     * @param array  $values
-     */
     public function __construct(string $column, array $values)
     {
         parent::__construct($column);
@@ -32,9 +28,6 @@ final class BetweenCondition extends Condition
     }
 
     /**
-     * @param string $column
-     * @param array  $values
-     *
      * @return BetweenCondition
      */
     public static function create(string $column, array $values): BetweenCondition

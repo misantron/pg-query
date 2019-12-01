@@ -19,10 +19,6 @@ final class OnConflict implements Compilable
      */
     private $action;
 
-    /**
-     * @param ConflictTarget $target
-     * @param Update|null    $action
-     */
     public function __construct(ConflictTarget $target, ?Update $action = null)
     {
         $this->target = $target;
