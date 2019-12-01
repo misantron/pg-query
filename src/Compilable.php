@@ -9,8 +9,5 @@ namespace Misantron\QueryBuilder;
  */
 interface Compilable
 {
-    /**
-     * @return string
-     */
     public function compile(): string;
 }

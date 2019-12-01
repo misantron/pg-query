@@ -27,9 +27,6 @@ final class BetweenCondition extends Condition
         QueryAssert::numberOfElements($this->values, 2);
     }
 
-    /**
-     * @return BetweenCondition
-     */
     public static function create(string $column, array $values): BetweenCondition
     {
         return new static($column, $values);

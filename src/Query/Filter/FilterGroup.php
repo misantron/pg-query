@@ -16,17 +16,11 @@ final class FilterGroup implements Compilable
      */
     private $list = [];
 
-    /**
-     * @return bool
-     */
     public function notEmpty(): bool
     {
         return !empty($this->list);
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return empty($this->list);

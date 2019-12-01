@@ -30,8 +30,6 @@ final class InArrayCondition extends Condition
 
     /**
      * @param mixed $value
-     *
-     * @return InArrayCondition
      */
     public static function create(string $column, $value, string $operator): InArrayCondition
     {

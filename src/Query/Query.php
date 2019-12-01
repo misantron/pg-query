@@ -37,9 +37,6 @@ abstract class Query implements Compilable
         $this->server = $server;
     }
 
-    /**
-     * @return Query
-     */
     public function table(string $name): Query
     {
         $this->table = $this->escapeIdentifier($name);
@@ -47,9 +44,6 @@ abstract class Query implements Compilable
         return $this;
     }
 
-    /**
-     * @return Query
-     */
     public function execute(): Query
     {
         $query = $this->compile();
@@ -64,8 +58,6 @@ abstract class Query implements Compilable
 
     /**
      * @param array|string $items
-     *
-     * @return array
      */
     protected function parseList($items): array
     {

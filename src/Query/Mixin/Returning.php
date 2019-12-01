@@ -32,9 +32,6 @@ trait Returning
         return $this;
     }
 
-    /**
-     * @return string
-     */
     private function buildReturning(): string
     {
         return !empty($this->returning) ? ' RETURNING ' . implode(',', $this->returning) : '';

@@ -81,9 +81,6 @@ final class Update extends Query implements Filterable
         $this->filters = new FilterGroup();
     }
 
-    /**
-     * @return Update
-     */
     public function set(array $data): Update
     {
         QueryAssert::valuesNotEmpty($data);
@@ -108,9 +105,6 @@ final class Update extends Query implements Filterable
         return $query;
     }
 
-    /**
-     * @return string
-     */
     private function buildSet(): string
     {
         $set = $this->set;

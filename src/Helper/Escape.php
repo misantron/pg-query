@@ -14,8 +14,6 @@ use Misantron\QueryBuilder\Exception\QueryParameterException;
 trait Escape
 {
     /**
-     * @return string
-     *
      * @throws IdentifierException
      */
     protected function escapeIdentifier(string $value): string
@@ -34,8 +32,6 @@ trait Escape
 
     /**
      * @param mixed $value
-     *
-     * @return string
      */
     protected function escapeValue($value): string
     {
@@ -63,9 +59,6 @@ trait Escape
         return $escaped;
     }
 
-    /**
-     * @return string
-     */
     protected function escapeArray(array $values): string
     {
         $first = reset($values);
@@ -92,9 +85,6 @@ trait Escape
         return "'{" . implode(',', $values) . "}'";
     }
 
-    /**
-     * @return array
-     */
     protected function escapeList(array $items): array
     {
         $type = $this->isIntegerArray($items) ? 'integer' : 'string';
@@ -111,9 +101,6 @@ trait Escape
         return $filtered;
     }
 
-    /**
-     * @return bool
-     */
     protected function isIntegerArray(array $array): bool
     {
         $filtered = array_filter($array, static function ($value) {
@@ -125,8 +112,6 @@ trait Escape
 
     /**
      * @param mixed $value
-     *
-     * @return string
      */
     protected function quote($value): string
     {
@@ -135,8 +120,6 @@ trait Escape
 
     /**
      * @param mixed $value
-     *
-     * @return string
      */
     protected function jsonEncode($value): string
     {

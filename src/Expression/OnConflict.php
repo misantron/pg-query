@@ -25,9 +25,6 @@ final class OnConflict implements Compilable
         $this->action = $action instanceof Update ? $action : new ActionNothing();
     }
 
-    /**
-     * @return string
-     */
     public function compile(): string
     {
         return sprintf(' ON CONFLICT %s DO %s', $this->target->compile(), $this->action->compile());

@@ -59,8 +59,6 @@ class Server
 
     /**
      * @param mixed $value
-     *
-     * @return Server
      */
     public function setOption(int $key, $value): Server
     {
@@ -71,17 +69,11 @@ class Server
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getVersion(): ?string
     {
         return $this->version;
     }
 
-    /**
-     * @return PDO
-     */
     public function pdo(): PDO
     {
         $this->initialize();
@@ -99,9 +91,6 @@ class Server
         }
     }
 
-    /**
-     * @return string
-     */
     private function createDsnFromCredentials(): string
     {
         $credentials = $this->credentials;

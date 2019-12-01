@@ -26,8 +26,6 @@ final class ValueCondition extends Condition
 
     /**
      * @param mixed $value
-     *
-     * @return ValueCondition
      */
     public static function create(string $column, $value, string $operator): ValueCondition
     {

@@ -9,9 +9,6 @@ namespace Misantron\QueryBuilder\Query\Condition;
  */
 final class NullCondition extends Condition
 {
-    /**
-     * @return NullCondition
-     */
     public static function create(string $column, string $operator): NullCondition
     {
         return new static($column, $operator);

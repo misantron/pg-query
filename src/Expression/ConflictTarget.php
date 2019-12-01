@@ -28,8 +28,6 @@ final class ConflictTarget implements Compilable
 
     /**
      * Create target from table field name.
-     *
-     * @return ConflictTarget
      */
     public static function fromField(string $field): ConflictTarget
     {
@@ -38,8 +36,6 @@ final class ConflictTarget implements Compilable
 
     /**
      * Create target from table constraint name.
-     *
-     * @return ConflictTarget
      */
     public static function fromConstraint(string $constraint): ConflictTarget
     {
@@ -48,8 +44,6 @@ final class ConflictTarget implements Compilable
 
     /**
      * Create target from where clause with a predicate.
-     *
-     * @return ConflictTarget
      */
     public static function fromCondition(FilterGroup $group): ConflictTarget
     {
@@ -58,9 +52,6 @@ final class ConflictTarget implements Compilable
         return new static('WHERE ' . $group->compile());
     }
 
-    /**
-     * @return string
-     */
     public function compile(): string
     {
         return $this->expr;

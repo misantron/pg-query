@@ -25,25 +25,16 @@ final class ArrayContainsCondition extends Condition
         $this->values = $this->escapeArray($values);
     }
 
-    /**
-     * @return ArrayContainsCondition
-     */
     public static function create(string $column, array $values): ArrayContainsCondition
     {
         return new static($column, $values);
     }
 
-    /**
-     * @return array
-     */
     protected function getAcceptableOperators(): array
     {
         return [];
     }
 
-    /**
-     * @return string
-     */
     public function compile(): string
     {
         return sprintf('%s @> %s', $this->column, $this->values);

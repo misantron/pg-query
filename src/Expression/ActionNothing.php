@@ -8,9 +8,6 @@ use Misantron\QueryBuilder\Compilable;
 
 final class ActionNothing implements Compilable
 {
-    /**
-     * @return string
-     */
     public function compile(): string
     {
         return 'NOTHING';

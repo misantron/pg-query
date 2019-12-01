@@ -18,17 +18,11 @@ use Misantron\QueryBuilder\Query\Mixin\Filterable;
  */
 trait ArrayCompare
 {
-    /**
-     * @return Filterable
-     */
     public function in(string $column, array $values): Filterable
     {
         return $this->andIn($column, $values);
     }
 
-    /**
-     * @return Filterable
-     */
     public function andIn(string $column, array $values): Filterable
     {
         $this->filters->append(
@@ -38,9 +32,6 @@ trait ArrayCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function orIn(string $column, array $values): Filterable
     {
         $this->filters->append(
@@ -50,17 +41,11 @@ trait ArrayCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function notIn(string $column, array $values): Filterable
     {
         return $this->andNotIn($column, $values);
     }
 
-    /**
-     * @return Filterable
-     */
     public function andNotIn(string $column, array $values): Filterable
     {
         $this->filters->append(
@@ -70,9 +55,6 @@ trait ArrayCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function orNotIn(string $column, array $values): Filterable
     {
         $this->filters->append(
@@ -84,8 +66,6 @@ trait ArrayCompare
 
     /**
      * @param mixed $value
-     *
-     * @return Filterable
      */
     public function inArray(string $column, $value): Filterable
     {
@@ -94,8 +74,6 @@ trait ArrayCompare
 
     /**
      * @param mixed $value
-     *
-     * @return Filterable
      */
     public function andInArray(string $column, $value): Filterable
     {
@@ -108,8 +86,6 @@ trait ArrayCompare
 
     /**
      * @param mixed $value
-     *
-     * @return Filterable
      */
     public function orInArray(string $column, $value): Filterable
     {
@@ -122,8 +98,6 @@ trait ArrayCompare
 
     /**
      * @param mixed $value
-     *
-     * @return Filterable
      */
     public function notInArray(string $column, $value): Filterable
     {
@@ -132,8 +106,6 @@ trait ArrayCompare
 
     /**
      * @param mixed $value
-     *
-     * @return Filterable
      */
     public function andNotInArray(string $column, $value): Filterable
     {
@@ -146,8 +118,6 @@ trait ArrayCompare
 
     /**
      * @param mixed $value
-     *
-     * @return Filterable
      */
     public function orNotInArray(string $column, $value): Filterable
     {
@@ -158,17 +128,11 @@ trait ArrayCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function arrayContains(string $column, array $values): Filterable
     {
         return $this->andArrayContains($column, $values);
     }
 
-    /**
-     * @return Filterable
-     */
     public function andArrayContains(string $column, array $values): Filterable
     {
         $this->filters->append(
@@ -178,9 +142,6 @@ trait ArrayCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function orArrayContains(string $column, array $values): Filterable
     {
         $this->filters->append(

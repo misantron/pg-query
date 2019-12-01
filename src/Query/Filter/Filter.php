@@ -38,8 +38,6 @@ final class Filter
 
     /**
      * @param Condition|string $condition
-     *
-     * @return Filter
      */
     public static function create($condition, string $conjunction = '', bool $group = false): Filter
     {
@@ -50,25 +48,16 @@ final class Filter
         return new static($condition, $conjunction, $group);
     }
 
-    /**
-     * @return string
-     */
     public function condition(): string
     {
         return $this->condition;
     }
 
-    /**
-     * @return string
-     */
     public function conjunction(): string
     {
         return $this->conjunction;
     }
 
-    /**
-     * @return bool
-     */
     public function group(): bool
     {
         return $this->group;

@@ -16,17 +16,11 @@ use Misantron\QueryBuilder\Query\Mixin\Filterable;
  */
 trait NullCompare
 {
-    /**
-     * @return Filterable
-     */
     public function isNull(string $column): Filterable
     {
         return $this->andIsNull($column);
     }
 
-    /**
-     * @return Filterable
-     */
     public function andIsNull(string $column): Filterable
     {
         $this->filters->append(
@@ -36,9 +30,6 @@ trait NullCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function orIsNull(string $column): Filterable
     {
         $this->filters->append(
@@ -48,17 +39,11 @@ trait NullCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function isNotNull(string $column): Filterable
     {
         return $this->andIsNotNull($column);
     }
 
-    /**
-     * @return Filterable
-     */
     public function andIsNotNull(string $column): Filterable
     {
         $this->filters->append(
@@ -68,9 +53,6 @@ trait NullCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function orIsNotNull(string $column): Filterable
     {
         $this->filters->append(

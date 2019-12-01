@@ -49,9 +49,6 @@ final class Insert extends Query implements Selectable
         $this->table($table);
     }
 
-    /**
-     * @return Insert
-     */
     public function values(array $items): Insert
     {
         QueryAssert::valuesNotEmpty($items);
@@ -70,9 +67,6 @@ final class Insert extends Query implements Selectable
         return $this;
     }
 
-    /**
-     * @return Insert
-     */
     public function onConflict(ConflictTarget $target, ?Update $action = null): Insert
     {
         ServerAssert::engineFeatureAvailable($this->server, '9.5');
@@ -82,9 +76,6 @@ final class Insert extends Query implements Selectable
         return $this;
     }
 
-    /**
-     * @return Insert
-     */
     public function fromRows(Select $rowSet): Insert
     {
         $this->rowSet = $rowSet;
@@ -93,9 +84,6 @@ final class Insert extends Query implements Selectable
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getInsertedRow(): array
     {
         QueryAssert::returningConditionSet($this->returning);
@@ -104,9 +92,6 @@ final class Insert extends Query implements Selectable
         return $this->statement->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * @return array
-     */
     public function getInsertedRows(): array
     {
         QueryAssert::returningConditionSet($this->returning);
@@ -135,9 +120,6 @@ final class Insert extends Query implements Selectable
         return $query;
     }
 
-    /**
-     * @return string
-     */
     private function buildValues(): string
     {
         QueryAssert::valuesNotEmpty($this->values);
@@ -154,9 +136,6 @@ final class Insert extends Query implements Selectable
         return ' VALUES ' . rtrim($values, ',');
     }
 
-    /**
-     * @return string
-     */
     private function buildOnConflict(): string
     {
         return $this->onConflict instanceof OnConflict ? $this->onConflict->compile() : '';

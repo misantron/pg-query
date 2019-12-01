@@ -130,9 +130,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         $this->filters = new FilterGroup();
     }
 
-    /**
-     * @return Select
-     */
     public function alias(string $value): Select
     {
         $this->alias = $this->escapeIdentifier($value);
@@ -140,9 +137,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return Select
-     */
     public function distinct(bool $value = true): Select
     {
         $this->distinct = $value;
@@ -150,9 +144,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return Select
-     */
     public function innerJoin(string $table, string $alias, string $condition): Select
     {
         $this->appendJoin('inner', $table, $alias, $condition);
@@ -160,9 +151,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return Select
-     */
     public function leftJoin(string $table, string $alias, string $condition): Select
     {
         $this->appendJoin('left', $table, $alias, $condition);
@@ -184,9 +172,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         ];
     }
 
-    /**
-     * @return string
-     */
     private function makeHash(string $type, string $table, string $alias): string
     {
         $table = $this->escapeIdentifier($table);
@@ -197,8 +182,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param Select[] $values
-     *
-     * @return Select
      */
     public function with(array $values): Select
     {
@@ -213,8 +196,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
 
     /**
      * @param array|string $values
-     *
-     * @return Select
      */
     public function groupBy($values): Select
     {
@@ -223,9 +204,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return Select
-     */
     public function orderBy(array $values): Select
     {
         $this->orderBy = $values;
@@ -233,9 +211,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return Select
-     */
     public function having(string $condition): Select
     {
         $this->having = $condition;
@@ -243,9 +218,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return Select
-     */
     public function limit(int $value): Select
     {
         $this->limit = $value;
@@ -253,9 +225,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return Select
-     */
     public function offset(int $value): Select
     {
         $this->offset = $value;
@@ -263,9 +232,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return Select
-     */
     public function range(int $offset, int $limit): Select
     {
         $this->offset = $offset;
@@ -274,9 +240,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function rowsCount(): int
     {
         QueryAssert::queryExecuted($this->statement);
@@ -306,9 +269,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $query;
     }
 
-    /**
-     * @return string
-     */
     private function buildWith(): string
     {
         $queries = [];
@@ -319,9 +279,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return !empty($queries) ? 'WITH ' . implode(', ', $queries) . ' ' : '';
     }
 
-    /**
-     * @return string
-     */
     private function buildSelect(): string
     {
         $columns = empty($this->columns) ? '*' : implode(',', $this->columns);
@@ -332,9 +289,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $str;
     }
 
-    /**
-     * @return string
-     */
     private function buildJoins(): string
     {
         $joins = [];
@@ -351,33 +305,21 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return !empty($joins) ? ' ' . implode(' ', $joins) : '';
     }
 
-    /**
-     * @return string
-     */
     private function buildGroupBy(): string
     {
         return !empty($this->groupBy) ? ' GROUP BY ' . implode(',', $this->groupBy) : '';
     }
 
-    /**
-     * @return string
-     */
     private function buildHaving(): string
     {
         return !empty($this->having) ? ' HAVING ' . $this->having : '';
     }
 
-    /**
-     * @return string
-     */
     private function buildOrderBy(): string
     {
         return !empty($this->orderBy) ? ' ORDER BY ' . implode(',', $this->orderBy) : '';
     }
 
-    /**
-     * @return string
-     */
     private function buildLimitOffset(): string
     {
         $str = '';

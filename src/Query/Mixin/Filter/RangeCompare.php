@@ -16,17 +16,11 @@ use Misantron\QueryBuilder\Query\Mixin\Filterable;
  */
 trait RangeCompare
 {
-    /**
-     * @return Filterable
-     */
     public function between(string $column, array $values): Filterable
     {
         return $this->andBetween($column, $values);
     }
 
-    /**
-     * @return Filterable
-     */
     public function andBetween(string $column, array $values): Filterable
     {
         $this->filters->append(
@@ -36,9 +30,6 @@ trait RangeCompare
         return $this;
     }
 
-    /**
-     * @return Filterable
-     */
     public function orBetween(string $column, array $values): Filterable
     {
         $this->filters->append(

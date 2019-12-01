@@ -15,9 +15,6 @@ use PDOStatement;
  */
 trait DataFetching
 {
-    /**
-     * @return array
-     */
     public function fetchAllObject(string $className): array
     {
         QueryAssert::queryExecuted($this->statement);
@@ -37,9 +34,6 @@ trait DataFetching
         return $response instanceof $className ? $response : null;
     }
 
-    /**
-     * @return array
-     */
     public function fetchCallback(callable $callback): array
     {
         QueryAssert::queryExecuted($this->statement);
@@ -47,9 +41,6 @@ trait DataFetching
         return $this->statement->fetchAll(PDO::FETCH_FUNC, $callback);
     }
 
-    /**
-     * @return array
-     */
     public function fetchAllAssoc(): array
     {
         QueryAssert::queryExecuted($this->statement);
@@ -57,9 +48,6 @@ trait DataFetching
         return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * @return array|null
-     */
     public function fetchOneAssoc(): ?array
     {
         QueryAssert::queryExecuted($this->statement);
@@ -69,9 +57,6 @@ trait DataFetching
         return is_array($response) ? $response : null;
     }
 
-    /**
-     * @return array
-     */
     public function fetchKeyValue(): array
     {
         QueryAssert::queryExecuted($this->statement);
@@ -79,9 +64,6 @@ trait DataFetching
         return $this->statement->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
-    /**
-     * @return array
-     */
     public function fetchAllColumn(): array
     {
         QueryAssert::queryExecuted($this->statement);

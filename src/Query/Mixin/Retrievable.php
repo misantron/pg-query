@@ -9,9 +9,6 @@ namespace Misantron\QueryBuilder\Query\Mixin;
  */
 interface Retrievable
 {
-    /**
-     * @return array
-     */
     public function fetchAllObject(string $className): array;
 
     /**
@@ -19,29 +16,14 @@ interface Retrievable
      */
     public function fetchOneObject(string $className);
 
-    /**
-     * @return array
-     */
     public function fetchCallback(callable $callback): array;
 
-    /**
-     * @return array
-     */
     public function fetchAllAssoc(): array;
 
-    /**
-     * @return array|null
-     */
     public function fetchOneAssoc(): ?array;
 
-    /**
-     * @return array
-     */
     public function fetchKeyValue(): array;
 
-    /**
-     * @return array
-     */
     public function fetchAllColumn(): array;
 
     /**

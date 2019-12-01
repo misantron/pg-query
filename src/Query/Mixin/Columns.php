@@ -20,8 +20,6 @@ trait Columns
 
     /**
      * @param array|string $items
-     *
-     * @return Selectable
      */
     public function columns($items): Selectable
     {
@@ -32,9 +30,6 @@ trait Columns
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getColumns(): array
     {
         return $this->columns;

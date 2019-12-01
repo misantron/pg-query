@@ -33,8 +33,5 @@ abstract class Condition implements Compilable
         $this->operator = $operator;
     }
 
-    /**
-     * @return array
-     */
     abstract protected function getAcceptableOperators(): array;
 }

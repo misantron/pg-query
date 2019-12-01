@@ -30,9 +30,6 @@ final class Field implements Compilable
         $this->alias = $this->escapeIdentifier($alias);
     }
 
-    /**
-     * @return Field
-     */
     public static function create(string $expression, string $alias = ''): Field
     {
         return new static($expression, $alias);
