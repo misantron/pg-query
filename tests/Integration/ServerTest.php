@@ -4,40 +4,38 @@ declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Integration;
 
-use PDO;
-
 class ServerTest extends IntegrationTestCase
 {
     public function testConstructor(): void
     {
         $expectedCredentials = [
-            'host' => 'localhost',
+            'host' => getenv('POSTGRES_HOST'),
             'port' => '5432',
-            'dbname' => 'test',
-            'user' => 'postgres',
-            'password' => '1',
+            'dbname' => getenv('POSTGRES_DATABASE'),
+            'user' => getenv('POSTGRES_USER'),
+            'password' => getenv('POSTGRES_PASSWORD'),
         ];
         $expectedOptions = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_EMULATE_PREPARES => false,
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_EMULATE_PREPARES => false,
         ];
 
         $this->assertPropertySame($expectedCredentials, 'credentials', $this->getServer());
         $this->assertPropertySame($expectedOptions, 'options', $this->getServer());
-        $this->assertPropertySame('9.5', 'version', $this->getServer());
+        $this->assertPropertySame(getenv('POSTGRES_VERSION'), 'version', $this->getServer());
         $this->assertPropertyNull('pdo', $this->getServer());
     }
 
     public function testGetVersion(): void
     {
-        $this->assertSame('9.5', $this->getServer()->getVersion());
+        self::assertSame(getenv('POSTGRES_VERSION'), $this->getServer()->getVersion());
     }
 
     public function testPdo(): void
     {
         $pdo = $this->getServer()->pdo();
 
-        $this->assertPropertyInstanceOf(PDO::class, 'pdo', $this->getServer());
-        $this->assertFalse($pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES));
+        $this->assertPropertyInstanceOf(\PDO::class, 'pdo', $this->getServer());
+        self::assertFalse($pdo->getAttribute(\PDO::ATTR_EMULATE_PREPARES));
     }
 }

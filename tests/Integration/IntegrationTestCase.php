@@ -7,7 +7,6 @@ namespace Misantron\QueryBuilder\Tests\Integration;
 use Misantron\QueryBuilder\Factory;
 use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\AssertObjectProperty;
-use PDO;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,33 +30,27 @@ abstract class IntegrationTestCase extends TestCase
     {
         $this->server = new Server(
             [
-                'host' => 'localhost',
+                'host' => getenv('POSTGRES_HOST'),
                 'port' => '5432',
-                'dbname' => 'test',
-                'user' => 'postgres',
-                'password' => '1',
+                'dbname' => getenv('POSTGRES_DATABASE'),
+                'user' => getenv('POSTGRES_USER'),
+                'password' => getenv('POSTGRES_PASSWORD'),
             ],
             [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_EMULATE_PREPARES => false,
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_EMULATE_PREPARES => false,
             ],
-            '9.5'
+            getenv('POSTGRES_VERSION')
         );
 
         $this->factory = Factory::create($this->server);
     }
 
-    /**
-     * @return Server
-     */
     protected function getServer(): Server
     {
         return $this->server;
     }
 
-    /**
-     * @return Factory
-     */
     protected function getFactory(): Factory
     {
         return $this->factory;

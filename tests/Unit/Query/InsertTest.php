@@ -177,7 +177,7 @@ class InsertTest extends UnitTestCase
             $query->compile()
         );
 
-        $obj = new class() implements JsonSerializable {
+        $obj = new class () implements JsonSerializable {
             private $foo = 'bar';
 
             public function jsonSerialize(): string

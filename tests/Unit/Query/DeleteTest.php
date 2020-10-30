@@ -8,7 +8,6 @@ use Misantron\QueryBuilder\Query\Delete;
 use Misantron\QueryBuilder\Query\Filter\FilterGroup;
 use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
-use PDO;
 
 class DeleteTest extends UnitTestCase
 {
@@ -31,19 +30,7 @@ class DeleteTest extends UnitTestCase
     public function testCompile(): void
     {
         $pdo = $this->createPDOMock();
-
-        $pdo
-            ->method('quote')
-            ->withConsecutive(['test', PDO::PARAM_STR])
-            ->willReturnOnConsecutiveCalls("'test'");
-
-        $server = $this->getMockBuilder(Server::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $server
-            ->method('pdo')
-            ->willReturn($pdo);
+        $server = $this->createServerMock($pdo);
 
         $query = $this->createQuery($server);
         $query

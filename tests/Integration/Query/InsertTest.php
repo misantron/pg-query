@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Integration\Query;
 
-use DateTime;
 use Misantron\QueryBuilder\Tests\Integration\IntegrationTestCase;
 
 class InsertTest extends IntegrationTestCase
 {
     public function testInsertSingleRow(): void
     {
-        $query = $this->getFactory()->insert('foo.products');
+        $query = $this->getFactory()->insert('public.products');
 
         $response = $query
             ->values([
@@ -23,7 +22,7 @@ class InsertTest extends IntegrationTestCase
                 'quantity' => 145,
                 'taxable' => false,
                 'tag_ids' => [5, 8],
-                'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
+                'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
             ])
             ->returning([
                 'sku',
@@ -32,15 +31,15 @@ class InsertTest extends IntegrationTestCase
             ->execute()
             ->getInsertedRow();
 
-        $this->assertArrayHasKey('sku', $response);
-        $this->assertSame('S12T-Gec-RS', $response['sku']);
-        $this->assertArrayHasKey('status_id', $response);
-        $this->assertEquals(1, $response['status_id']);
+        self::assertArrayHasKey('sku', $response);
+        self::assertSame('S12T-Gec-RS', $response['sku']);
+        self::assertArrayHasKey('status_id', $response);
+        self::assertEquals(1, $response['status_id']);
     }
 
     public function testInsertMultipleRows(): void
     {
-        $query = $this->getFactory()->insert('foo.products');
+        $query = $this->getFactory()->insert('public.products');
 
         $response = $query
             ->values([
@@ -53,7 +52,7 @@ class InsertTest extends IntegrationTestCase
                     'quantity' => 145,
                     'taxable' => false,
                     'tag_ids' => [5, 8],
-                    'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
+                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
                 ],
                 [
                     'sku' => 'S12T-Gec-GS',
@@ -64,7 +63,7 @@ class InsertTest extends IntegrationTestCase
                     'quantity' => 180,
                     'taxable' => false,
                     'tag_ids' => [5, 6],
-                    'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
+                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
                 ],
             ])
             ->returning([
@@ -75,32 +74,32 @@ class InsertTest extends IntegrationTestCase
             ->execute()
             ->getInsertedRows();
 
-        $this->assertCount(2, $response);
+        self::assertCount(2, $response);
     }
 
     public function testInsertFromRows(): void
     {
-        $query = $this->getFactory()->insert('foo.tags');
+        $query = $this->getFactory()->insert('public.tags');
 
         $query
             ->values([
                 [
                     'name' => 'Green',
-                    'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
+                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
                 ],
                 [
                     'name' => 'Red',
-                    'inserted_at' => (new DateTime())->format('Y-m-d H:i:s'),
+                    'inserted_at' => (new \DateTime())->format('Y-m-d H:i:s'),
                 ],
             ])
             ->execute();
 
         $select = $this->getFactory()
-            ->select('foo.tags')
+            ->select('public.tags')
             ->columns(['name', 'inserted_at']);
 
         $response = $this->getFactory()
-            ->insert('foo.tags')
+            ->insert('public.tags')
             ->fromRows($select)
             ->returning([
                 'name', 'inserted_at',
@@ -108,23 +107,23 @@ class InsertTest extends IntegrationTestCase
             ->execute()
             ->getInsertedRows();
 
-        $this->assertCount(2, $response);
+        self::assertCount(2, $response);
 
         $select = $this->getFactory()
-            ->select('foo.tags')
+            ->select('public.tags')
             ->execute();
 
-        $this->assertSame(4, $select->rowsCount());
+        self::assertSame(4, $select->rowsCount());
     }
 
     protected function tearDown(): void
     {
         $this->getFactory()
-            ->delete('foo.products')
+            ->delete('public.products')
             ->execute();
 
         $this->getFactory()
-            ->delete('foo.tags')
+            ->delete('public.tags')
             ->execute();
     }
 }

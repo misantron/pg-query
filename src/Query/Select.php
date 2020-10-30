@@ -247,9 +247,6 @@ final class Select extends Query implements Selectable, Filterable, Retrievable
         return $this->statement->rowCount();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function compile(): string
     {
         if (!empty($this->having) && empty($this->groupBy)) {
