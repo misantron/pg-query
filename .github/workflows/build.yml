@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         php: [ '7.2', '7.3', '7.4', '8.0' ]
-        postgres: [ '9.5', '9.6', '10', '11', '12' ]
+        postgres: [ '9.5', '9.6', '10' ]
     services:
       postgres:
         image: postgres:${{ matrix.postgres }}
@@ -51,6 +51,12 @@ jobs:
         run: |
           vendor/bin/phpunit --testsuite=Unit --colors=always
           vendor/bin/phpunit --testsuite=Integration --colors=always
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DATABASE: postgres
+          POSTGRES_VERSION: ${{ matrix.postgres }}
   coverage:
     name: Tests coverage
     runs-on: ubuntu-latest

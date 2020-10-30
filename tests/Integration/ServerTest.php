@@ -9,7 +9,7 @@ class ServerTest extends IntegrationTestCase
     public function testConstructor(): void
     {
         $expectedCredentials = [
-            'host' => 'localhost',
+            'host' => getenv('POSTGRES_HOST'),
             'port' => '5432',
             'dbname' => 'postgres',
             'user' => 'postgres',
