@@ -14,12 +14,12 @@ jobs:
       - name: PHP Code Style run
         run: vendor/bin/phpcs --standard=phpcs.xml
   tests:
-    name: Tests
+    name: Tests (php ${{ matrix.php }} - pg ${{ matrix.postgres }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ '7.2', '7.3', '7.4' ]
-        postgres: [ '9.5', '9.6', '10' ]
+        postgres: [ '9.5', '9.6', '10', '11', '12' ]
     services:
       postgres:
         image: postgres:${{ matrix.postgres }}
