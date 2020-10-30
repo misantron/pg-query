@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Misantron\QueryBuilder\Tests\Unit;
 
 use Misantron\QueryBuilder\Server;
-use PDO;
-use PDOStatement;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,24 +16,23 @@ abstract class UnitTestCase extends TestCase
     use AssertObjectProperty;
 
     /**
-     * @return MockObject|PDO
+     * @return MockObject|\PDO
      */
     protected function createPDOMock(): MockObject
     {
-        return $this->getMockBuilder(PDO::class)
+        return $this->getMockBuilder(\PDO::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['prepare'])
             ->getMock();
     }
 
     /**
-     * @param PDO|null $pdo
+     * @param \PDO|null $pdo
      * @return MockObject|Server
      */
-    protected function createServerMock(?PDO $pdo = null): MockObject
+    protected function createServerMock(?\PDO $pdo = null): MockObject
     {
-        $server = $this->getMockBuilder(Server::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $server = $this->createMock(Server::class);
 
         if ($pdo === null) {
             $pdo = $this->createPDOMock();
@@ -49,12 +46,15 @@ abstract class UnitTestCase extends TestCase
     }
 
     /**
-     * @return MockObject|PDOStatement
+     * @return MockObject|\PDOStatement
      */
-    protected function createStatementMock()
+    protected function createStatementMock(): MockObject
     {
-        return $this->getMockBuilder(PDOStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createMock(\PDOStatement::class);
+        $mock
+            ->method('execute')
+            ->willReturn(true);
+
+        return $mock;
     }
 }

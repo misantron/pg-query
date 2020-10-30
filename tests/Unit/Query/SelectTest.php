@@ -14,8 +14,6 @@ use Misantron\QueryBuilder\Query\Select;
 use Misantron\QueryBuilder\Server;
 use Misantron\QueryBuilder\Tests\Unit\UnitTestCase;
 use PDO;
-use PDOStatement;
-use stdClass;
 
 class SelectTest extends UnitTestCase
 {
@@ -504,15 +502,13 @@ class SelectTest extends UnitTestCase
 
     public function testExecute(): void
     {
-        $pdo = $this->createPDOMock();
-
         $qs = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 10';
-        $statement = new PDOStatement();
 
+        $pdo = $this->createPDOMock();
         $pdo
             ->method('prepare')
             ->with($qs)
-            ->willReturn($statement);
+            ->willReturn($this->createStatementMock());
 
         $server = $this->createServerMock($pdo);
 
@@ -524,7 +520,7 @@ class SelectTest extends UnitTestCase
             ->limit(10);
 
         $this->assertInstanceOf(Select::class, $query->execute());
-        $this->assertPropertyInstanceOf(PDOStatement::class, 'statement', $query);
+        $this->assertPropertyInstanceOf(\PDOStatement::class, 'statement', $query);
     }
 
     public function testRowCountBeforeQueryExecute(): void
@@ -542,11 +538,6 @@ class SelectTest extends UnitTestCase
         $statement = $this->createStatementMock();
 
         $qs = 'SELECT * FROM foo.bar t1 LIMIT 10';
-
-        $statement
-            ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
 
         $statement
             ->expects($this->once())
@@ -576,7 +567,7 @@ class SelectTest extends UnitTestCase
         $this->expectExceptionMessage('Query must be executed before data fetching');
 
         $query = $this->createQuery();
-        $query->fetchAllObject(stdClass::class);
+        $query->fetchAllObject(\stdClass::class);
     }
 
     public function testFetchAllObject(): void
@@ -586,21 +577,16 @@ class SelectTest extends UnitTestCase
         $qs = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 10';
 
         $data = [
-            new stdClass(),
-            new stdClass(),
+            new \stdClass(),
+            new \stdClass(),
         ];
 
         $statement = $this->createStatementMock();
 
         $statement
             ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
-
-        $statement
-            ->expects($this->once())
             ->method('fetchAll')
-            ->with(PDO::FETCH_CLASS, stdClass::class)
+            ->with(PDO::FETCH_CLASS, \stdClass::class)
             ->willReturn($data);
 
         $pdo
@@ -619,7 +605,7 @@ class SelectTest extends UnitTestCase
             ->limit(10)
             ->execute();
 
-        $this->assertSame($data, $query->fetchAllObject(stdClass::class));
+        $this->assertSame($data, $query->fetchAllObject(\stdClass::class));
     }
 
     public function testFetchCallback(): void
@@ -629,19 +615,14 @@ class SelectTest extends UnitTestCase
         $query = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 10';
 
         $data = [
-            new stdClass(),
-            new stdClass(),
+            new \stdClass(),
+            new \stdClass(),
         ];
         $callback = static function () {
             return null;
         };
 
         $statement = $this->createStatementMock();
-
-        $statement
-            ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
 
         $statement
             ->expects($this->once())
@@ -683,11 +664,6 @@ class SelectTest extends UnitTestCase
 
         $statement
             ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
-
-        $statement
-            ->expects($this->once())
             ->method('fetchAll')
             ->with(PDO::FETCH_ASSOC)
             ->willReturn($data);
@@ -723,11 +699,6 @@ class SelectTest extends UnitTestCase
         ];
 
         $statement = $this->createStatementMock();
-
-        $statement
-            ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
 
         $statement
             ->expects($this->once())
@@ -767,11 +738,6 @@ class SelectTest extends UnitTestCase
 
         $statement
             ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
-
-        $statement
-            ->expects($this->once())
             ->method('fetchAll')
             ->with(PDO::FETCH_COLUMN)
             ->willReturn($data);
@@ -802,7 +768,7 @@ class SelectTest extends UnitTestCase
         $this->expectExceptionMessage('Query must be executed before data fetching');
 
         $query = $this->createQuery();
-        $query->fetchOneObject(stdClass::class);
+        $query->fetchOneObject(\stdClass::class);
     }
 
     public function testFetchOneObject(): void
@@ -811,19 +777,14 @@ class SelectTest extends UnitTestCase
 
         $query = 'SELECT * FROM foo.bar t1 WHERE field1 IN (3,7,9) ORDER BY field2 desc LIMIT 1';
 
-        $data = new stdClass();
+        $data = new \stdClass();
 
         $statement = $this->createStatementMock();
 
         $statement
             ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
-
-        $statement
-            ->expects($this->once())
             ->method('fetchObject')
-            ->with(stdClass::class)
+            ->with(\stdClass::class)
             ->willReturn($data);
 
         $pdo
@@ -842,7 +803,7 @@ class SelectTest extends UnitTestCase
             ->limit(1)
             ->execute();
 
-        $this->assertSame($data, $query->fetchOneObject(stdClass::class));
+        $this->assertSame($data, $query->fetchOneObject(\stdClass::class));
     }
 
     public function testFetchOneAssoc(): void
@@ -854,11 +815,6 @@ class SelectTest extends UnitTestCase
         $data = ['foo' => 1, 'bar' => 2];
 
         $statement = $this->createStatementMock();
-
-        $statement
-            ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
 
         $statement
             ->expects($this->once())
@@ -891,11 +847,6 @@ class SelectTest extends UnitTestCase
         $data = 1;
 
         $statement = $this->createStatementMock();
-
-        $statement
-            ->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
 
         $statement
             ->expects($this->once())

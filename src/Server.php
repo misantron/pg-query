@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misantron\QueryBuilder;
 
 use Misantron\QueryBuilder\Assert\ServerAssert;
-use PDO;
 
 /**
  * Class Server.
@@ -13,7 +12,7 @@ use PDO;
 class Server
 {
     /**
-     * @var PDO
+     * @var \PDO
      */
     private $pdo;
 
@@ -57,9 +56,6 @@ class Server
         $this->version = $version;
     }
 
-    /**
-     * @param mixed $value
-     */
     public function setOption(int $key, $value): Server
     {
         ServerAssert::validConnectionOption($key);
@@ -74,7 +70,7 @@ class Server
         return $this->version;
     }
 
-    public function pdo(): PDO
+    public function pdo(): \PDO
     {
         $this->initialize();
 
@@ -84,7 +80,7 @@ class Server
     private function initialize(): void
     {
         if ($this->pdo === null) {
-            $this->pdo = new PDO($this->createDsnFromCredentials());
+            $this->pdo = new \PDO($this->createDsnFromCredentials());
             foreach ($this->options as $attribute => $value) {
                 $this->pdo->setAttribute($attribute, $value);
             }
