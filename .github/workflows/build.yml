@@ -16,9 +16,13 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '7.2', '7.3', '7.4' ]
+        postgres: [ '9.5', '9.6', '10' ]
     services:
       postgres:
-        image: postgres:9.5
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
@@ -28,9 +32,6 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    strategy:
-      matrix:
-        php: [ '7.2', '7.3', '7.4', '8.0' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
