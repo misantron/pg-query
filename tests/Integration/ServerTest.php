@@ -11,9 +11,9 @@ class ServerTest extends IntegrationTestCase
         $expectedCredentials = [
             'host' => getenv('POSTGRES_HOST'),
             'port' => '5432',
-            'dbname' => 'postgres',
-            'user' => 'postgres',
-            'password' => 'postgres',
+            'dbname' => getenv('POSTGRES_DATABASE'),
+            'user' => getenv('POSTGRES_USER'),
+            'password' => getenv('POSTGRES_PASSWORD'),
         ];
         $expectedOptions = [
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
@@ -22,13 +22,13 @@ class ServerTest extends IntegrationTestCase
 
         $this->assertPropertySame($expectedCredentials, 'credentials', $this->getServer());
         $this->assertPropertySame($expectedOptions, 'options', $this->getServer());
-        $this->assertPropertySame('9.5', 'version', $this->getServer());
+        $this->assertPropertySame(getenv('POSTGRES_VERSION'), 'version', $this->getServer());
         $this->assertPropertyNull('pdo', $this->getServer());
     }
 
     public function testGetVersion(): void
     {
-        self::assertSame('9.5', $this->getServer()->getVersion());
+        self::assertSame(getenv('POSTGRES_VERSION'), $this->getServer()->getVersion());
     }
 
     public function testPdo(): void

@@ -32,15 +32,15 @@ abstract class IntegrationTestCase extends TestCase
             [
                 'host' => getenv('POSTGRES_HOST'),
                 'port' => '5432',
-                'dbname' => 'postgres',
-                'user' => 'postgres',
-                'password' => 'postgres',
+                'dbname' => getenv('POSTGRES_DATABASE'),
+                'user' => getenv('POSTGRES_USER'),
+                'password' => getenv('POSTGRES_PASSWORD'),
             ],
             [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_EMULATE_PREPARES => false,
             ],
-            '9.5'
+            getenv('POSTGRES_VERSION')
         );
 
         $this->factory = Factory::create($this->server);
