@@ -1,5 +1,4 @@
-
-create table foo.users (
+create table public.users (
    id serial primary key,
    role_id integer not null,
    username varchar(255) unique,
@@ -10,21 +9,21 @@ create table foo.users (
    updated_at timestamp with time zone
 );
 
-create table foo.tags (
+create table public.tags (
    id serial primary key,
    name varchar(255),
    inserted_at timestamp with time zone,
    updated_at timestamp with time zone
 );
 
-create table foo.categories (
+create table public.categories (
    id serial primary key,
    name varchar(255),
    inserted_at timestamp with time zone,
    updated_at timestamp with time zone
 );
 
-create table foo.products (
+create table public.products (
     sku varchar(255) primary key,
     name varchar(255),
     description text,
@@ -39,7 +38,7 @@ create table foo.products (
     updated_at timestamp with time zone
 );
 
-create table foo.coupons (
+create table public.coupons (
    id serial primary key,
    code varchar(255),
    description text,
@@ -52,7 +51,7 @@ create table foo.coupons (
    updated_at  timestamp with time zone
 );
 
-create table foo.orders (
+create table public.orders (
    id serial primary key,
    order_date date,
    total numeric,

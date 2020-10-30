@@ -33,9 +33,9 @@ abstract class IntegrationTestCase extends TestCase
             [
                 'host' => 'localhost',
                 'port' => '5432',
-                'dbname' => 'test',
+                'dbname' => 'postgres',
                 'user' => 'postgres',
-                'password' => '1',
+                'password' => 'postgres',
             ],
             [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
