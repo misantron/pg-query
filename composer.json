@@ -32,8 +32,8 @@
     }
   },
   "scripts": {
-    "unit-tests": "phpunit --testsuite Unit",
-    "phpcs": "phpcs --standard=phpcs.xml"
+    "unit-tests": "vendor/bin/phpunit --testsuite=Unit --colors=always",
+    "phpcs": "vendor/bin/phpcs --standard=phpcs.xml"
   },
   "config": {
     "sort-packages": true
