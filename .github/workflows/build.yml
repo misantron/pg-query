@@ -42,7 +42,8 @@ jobs:
       - name: Install dependencies
         run: composer install --no-scripts
       - name: Seed database
-        run: psql -d postgresql://postgres@localhost/postgres -f ./tests/schema.sql
+        run: psql -d postgresql://postgres@localhost/postgres -f schema.sql
+        working-directory: ./tests
         env:
           PGPASSWORD: postgres
       - name: PHPUnit run
