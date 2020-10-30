@@ -14,7 +14,7 @@ class QueryTest extends UnitTestCase
     {
         $server = $this->createServerMock();
 
-        $query = new class($server) extends Query {
+        $query = new class ($server) extends Query {
             public function compile(): string
             {
                 throw new BadMethodCallException('Not implemented');
