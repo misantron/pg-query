@@ -30,7 +30,7 @@ abstract class UnitTestCase extends TestCase
      * @param \PDO|null $pdo
      * @return MockObject|Server
      */
-    protected function createServerMock(?\PDO $pdo = null): MockObject
+    protected function createServerMock(\PDO $pdo = null): MockObject
     {
         $server = $this->createMock(Server::class);
 

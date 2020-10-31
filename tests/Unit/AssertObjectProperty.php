@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Misantron\QueryBuilder\Tests\Unit;
 
-use ReflectionClass;
-use ReflectionException;
-use RuntimeException;
-
 trait AssertObjectProperty
 {
     /**
@@ -15,9 +11,9 @@ trait AssertObjectProperty
      * @param string $attributeName
      * @param object $actual
      */
-    public function assertPropertySame($expected, string $attributeName, $actual): void
+    public static function assertPropertySame($expected, string $attributeName, $actual): void
     {
-        static::assertSame($expected, $this->getObjectPropertyValue($actual, $attributeName));
+        self::assertSame($expected, self::getObjectPropertyValue($actual, $attributeName));
     }
 
     /**
@@ -25,18 +21,18 @@ trait AssertObjectProperty
      * @param string $attributeName
      * @param object $actual
      */
-    public function assertPropertyInstanceOf(string $expected, string $attributeName, $actual): void
+    public static function assertPropertyInstanceOf(string $expected, string $attributeName, $actual): void
     {
-        static::assertInstanceOf($expected, $this->getObjectPropertyValue($actual, $attributeName));
+        self::assertInstanceOf($expected, self::getObjectPropertyValue($actual, $attributeName));
     }
 
     /**
      * @param string $attributeName
      * @param object $actual
      */
-    public function assertPropertyNull(string $attributeName, $actual): void
+    public static function assertPropertyNull(string $attributeName, $actual): void
     {
-        static::assertNull($this->getObjectPropertyValue($actual, $attributeName));
+        self::assertNull(self::getObjectPropertyValue($actual, $attributeName));
     }
 
     /**
@@ -45,14 +41,14 @@ trait AssertObjectProperty
      *
      * @return mixed
      */
-    private function getObjectPropertyValue($obj, string $name)
+    private static function getObjectPropertyValue($obj, string $name)
     {
         try {
-            $class = new ReflectionClass($obj);
+            $class = new \ReflectionClass($obj);
             $method = $class->getProperty($name);
             $method->setAccessible(true);
-        } catch (ReflectionException $e) {
-            throw new RuntimeException('Unable to get non-public property value');
+        } catch (\ReflectionException $e) {
+            throw new \RuntimeException('Unable to get non-public property value');
         }
 
         return $method->getValue($obj);

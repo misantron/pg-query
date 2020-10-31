@@ -6,9 +6,6 @@ namespace Misantron\QueryBuilder;
 
 use Misantron\QueryBuilder\Assert\ServerAssert;
 
-/**
- * Class Server.
- */
 class Server
 {
     /**
@@ -42,7 +39,7 @@ class Server
         'password' => null,
     ];
 
-    public function __construct(array $credentials, array $options = [], ?string $version = null)
+    public function __construct(array $credentials, array $options = [], string $version = null)
     {
         $default = self::$defaultCredentials;
 

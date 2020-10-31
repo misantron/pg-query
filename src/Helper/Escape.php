@@ -30,9 +30,6 @@ trait Escape
         return $str;
     }
 
-    /**
-     * @param mixed $value
-     */
     protected function escapeValue($value): string
     {
         switch (strtolower(gettype($value))) {
@@ -72,7 +69,7 @@ trait Escape
 
         $type = strtolower(gettype($first));
         $nonQuotedTypes = ['integer', 'double', 'boolean', 'null'];
-        if (!in_array($type, $nonQuotedTypes, true)) {
+        if (!\in_array($type, $nonQuotedTypes, true)) {
             if ($type === 'string') {
                 $values = array_map(static function (string $value) {
                     return '"' . str_replace('"', '\"', $value) . '"';
@@ -110,17 +107,11 @@ trait Escape
         return empty($filtered);
     }
 
-    /**
-     * @param mixed $value
-     */
     protected function quote($value): string
     {
         return "'" . str_replace("'", "''", (string) $value) . "'";
     }
 
-    /**
-     * @param mixed $value
-     */
     protected function jsonEncode($value): string
     {
         $encoded = json_encode($value);
